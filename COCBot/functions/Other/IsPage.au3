@@ -16,7 +16,7 @@
 Func IsTrainPage()
 	Local $i = 0
 
-	While $i < 30
+	While $i < 5
 		;If $DebugSetlog = 1 Then SetLog( "TrainPage:(" & _GetPixelColor(717, 120, True) & ",Expected:E0070A)(" & _GetPixelColor(762, 328, True) & ",Expected:F18439)", $COLOR_ORANGE)
 		If _ColorCheck(_GetPixelColor(717, 120 + $midOffsetY, True), Hex(0xE0070A, 6), 10) And _ColorCheck(_GetPixelColor(762, 328 + $midOffsetY, True), Hex(0xF18439, 6), 10) Then ExitLoop
 		If _Sleep($iDelayIsTrainPage1) Then ExitLoop
