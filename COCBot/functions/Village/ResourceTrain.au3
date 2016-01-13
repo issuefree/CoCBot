@@ -67,6 +67,8 @@ SetLog("Currently trained:")
 	; 2. Figure out what we have in training.
 	;	a. figure out how much time is already in each barracks
 
+Local $restartAfterTrain = False
+
 SetLog("Currently in training:")
 	Local $barracksTrainingTime[$numBarracksAvaiables + $numDarkBarracksAvaiables]
 	Local $barracksTrainingSpace[$numBarracksAvaiables + $numDarkBarracksAvaiables]
@@ -80,9 +82,10 @@ SetLog("Currently in training:")
 
 	If goHome() == False Then Return
 	If goArmyOverview() == False Then Return	
-	goToBarracks(0)
+	If goToBarracks(0) == False Then Return
 
 	ZeroArray($ArmyTraining)
+	Local $maxTrainTime = 0
 	While isBarrack() Or isDarkBarrack()
 		If $barracksNumber >= $numBarracksAvaiables + $numDarkBarracksAvaiables Then ExitLoop
 
@@ -95,6 +98,10 @@ SetLog("Currently in training:")
 			$barracksTrainingUnits[$barracksNumber][$iUnit] += $num
 		Next
 
+		If $barracksTrainingTime[$barracksNumber] > $maxTrainTime Then
+			$maxTrainTime = $barracksTrainingTime[$barracksNumber]
+		EndIf
+
 		; SetLog("Checking barracks " & $barracksNumber)
 		$blockedBarracks[$barracksNumber] = CheckFullBarrack()
 		If $blockedBarracks[$barracksNumber] Then
@@ -102,13 +109,37 @@ SetLog("Currently in training:")
 			$numBlockedBarracks += 1
 		EndIf
 
-		; SetLog("Barracks " & $barracksNumber & ":" & $barracksTrainingTime[$barracksNumber])
+		SetLog("Barracks " & $barracksNumber & ":" & $barracksTrainingTime[$barracksNumber])
 
 		$barracksNumber += 1
 		; SetLog("Moving to barracks " & $barracksNumber+1 & "/" & $numBarracksAvaiables + $numDarkBarracksAvaiables)
 		_TrainMoveBtn(+1) ;click Next button
 		If _Sleep($iDelayTrain2) Then Return
 	WEnd
+
+	; SetLog("")
+	; SetLog("Checking account switch:")
+	; SetLog("  mTT: " & $maxTrainTime)
+	; If $fullarmy Then 
+	; 	SetLog("  $fullarmy = True")
+	; Else
+	; 	SetLog("  $fullarmy = False")
+	; EndIf
+	; SetLog("  timer: " & Floor(TimerDiff($accountSwitchTimer)) & "/" & $accountSwitchTimeout)
+	; SetLog("  Can swap in " & Round(($accountSwitchTimeout - TimerDiff($accountSwitchTimer))/60/1000) & " mins")
+
+	; If $maxTrainTime > 600 And _  ; I can't get an attack in in under 10 mins probably so no point in switching
+	;    $fullarmy <> True And _
+	;    TimerDiff($accountSwitchTimer) > $accountSwitchTimeout _
+	; Then
+	; 	SetLog("I have " & Round($maxTrainTime/60) & " mins left in training and I'm not ready for attack.")
+	; 	SetLog("Swap accounts after train.")
+	; 	$accountSwitchTimer = TimerInit()
+	; 	$accountSwitchTimeout = ($maxTrainTime / 2)*1000 ; Don't come back until I'm half way done training. I'm thinking this will keep me balanced between accounts.
+	; 	SetLog("Can come back in " & Round($maxTrainTime / 60 / 2) & " mins")
+	; 	SetLog("  " & $accountSwitchTimeout)
+	; 	$restartAfterTrain = True
+	; EndIf
 
 	barracksReport($barracksTrainingUnits)
 
@@ -292,6 +323,14 @@ SetLog("End train")
 
 	UpdateStats()
 
+	If $restartAfterTrain == True Then
+		If $currentAccount == 0 Then
+			loadAccount(1)
+		Else
+			loadAccount(0)
+		EndIf
+	EndIf
+
 EndFunc
 
 ; this will figure out my target army based on 
@@ -316,23 +355,23 @@ Func getArmyComposition($currentArmy)
 
 	; by resource type then by size
 	Local $unitEvalOrder[$iArmyEnd] = [ _
-		$iLavaHound, _
 		$iGolem, _
-		$iWitch, _
 		$iValkyrie, _
-		$iHogRider, _
-		$iMinion, _
 		$iPekka, _
-		$iDragon, _
-		$iHealer, _
 		$iGiant, _
-		$iBalloon, _
 		$iWizard, _
-		$iWallBreaker, _
 		$iArcher, _
 		$iBarbarian, _
 		$iGoblin _
 	]
+		; $iLavaHound, _
+		; $iWitch, _
+		; $iHogRider, _
+		; $iMinion, _
+		; $iDragon, _
+		; $iHealer, _
+		; $iBalloon, _
+		; $iWallBreaker, _
 
 
 	; resource calculations
@@ -400,6 +439,8 @@ Func getArmyComposition($currentArmy)
 		EndIf
 	Next
 
+	SetLog("Need counts: [T]: " & $tankCount & " [M]: " & $meleeCount & " [R]: " & $rangedCount & " [r]:" & $resourceCount)
+
 	; at this point $tankCount + $meleeCount + $rangeCount + $resourceCount should equal $troopCount (including negatives as we'll balance those against the counts in a minute.)
 
 	; get ready to figure what new troops we need for our army composition
@@ -412,28 +453,32 @@ Func getArmyComposition($currentArmy)
 
 	Local $extraCount = 0
 	If $tankCount < 0 Then 
-		$extraCount += $tankCount
+		$extraCount -= $tankCount
 		$tankCount = 0
 	EndIf
 	If $meleeCount < 0 Then 
-		$extraCount += $meleeCount
+		$extraCount -= $meleeCount
 		$meleeCount = 0
 	EndIf
 	If $rangedCount < 0 Then 
-		$extraCount += $rangedCount
+		$extraCount -= $rangedCount
 		$rangedCount = 0
 	EndIf
 	If $resourceCount < 0 Then 
-		$extraCount += $resourceCount
+		$extraCount -= $resourceCount
 		$resourceCount = 0
 	EndIf
 	If $deCount < 0 Then $deCount = 0
 	If $hvCount < 0 Then $hvCount = 0
 
-	$tankCount = $tankCount - $extraCount*$tankCount/($tankCount+$meleeCount+$rangedCount+$resourceCount)
-	$meleeCount = $meleeCount - $extraCount*$meleeCount/($tankCount+$meleeCount+$rangedCount+$resourceCount)
-	$rangedCount = $rangedCount - $extraCount*$rangedCount/($tankCount+$meleeCount+$rangedCount+$resourceCount)
-	$resourceCount = $resourceCount - $extraCount*$resourceCount/($tankCount+$meleeCount+$rangedCount+$resourceCount)
+	SetLog("Extra: " & $extraCount)
+
+	Local $sum = $tankCount+$meleeCount+$rangedCount+$resourceCount
+
+	$tankCount = Floor($tankCount - $extraCount*$tankCount/($sum))
+	$meleeCount = Floor($meleeCount - $extraCount*$meleeCount/($sum))
+	$rangedCount = Floor($rangedCount - $extraCount*$rangedCount/($sum))
+	$resourceCount = Floor($resourceCount - $extraCount*$resourceCount/($sum))
 
 	SetLog("Capacity: " & $troopCount)
 	SetLog("ToTrain counts: [T]: " & $tankCount & " [M]: " & $meleeCount & " [R]: " & $rangedCount & " [r]:" & $resourceCount)
@@ -509,15 +554,15 @@ Func getArmyComposition($currentArmy)
 			Local $leftoverCount = 0
 			If _ArraySearch($deUnits, $iUnit) <> -1 Then
 				$leftoverCount = Floor($deCount/$UnitSize[$iUnit])
-				$newArmyComp[$iUnit] += $leftoverCount*$UnitSize[$iUnit]
+				$newArmyComp[$iUnit] += $leftoverCount
 				$deCount -= $leftoverCount*$UnitSize[$iUnit]
 			ElseIf _ArraySearch($hvUnits, $iUnit) <> -1 Then
 				$leftoverCount = Floor($hvCount/$UnitSize[$iUnit])
-				$newArmyComp[$iUnit] += $leftoverCount*$UnitSize[$iUnit]
+				$newArmyComp[$iUnit] += $leftoverCount
 				$hvCount -= $leftoverCount*$UnitSize[$iUnit]
 			Else
 				$leftoverCount = Floor($troopCount/$UnitSize[$iUnit])
-				$newArmyComp[$iUnit] += $leftoverCount*$UnitSize[$iUnit]
+				$newArmyComp[$iUnit] += $leftoverCount
 			EndIf
 			$troopCount -= $leftoverCount*$UnitSize[$iUnit]
 		Next
