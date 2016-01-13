@@ -58,12 +58,9 @@ Func ResourceTrain()
 	; 4. Assign troops to barracks.
 	;;;;;
 
-	; 1. Figure out what we've already trained. (This is done above in checkArmyCamp)
-
-SetLog("Currently trained:")
 	ZeroArray($ArmyTrained) ; Zero out the in-training array before we check the camp. checkArmyCamp populates this
 	checkArmyCamp()
-
+	
 	; 2. Figure out what we have in training.
 	;	a. figure out how much time is already in each barracks
 
@@ -105,11 +102,11 @@ SetLog("Currently in training:")
 		; SetLog("Checking barracks " & $barracksNumber)
 		$blockedBarracks[$barracksNumber] = CheckFullBarrack()
 		If $blockedBarracks[$barracksNumber] Then
-			SetLog("Found blocked barracks: " & $barracksNumber)
+			; SetLog("Found blocked barracks: " & $barracksNumber)
 			$numBlockedBarracks += 1
 		EndIf
 
-		SetLog("Barracks " & $barracksNumber & ":" & $barracksTrainingTime[$barracksNumber])
+		; SetLog("Barracks " & $barracksNumber & ":" & $barracksTrainingTime[$barracksNumber])
 
 		$barracksNumber += 1
 		; SetLog("Moving to barracks " & $barracksNumber+1 & "/" & $numBarracksAvaiables + $numDarkBarracksAvaiables)
@@ -117,29 +114,37 @@ SetLog("Currently in training:")
 		If _Sleep($iDelayTrain2) Then Return
 	WEnd
 
-	; SetLog("")
-	; SetLog("Checking account switch:")
-	; SetLog("  mTT: " & $maxTrainTime)
-	; If $fullarmy Then 
-	; 	SetLog("  $fullarmy = True")
-	; Else
-	; 	SetLog("  $fullarmy = False")
-	; EndIf
-	; SetLog("  timer: " & Floor(TimerDiff($accountSwitchTimer)) & "/" & $accountSwitchTimeout)
-	; SetLog("  Can swap in " & Round(($accountSwitchTimeout - TimerDiff($accountSwitchTimer))/60/1000) & " mins")
+	; 1. Figure out what we've already trained.
 
-	; If $maxTrainTime > 600 And _  ; I can't get an attack in in under 10 mins probably so no point in switching
-	;    $fullarmy <> True And _
-	;    TimerDiff($accountSwitchTimer) > $accountSwitchTimeout _
-	; Then
-	; 	SetLog("I have " & Round($maxTrainTime/60) & " mins left in training and I'm not ready for attack.")
-	; 	SetLog("Swap accounts after train.")
-	; 	$accountSwitchTimer = TimerInit()
-	; 	$accountSwitchTimeout = ($maxTrainTime / 2)*1000 ; Don't come back until I'm half way done training. I'm thinking this will keep me balanced between accounts.
-	; 	SetLog("Can come back in " & Round($maxTrainTime / 60 / 2) & " mins")
-	; 	SetLog("  " & $accountSwitchTimeout)
-	; 	$restartAfterTrain = True
-	; EndIf
+SetLog("Currently trained:")
+	If goHome() == False Then Return
+	If goArmyOverview() == False Then Return			
+	ZeroArray($ArmyTrained) ; Zero out the in-training array before we check the camp. checkArmyCamp populates this
+	checkArmyCamp()
+
+	SetLog("")
+	SetLog("Checking account switch:")
+	SetLog("  mTT: " & $maxTrainTime)
+	If $fullarmy Then 
+		SetLog("  $fullarmy = True")
+	Else
+		SetLog("  $fullarmy = False")
+	EndIf
+	SetLog("  timer: " & Floor(TimerDiff($accountSwitchTimer)) & "/" & $accountSwitchTimeout)
+	SetLog("  Can swap in " & Round(($accountSwitchTimeout - TimerDiff($accountSwitchTimer))/60/1000) & " mins")
+
+	If $maxTrainTime > 600 And _  ; I can't get an attack in in under 10 mins probably so no point in switching
+	   $fullarmy <> True And _
+	   TimerDiff($accountSwitchTimer) > $accountSwitchTimeout _
+	Then
+		SetLog("I have " & Round($maxTrainTime/60) & " mins left in training and I'm not ready for attack.")
+		SetLog("Swap accounts after train.")
+		$accountSwitchTimer = TimerInit()
+		$accountSwitchTimeout = ($maxTrainTime / 2)*1000 ; Don't come back until I'm half way done training. I'm thinking this will keep me balanced between accounts.
+		SetLog("Can come back in " & Round($maxTrainTime / 60 / 2) & " mins")
+		SetLog("  " & $accountSwitchTimeout)
+		$restartAfterTrain = True
+	EndIf
 
 	barracksReport($barracksTrainingUnits)
 
@@ -323,6 +328,8 @@ SetLog("End train")
 
 	UpdateStats()
 
+	; assume matching accounts. I'll put UI on this to do it better.
+	$currentAccount = Number($sCurrProfile)-1
 	If $restartAfterTrain == True Then
 		If $currentAccount == 0 Then
 			loadAccount(1)
@@ -362,16 +369,16 @@ Func getArmyComposition($currentArmy)
 		$iWizard, _
 		$iArcher, _
 		$iBarbarian, _
-		$iGoblin _
+		$iGoblin, _
+		$iWallBreaker, _
+		$iLavaHound, _
+		$iWitch, _
+		$iHogRider, _
+		$iMinion, _
+		$iDragon, _
+		$iHealer, _
+		$iBalloon _
 	]
-		; $iLavaHound, _
-		; $iWitch, _
-		; $iHogRider, _
-		; $iMinion, _
-		; $iDragon, _
-		; $iHealer, _
-		; $iBalloon, _
-		; $iWallBreaker, _
 
 
 	; resource calculations
