@@ -1,11 +1,15 @@
 Func SetLog($String, $Color = $COLOR_BLACK, $Font = "Verdana", $FontSize = 7.5, $statusbar = 1, $time = Time()) ;Sets the text for the log
     If IsDeclared("txtLog") Then
-	   _GUICtrlRichEdit_SetFont($txtLog, 6, "Lucida Console")
-	   _GUICtrlRichEdit_AppendTextColor($txtLog, Time(), 0x000000)
-	   _GUICtrlRichEdit_SetFont($txtLog, $FontSize, $Font)
-	   _GUICtrlRichEdit_AppendTextColor($txtLog, $String & @CRLF, _ColorConvert($Color))
-	   If $statusbar = 1 And IsDeclared("statLog") Then _GUICtrlStatusBar_SetText($statLog, "Status : " & $String)
-	   _FileWriteLog($hLogFileHandle, $String)
+		_GUICtrlRichEdit_SetFont($txtLog, 6, "Lucida Console")
+		_GUICtrlRichEdit_AppendTextColor($txtLog, Time(), 0x000000)
+		_GUICtrlRichEdit_SetFont($txtLog, $FontSize, $Font)
+		_GUICtrlRichEdit_AppendTextColor($txtLog, $String & @CRLF, _ColorConvert($Color))
+		If $statusbar = 1 And IsDeclared("statLog") Then _GUICtrlStatusBar_SetText($statLog, "Status : " & $String)
+		_FileWriteLog($hLogFileHandle, $String)
+		If $gLogFileHandle = "" Then
+			CreateGlobalLogFile()
+		EndIf
+		_FileWriteLog($gLogFileHandle, $String)
     Else
 	    Local $iIndex = UBound($aTxtLogInitText)
 	    ReDim $aTxtLogInitText[$iIndex + 1][6]
