@@ -1,7 +1,6 @@
-TEST
-
 #include <Array.au3>
 #include <String.au3>
+#include "findDeCollector.au3"
 ; I know a lot of this info is already defined in the bot but I like my format better :)
 
 Global Enum _
@@ -175,6 +174,7 @@ EndFunc
 ;ConsoleWrite($iGolem)
 
 Func goHome($maxDelay = 5000)
+	SetLog("goHome")
 	ClickP($aAway, 2, $iDelayTrain5, "#0501"); Click away twice with 250ms delay
 	If WaitforPixel(28, 505, 30, 507, Hex(0xE4A438, 6), 5, $maxDelay/500) Then
 		Return True
@@ -183,6 +183,7 @@ Func goHome($maxDelay = 5000)
 EndFunc
 
 Func goArmyOverview($maxDelay = 5000)
+	SetLog("goArmyOverview")
 	Click($aArmyTrainButton[0], $aArmyTrainButton[1], 1, 0, "#9998") ; Button Army Overview
 	
 	Local $icount = 0
@@ -224,6 +225,7 @@ EndFunc
 
 ; this relies on you being on the army overview
 Func goToBarracks($targetBarracks)
+	SetLog("goToBarracks(" & $targetBarracks)
 	Local $currentBarracks = -1
 	While $currentBarracks < 6
 		_TrainMoveBtn(+1) ;click Next button
@@ -246,3 +248,98 @@ Global $rtElixirRes
 Global $rtDarkMax
 Global $rtDarkRes
 
+; this requires that your profiles are the same number as your accounts in play
+Global $currentAccount = 1
+Global $accountSwitchTimer = TimerInit()
+Global $accountSwitchTimeout = 0
+
+Func loadAccount($accountNum)
+	goHome()
+	Click(820, 590) ; settings button
+	; check pixel for b4de50 at 476 415
+	If WaitforPixel(476, 415, 477, 416, Hex(0xffffff, 6), 5, 2) Then ; White in connected button font
+		Click(476, 415)
+		_Sleep(500)
+	Else
+		SetLog("Failed to find connected button, it's ok maybe we're not connected. Try the disconnect button.")
+		SetLog(_GetPixelColor(476, 415, True))
+	EndIf
+	; wait for ffffff at 500 415
+	If WaitforPixel(500, 415, 501, 416, Hex(0xffffff, 6), 5, 2) Then ; White in disconnected button font
+		Click(500, 415)
+		_Sleep(500)
+	Else
+		SetLog("Failed to find disconnected button aborting")
+		SetLog(_GetPixelColor(500, 415, True))
+		Return False
+	EndIf
+
+	;wait for 689f38 at 460 230
+	If WaitForPixel(460, 230, 461, 231, Hex(0x689f38, 6), 5, 30) Then ; green in header of profile picker
+		;click account number at 175 x 290+num*50 (num = 0-n)
+		SetLog("Selecting account " & $accountNum)
+		Click(175, 290+($accountNum*50))
+		_Sleep(500)
+	Else
+		SetLog("Failed to find account screen, this isn't great.")
+		SetLog(_GetPixelColor(460,230, True))
+		Return False
+	EndIf
+
+	Click(575, 530) ; ok button
+	_Sleep(500)
+
+	;Wait for 284807 at 534 437
+	If WaitForPixel(534, 437, 535, 438, Hex(0x284807, 6), 5, 2) Then ; green in load button
+		Click(534, 437)
+		_Sleep(500)
+	Else
+		SetLog("Couldn't find load button.")
+		SetLog(_GetPixelColor(534, 437, True))
+		Return False
+	EndIf
+	
+	; Wait for cbcbcb at 586 178
+	If WaitForPixel(586, 178, 587, 179, Hex(0xcbcbcb, 6), 5, 2) Then ; gray in confirm button
+		_Sleep(500)
+		Click(300, 200) ; text box
+		_Sleep(500)
+	Else
+		SetLog("Couldn't find confirm screen")
+		SetLog(_GetPixelColor(586, 178, True))
+		Return False
+	EndIf
+
+	ControlSend($Title, "", "", "{LSHIFT DOWN}{C DOWN}{C UP}{O DOWN}{O UP}{N DOWN}{N UP}{F DOWN}{F UP}{I DOWN}{I UP}{R DOWN}{R UP}{M DOWN}{M UP}{LSHIFT UP}")  ;Enter  Confirm  txt
+	Click(586, 178) ; Confirm load
+
+
+	_GUICtrlComboBox_SetCurSel($cmbProfile, $accountNum)
+	cmbProfile()
+
+	$currentAccount = $accountNum
+	Initiate()
+EndFunc
+
+Func runTest()
+
+	loadAccount(1)
+
+	; If WaitforPixel(476, 415, 477, 416, Hex(0xffffff, 6), 5) Then ; White in connected button font
+	; 	ControlSend($Title, "", "", "{ESC}")
+	; Else
+	; 	SetLog("Failed to find connected button")
+	; 	SetLog(_GetPixelColor(476, 415, True))
+	; EndIf
+
+
+EndFunc
+
+
+Global $gLogFileHandle = ""
+Func CreateGlobalLogFile()
+    Local $sLogFName = @YEAR & "-" & @MON & "-" & @MDAY & "_" & @HOUR & "." & @MIN & "." & @SEC & ".log"
+	Local $sLogPath = @ScriptDir & "\Logs\"
+	DirCreate($sLogPath)
+	$gLogFileHandle = FileOpen($sLogPath & $sLogFName, $FO_APPEND)
+EndFunc
