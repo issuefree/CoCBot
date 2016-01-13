@@ -174,7 +174,6 @@ EndFunc
 ;ConsoleWrite($iGolem)
 
 Func goHome($maxDelay = 5000)
-	SetLog("goHome")
 	ClickP($aAway, 2, $iDelayTrain5, "#0501"); Click away twice with 250ms delay
 	If WaitforPixel(28, 505, 30, 507, Hex(0xE4A438, 6), 5, $maxDelay/500) Then
 		Return True
@@ -183,15 +182,14 @@ Func goHome($maxDelay = 5000)
 EndFunc
 
 Func goArmyOverview($maxDelay = 5000)
-	SetLog("goArmyOverview")
-	Click($aArmyTrainButton[0], $aArmyTrainButton[1], 1, 0, "#9998") ; Button Army Overview
 	
 	Local $icount = 0
 	While True
+		Click($aArmyTrainButton[0], $aArmyTrainButton[1], 1, 0, "#9998") ; Button Army Overview
+		If _Sleep(250) Then Return
 		If IsTrainPage() Then Return True
-		If _Sleep(100) Then Return
 		$icount += 1
-		If $icount = $maxDelay/100 Then ExitLoop
+		If $icount = $maxDelay/250 Then ExitLoop
 	WEnd
 	Return False
 EndFunc
@@ -254,6 +252,7 @@ Global $accountSwitchTimer = TimerInit()
 Global $accountSwitchTimeout = 0
 
 Func loadAccount($accountNum)
+	SetLog("Loading account: " & $accountNum)
 	goHome()
 	Click(820, 590) ; settings button
 	; check pixel for b4de50 at 476 415
@@ -290,12 +289,21 @@ Func loadAccount($accountNum)
 	_Sleep(500)
 
 	;Wait for 284807 at 534 437
-	If WaitForPixel(534, 437, 535, 438, Hex(0x284807, 6), 5, 2) Then ; green in load button
-		Click(534, 437)
+	If WaitForPixel(403, 409, 404, 410, Hex(0xf0bc68, 6), 5, 4) Then ; orange in cancel button
+		Click(534, 437) ; click load
 		_Sleep(500)
 	Else
-		SetLog("Couldn't find load button.")
+		SetLog("Couldn't find cancel button.")
 		SetLog(_GetPixelColor(534, 437, True))
+
+		SetLog("Checking if we're connected still connected")
+		If WaitforPixel(476, 415, 477, 416, Hex(0xffffff, 6), 5, 2) Then ; White in connected button font
+			SetLog("I think we're already connected to the account we were asking for.")
+			_GUICtrlComboBox_SetCurSel($cmbProfile, $accountNum)
+			cmbProfile()
+			Return True
+		EndIf
+		SetLog("Abort. Unknown state.")
 		Return False
 	EndIf
 	
