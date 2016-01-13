@@ -434,6 +434,7 @@ Global $resourceTroopsUI[0]
 		_ArrayAdd($resourceTroopsUI, $rtElixirMaxTxt)
 		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Reserve:", $x+135, $y))
 		$rtElixirResTxt = GUICtrlCreateInput("1000000", $x+180, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
+		_ArrayAdd($resourceTroopsUI, $rtElixirResTxt)
 
 		$y += 24
 		_ArrayAdd($resourceTroopsUI, GUICtrlCreateIcon($pIconLib, $eIcnDark, $x+10, $y-2, 16, 16))
@@ -442,6 +443,7 @@ Global $resourceTroopsUI[0]
 		_ArrayAdd($resourceTroopsUI, $rtDarkMaxTxt)
 		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Reserve:", $x+135, $y))
 		$rtDarkResTxt = GUICtrlCreateInput("40000", $x+180, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
+		_ArrayAdd($resourceTroopsUI, $rtDarkResTxt)
 		
 
 	$x = 180+155
