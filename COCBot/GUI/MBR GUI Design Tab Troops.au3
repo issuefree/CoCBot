@@ -445,6 +445,19 @@ Global $resourceTroopsUI[0]
 		$rtDarkResTxt = GUICtrlCreateInput("40000", $x+180, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
 		_ArrayAdd($resourceTroopsUI, $rtDarkResTxt)
 		
+		$y += 30
+		$x += 10
+		$rtAccountSwitchCheck = GUICtrlCreateCheckbox("Account switch during training", $x, $y)
+		_ArrayAdd($resourceTroopsUI, $rtAccountSwitchCheck)
+
+		$y += 20
+		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Warning: Early dev. Fragile", $x+30, $y))
+		$y += 24
+		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Account number must match profile number.", $x, $y))
+		$y += 24
+		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Accounts:", $x, $y))
+		$rtAccountListTxt = GUICtrlCreateInput("1,2", $x+50, $y-3)
+		_ArrayAdd($resourceTroopsUI, $rtAccountListTxt)
 
 	$x = 180+155
 	$y = 330

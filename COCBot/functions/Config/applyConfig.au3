@@ -904,6 +904,12 @@ Func applyConfig() ;Applies the data from config to the controls in GUI
 	GUICtrlSetData($rtDarkMaxTxt, $rtDarkMax)
 	GUICtrlSetData($rtDarkResTxt, $rtDarkRes)
 
+	If $rtAccountSwitch Then
+		GUICtrlSetState($rtAccountSwitchCheck, $GUI_CHECKED)
+	Else
+		GUICtrlSetState($rtAccountSwitchCheck, $GUI_UNCHECKED)
+	EndIf
+	GUICtrlSetData($rtAccountListTxt, StringJoin($rtAccountList))
 
 
 	lblTotalCount()

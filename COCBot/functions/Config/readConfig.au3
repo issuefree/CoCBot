@@ -431,6 +431,9 @@ Func readConfig() ;Reads config and sets it to the variables
 		$rtDarkMax = IniRead($config, "troop", "rtDarkMax", 80000)
 		$rtDarkRes = IniRead($config, "troop", "rtDarkRes", 40000)
 
+		$rtAccountSwitch = IniRead($config, "troop", "rtAccountSwitch", 0) == 1
+		$rtAccountList = StringSplit(IniRead($config, "troop", "rtAccountList", "1,2"), ",", $STR_NOCOUNT)
+
 		$fulltroop = IniRead($config, "troop", "fullTroop", "100")
 
 		$isldTrainITDelay = IniRead($config, "troop", "TrainITDelay", "20")

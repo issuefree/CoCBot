@@ -60,7 +60,7 @@ Func ResourceTrain()
 
 	ZeroArray($ArmyTrained) ; Zero out the in-training array before we check the camp. checkArmyCamp populates this
 	checkArmyCamp()
-	
+
 	; 2. Figure out what we have in training.
 	;	a. figure out how much time is already in each barracks
 
@@ -113,40 +113,16 @@ SetLog("Currently in training:")
 		_TrainMoveBtn(+1) ;click Next button
 		If _Sleep($iDelayTrain2) Then Return
 	WEnd
+	barracksReport($barracksTrainingUnits)
+
 
 	; 1. Figure out what we've already trained.
-
 SetLog("Currently trained:")
 	If goHome() == False Then Return
 	If goArmyOverview() == False Then Return			
 	ZeroArray($ArmyTrained) ; Zero out the in-training array before we check the camp. checkArmyCamp populates this
 	checkArmyCamp()
 
-	SetLog("")
-	SetLog("Checking account switch:")
-	SetLog("  mTT: " & $maxTrainTime)
-	If $fullarmy Then 
-		SetLog("  $fullarmy = True")
-	Else
-		SetLog("  $fullarmy = False")
-	EndIf
-	SetLog("  timer: " & Floor(TimerDiff($accountSwitchTimer)) & "/" & $accountSwitchTimeout)
-	SetLog("  Can swap in " & Round(($accountSwitchTimeout - TimerDiff($accountSwitchTimer))/60/1000) & " mins")
-
-	If $maxTrainTime > 600 And _  ; I can't get an attack in in under 10 mins probably so no point in switching
-	   $fullarmy <> True And _
-	   TimerDiff($accountSwitchTimer) > $accountSwitchTimeout _
-	Then
-		SetLog("I have " & Round($maxTrainTime/60) & " mins left in training and I'm not ready for attack.")
-		SetLog("Swap accounts after train.")
-		$accountSwitchTimer = TimerInit()
-		$accountSwitchTimeout = ($maxTrainTime / 2)*1000 ; Don't come back until I'm half way done training. I'm thinking this will keep me balanced between accounts.
-		SetLog("Can come back in " & Round($maxTrainTime / 60 / 2) & " mins")
-		SetLog("  " & $accountSwitchTimeout)
-		$restartAfterTrain = True
-	EndIf
-
-	barracksReport($barracksTrainingUnits)
 
 SetLog("Check for deadlocks:")
 	; check for deadlock.
@@ -261,8 +237,6 @@ SetLog("Assign to barracks:")
 		$ArmyToTrain[$longestUnit] -= 1
 	WEnd
 
-	If $fullarmy = True Then SetLog("Build troops before attacking.")
-
 SetLog("Train troops:")
 
 	If $needTraining == True Then
@@ -293,6 +267,32 @@ SetLog("Train troops:")
 		WEnd
 	EndIf
 
+	If $rtAccountSwitch == True Then
+		SetLog("")
+		SetLog("Checking account switch:")
+		SetLog("  mTT: " & $maxTrainTime)
+		; If $fullarmy Then 
+		; 	SetLog("  $fullarmy = True")
+		; Else
+		; 	SetLog("  $fullarmy = False")
+		; EndIf
+		; SetLog("  timer: " & Floor(TimerDiff($accountSwitchTimer)) & "/" & $accountSwitchTimeout)
+		SetLog("  Can swap in " & Round(($accountSwitchTimeout - TimerDiff($accountSwitchTimer))/60/1000) & " mins")
+
+		If $maxTrainTime > 600 And _  ; I can't get an attack in in under 10 mins probably so no point in switching
+		   $fullarmy <> True And _
+		   TimerDiff($accountSwitchTimer) > $accountSwitchTimeout _
+		Then
+			SetLog("I have " & Round($maxTrainTime/60) & " mins left in training and I'm not ready for attack.")
+			SetLog("Swap accounts after train.")
+			$accountSwitchTimer = TimerInit()
+			$accountSwitchTimeout = ($maxTrainTime / 2)*1000 ; Don't come back until I'm half way done training. I'm thinking this will keep me balanced between accounts.
+			SetLog("Can come back in " & Round($maxTrainTime / 60 / 2) & " mins")
+			SetLog("  " & $accountSwitchTimeout)
+			$restartAfterTrain = True
+		EndIf
+	EndIf
+	
 SetLog("End train")
 
 	If _Sleep($iDelayTrain4) Then Return
@@ -384,16 +384,19 @@ Func getArmyComposition($currentArmy)
 	; resource calculations
 
 	Local $weightedElixir = (Number($iElixirCurrent) - $rtElixirRes) / ($rtElixirMax - $rtElixirRes)
+	If $weightedElixir < 0 Then $weightedElixir = 0
 	Local $weightedDarkElixir = (Number($iDarkCurrent) - $rtDarkRes) / ($rtDarkMax - $rtDarkRes)
+	If $weightedDarkElixir < 0 Then $weightedDarkElixir = 0
+
 	$weightedDarkElixir = $weightedDarkElixir / 3 ; This is an estimate of relative dark elixir value
 
-	SetLog("  Weighted Elixir = " & $weightedElixir)
-	SetLog("  Weighted Dark Elixir = " & $weightedDarkElixir)
+	SetLog("  Weighted Elixir = " & Floor($weightedElixir*100) & "%")
+	SetLog("  Weighted Dark Elixir = " & Floor($weightedDarkElixir*100) & "%")
 
 	Local $elixirRatio = $weightedElixir / ($weightedElixir + $weightedDarkElixir)
 	Local $darkElixirRatio = 1 - $elixirRatio
 
-	SetLog("Elixir ratio = " & $elixirRatio)
+	SetLog("Elixir ratio = " & Floor($elixirRatio*100))
 
 	; I need some buckets.
 	; The big bucket is the army size. Everything needs to fit in the army size.

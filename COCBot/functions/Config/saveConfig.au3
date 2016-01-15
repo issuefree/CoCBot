@@ -825,6 +825,13 @@ Func saveConfig() ;Saves the controls settings to the config
 	IniWrite($config, "troop", "rtDarkMax", GUICtrlRead($rtDarkMaxTxt))
 	IniWrite($config, "troop", "rtDarkRes", GUICtrlRead($rtDarkResTxt))
 
+	If GUICtrlRead($rtAccountSwitchCheck) == $GUI_CHECKED Then
+		IniWrite($config, "troop", "rtAccountSwitch", 1)
+	Else
+		IniWrite($config, "troop", "rtAccountSwitch", 0)
+	EndIf
+	
+	IniWrite($config, "troop", "rtAccountList", GUICtrlRead($rtAccountListTxt))
 
 	IniWrite($config, "troop", "troop1", _GUICtrlComboBox_GetCurSel($cmbBarrack1))
 	IniWrite($config, "troop", "troop2", _GUICtrlComboBox_GetCurSel($cmbBarrack2))

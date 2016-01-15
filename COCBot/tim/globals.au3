@@ -223,7 +223,7 @@ EndFunc
 
 ; this relies on you being on the army overview
 Func goToBarracks($targetBarracks)
-	SetLog("goToBarracks(" & $targetBarracks)
+	; SetLog("goToBarracks(" & $targetBarracks & ")")
 	Local $currentBarracks = -1
 	While $currentBarracks < 6
 		_TrainMoveBtn(+1) ;click Next button
@@ -250,6 +250,8 @@ Global $rtDarkRes
 Global $currentAccount = 1
 Global $accountSwitchTimer = TimerInit()
 Global $accountSwitchTimeout = 0
+Global $rtAccountSwitch
+Global $rtAccountList[5]
 
 Func loadAccount($accountNum)
 	SetLog("Loading account: " & $accountNum)
@@ -289,7 +291,7 @@ Func loadAccount($accountNum)
 	_Sleep(500)
 
 	;Wait for 284807 at 534 437
-	If WaitForPixel(403, 409, 404, 410, Hex(0xf0bc68, 6), 5, 4) Then ; orange in cancel button
+	If WaitForPixel(403, 409, 404, 410, Hex(0xf0bc68, 6), 5, 20) Then ; orange in cancel button
 		Click(534, 437) ; click load
 		_Sleep(500)
 	Else
@@ -351,3 +353,15 @@ Func CreateGlobalLogFile()
 	DirCreate($sLogPath)
 	$gLogFileHandle = FileOpen($sLogPath & $sLogFName, $FO_APPEND)
 EndFunc
+
+
+Func StringJoin($array, $delim=",")
+	If UBound($array) == 0 Then Return ""
+	If UBound($array) == 1 Then Return $array[0]
+	$str = $array[0]
+	For $i = 1 To UBound($array)-1
+		$str &= "," & $array[$i]
+	Next
+	Return $str
+EndFunc
+
