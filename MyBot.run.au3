@@ -131,8 +131,6 @@ WEnd
 Func runBot() ;Bot that runs everything in order
 	$TotalTrainedTroops = 0
 
-;runTest()
-
 	While 1
 		$Restart = False
 		$fullArmy = False
@@ -171,8 +169,6 @@ Func runBot() ;Bot that runs everything in order
 			If _Sleep($iDelayRunBot5) Then Return
 			checkMainScreen(False)
 
-			; Train()
-			
 			If $Restart = True Then ContinueLoop
 			Collect()
 			If _Sleep($iDelayRunBot1) Then Return
@@ -193,6 +189,8 @@ Func runBot() ;Bot that runs everything in order
 			If _Sleep($iDelayRunBot1) Then Return
 			checkMainScreen(False) ; required here due to many possible exits
 			If $Restart = True Then ContinueLoop
+			RequestCC()
+			If $Restart = True Then ContinueLoop
 			Train()
 			If _Sleep($iDelayRunBot1) Then Return
 			checkMainScreen(False)
@@ -208,8 +206,6 @@ Func runBot() ;Bot that runs everything in order
 			BoostQueen()
 			If $Restart = True Then ContinueLoop
 			BoostWarden()
-			If $Restart = True Then ContinueLoop
-			RequestCC()
 			If _Sleep($iDelayRunBot1) Then Return
 			checkMainScreen(False) ; required here due to many possible exits
 			If $Restart = True Then ContinueLoop
