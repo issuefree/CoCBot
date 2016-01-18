@@ -58,6 +58,8 @@ Func ResourceTrain()
 	; 4. Assign troops to barracks.
 	;;;;;
 
+	; 1. Figure out what we've already trained.
+SetLog("Currently trained:")
 	ZeroArray($ArmyTrained) ; Zero out the in-training array before we check the camp. checkArmyCamp populates this
 	checkArmyCamp()
 
@@ -114,15 +116,6 @@ SetLog("Currently in training:")
 		If _Sleep($iDelayTrain2) Then Return
 	WEnd
 	barracksReport($barracksTrainingUnits)
-
-
-	; 1. Figure out what we've already trained.
-SetLog("Currently trained:")
-	If goHome() == False Then Return
-	If goArmyOverview() == False Then Return			
-	ZeroArray($ArmyTrained) ; Zero out the in-training array before we check the camp. checkArmyCamp populates this
-	checkArmyCamp()
-
 
 SetLog("Check for deadlocks:")
 	; check for deadlock.
@@ -270,7 +263,7 @@ SetLog("Train troops:")
 	If $rtAccountSwitch == True Then
 		SetLog("")
 		SetLog("Checking account switch:")
-		SetLog("  mTT: " & $maxTrainTime)
+		SetLog("  Train time: " & Round($maxTrainTime/60) & " mins")
 		; If $fullarmy Then 
 		; 	SetLog("  $fullarmy = True")
 		; Else
@@ -345,8 +338,8 @@ Func getArmyComposition($currentArmy)
 	Local $capacity = $TotalCamp
 	; Resource based troop comp
 
-	SetLog("Current army: " & getArmySize($currentArmy))
-	dumpUnitArray($currentArmy)
+	; SetLog("Current army: " & getArmySize($currentArmy))
+	; dumpUnitArray($currentArmy)
 
 	; army composition calculations
 
@@ -390,13 +383,18 @@ Func getArmyComposition($currentArmy)
 
 	$weightedDarkElixir = $weightedDarkElixir / 3 ; This is an estimate of relative dark elixir value
 
-	SetLog("  Weighted Elixir = " & Floor($weightedElixir*100) & "%")
-	SetLog("  Weighted Dark Elixir = " & Floor($weightedDarkElixir*100) & "%")
 
-	Local $elixirRatio = $weightedElixir / ($weightedElixir + $weightedDarkElixir)
+	Local $elixirRatio
+	If $weightedElixir > 0 Then
+		$elixirRatio = $weightedElixir / ($weightedElixir + $weightedDarkElixir)
+	Else 
+		$elixirRatio = 1
+	EndIf
 	Local $darkElixirRatio = 1 - $elixirRatio
 
-	SetLog("Elixir ratio = " & Floor($elixirRatio*100))
+	SetLog("Resource allocation:")
+	SetLog("  [E]: " & Floor($weightedElixir*100) & "%  [DE]: " & Floor($weightedDarkElixir*100) & "%    [E/DE]: " & Floor($elixirRatio*100) & "/" & Floor($darkElixirRatio*100))
+	; SetLog("Elixir ratio = " & Floor($elixirRatio*100) & "%")
 
 	; I need some buckets.
 	; The big bucket is the army size. Everything needs to fit in the army size.
