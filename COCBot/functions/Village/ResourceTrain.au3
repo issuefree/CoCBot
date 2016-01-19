@@ -381,7 +381,10 @@ Func getArmyComposition($currentArmy)
 	Local $weightedDarkElixir = (Number($iDarkCurrent) - $rtDarkRes) / ($rtDarkMax - $rtDarkRes)
 	If $weightedDarkElixir < 0 Then $weightedDarkElixir = 0
 
-	$weightedDarkElixir = $weightedDarkElixir / 3 ; This is an estimate of relative dark elixir value
+	; Estimate of de value over elixir value. Started with 3. I'd like to use more DE troops so I set it to 2.	
+	; Changing to 1. Maybe just let the reserve handle it.
+	Local $deValue = 1 
+	$weightedDarkElixir = $weightedDarkElixir / $deValue ; This is an estimate of relative dark elixir value 
 
 
 	Local $elixirRatio
