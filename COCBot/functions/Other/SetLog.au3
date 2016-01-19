@@ -29,7 +29,7 @@ Func SetLog($String, $Color = $COLOR_BLACK, $Font = "Verdana", $FontSize = 7.5, 
     EndIf
     If IsDeclared("txtLog") Then
 		_GUICtrlRichEdit_SetFont($txtLog, 6, "Lucida Console")
-		_GUICtrlRichEdit_AppendTextColor($txtLog, Time(), 0x000000)
+	   _GUICtrlRichEdit_AppendTextColor($txtLog, $time, 0x000000)
 		_GUICtrlRichEdit_SetFont($txtLog, $FontSize, $Font)
 		_GUICtrlRichEdit_AppendTextColor($txtLog, $String & @CRLF, _ColorConvert($Color))
 		If $statusbar = 1 And IsDeclared("statLog") Then _GUICtrlStatusBar_SetText($statLog, "Status : " & $String)

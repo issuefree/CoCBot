@@ -219,8 +219,6 @@
 #include "functions\Village\PersonalShield.au3"
 #include "functions\Village\ReArm.au3"
 #include "functions\Village\RequestCC.au3"
-#include "functions\Village\ResourceTrain.au3"
-
 #include "functions\Village\VillageReport.au3"
 #include "functions\Village\UpgradeBuilding.au3"
 #include "functions\Village\UpgradeWall.au3"
@@ -230,3 +228,4 @@
 #include "functions\Village\BoostHeroes.au3"
 #include "functions\Village\UpgradeHeroes.au3"
 #include "functions\Village\ClanLevel.au3"
+#include "functions\Village\ResourceTrain.au3"

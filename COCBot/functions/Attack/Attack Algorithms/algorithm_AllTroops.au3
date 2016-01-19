@@ -143,7 +143,7 @@ Func algorithm_AllTroops() ;Attack Algorithm for all existing troops
 				, [$eGobl, $nbSides, 1, 1, 1] _
 				]
 	Else
-		If $debugSetlog =1 Then SetLog("listdeploy standard for attack", $COLOR_PURPLE)
+		If $debugSetlog = 1 Then SetLog("listdeploy standard for attack", $COLOR_PURPLE)
 		Local $listInfoDeploy[16][5] = [ _
 			  [$eGole, $nbSides, 1, 1, 2] _
 			, [$eGiant, $nbSides, 1, 1, 2] _
