@@ -313,12 +313,7 @@ Func DonateCC($Check = False)
 			If _Sleep($iDelayDonateCC2) Then ExitLoop
 			ContinueLoop
 		EndIf
-<<<<<<< HEAD
-		; $debugOcr = 0
-		$Donate = False
-=======
 		$bDonate = False
->>>>>>> refs/remotes/MyBotRun/master
 	WEnd
 
 	ClickP($aAway, 1, 0, "#0176") ; click away any possible open window

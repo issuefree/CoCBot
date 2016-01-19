@@ -151,11 +151,7 @@ Func runBot() ;Bot that runs everything in order
 		If _Sleep($iDelayRunBot1) Then Return
 		checkMainScreen()
 		If $Restart = True Then ContinueLoop
-<<<<<<< HEAD
-		If $Is_ClientSyncError = False and $Is_SearchLimit=false Then
-=======
 		If $Is_ClientSyncError = False And $Is_SearchLimit = False Then
->>>>>>> refs/remotes/MyBotRun/master
 			If BotCommand() Then btnStop()
 			If _Sleep($iDelayRunBot2) Then Return
 			checkMainScreen(False)
@@ -188,14 +184,8 @@ Func runBot() ;Bot that runs everything in order
 				ContinueLoop ; Restart bot loop to reset $CommandStop
 			EndIf
 			If _Sleep($iDelayRunBot5) Then Return
-<<<<<<< HEAD
-			checkMainScreen(False)
-
-			If $Restart = True Then ContinueLoop
-=======
 				checkMainScreen(False)
 				If $Restart = True Then ContinueLoop
->>>>>>> refs/remotes/MyBotRun/master
 			Collect()
 				If _Sleep($iDelayRunBot1) Then Return
 				If $Restart = True Then ContinueLoop
@@ -212,17 +202,9 @@ Func runBot() ;Bot that runs everything in order
 				If _Sleep($iDelayRunBot3) Then Return
 				If $Restart = True Then ContinueLoop
 			DonateCC()
-<<<<<<< HEAD
-			If _Sleep($iDelayRunBot1) Then Return
-			checkMainScreen(False) ; required here due to many possible exits
-			If $Restart = True Then ContinueLoop
-			RequestCC()
-			If $Restart = True Then ContinueLoop
-=======
 				If _Sleep($iDelayRunBot1) Then Return
 				checkMainScreen(False) ; required here due to many possible exits
 				If $Restart = True Then ContinueLoop
->>>>>>> refs/remotes/MyBotRun/master
 			Train()
 				If _Sleep($iDelayRunBot1) Then Return
 				checkMainScreen(False)
@@ -238,17 +220,11 @@ Func runBot() ;Bot that runs everything in order
 			BoostQueen()
 				If $Restart = True Then ContinueLoop
 			BoostWarden()
-<<<<<<< HEAD
-			If _Sleep($iDelayRunBot1) Then Return
-			checkMainScreen(False) ; required here due to many possible exits
-			If $Restart = True Then ContinueLoop
-=======
 				If $Restart = True Then ContinueLoop
 			RequestCC()
 				If _Sleep($iDelayRunBot1) Then Return
 				checkMainScreen(False) ; required here due to many possible exits
 				If $Restart = True Then ContinueLoop
->>>>>>> refs/remotes/MyBotRun/master
 			If $iUnbreakableMode >= 1 Then
 				If Unbreakable() = True Then ContinueLoop
 			EndIf

@@ -227,6 +227,9 @@ Func getArmyTroopCount($bOpenArmyWindow = False, $bCloseArmyWindow = False)
 				EndIf
 				If $TroopQ <> 0 Then SetLog(" - No. of " & $TroopName & ": " & $TroopQ)
 
+				If $TroopQ <> 0 Then
+					$ArmyTrained[$Troops[0]] = $TroopQ
+				EndIf
 			EndIf
 
 		Next
