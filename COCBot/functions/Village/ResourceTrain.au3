@@ -121,8 +121,9 @@ SetLog("Check for deadlocks:")
 	; check for deadlock.
 	; A deadlock is when 1 or more barracks is blocked and all other barracks are not training.
 	; this is not a very aggressive check and could waste some time but it'll probably do for now.
+
 	If $numBlockedBarracks > 0 And $CurCamp <> $TotalCamp Then	
-		If $numBlockedBarracks == $numBarracksAvaiables Then ; Hard deadlock.
+		If $numBlockedBarracks >= $numBarracksAvaiables Then ; Hard deadlock.
 			SetLog("Hard deadlock")
 			; Gotta stop training on something. Probably the barracks with the least training.
 			Local $bestBarracks
