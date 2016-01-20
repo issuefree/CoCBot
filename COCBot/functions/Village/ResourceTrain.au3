@@ -79,11 +79,8 @@ SetLog("Currently in training:")
 	Local $blockedBarracks[$numBarracksAvaiables+$numDarkBarracksAvaiables]
 	Local $numBlockedBarracks = 0
 
-SetLog("Debug: goHome()")
 	If goHome() == False Then Return
-SetLog("Debug: goArmyOverview()")
 	If goArmyOverview() == False Then Return	
-SetLog("Debug: goHomeToBarracks(0)")
 	If goToBarracks(0) == False Then Return
 
 	ZeroArray($ArmyTraining)
@@ -124,9 +121,8 @@ SetLog("Check for deadlocks:")
 	; check for deadlock.
 	; A deadlock is when 1 or more barracks is blocked and all other barracks are not training.
 	; this is not a very aggressive check and could waste some time but it'll probably do for now.
-
 	If $numBlockedBarracks > 0 And $CurCamp <> $TotalCamp Then	
-		If $numBlockedBarracks >= $numBarracksAvaiables Then ; Hard deadlock.
+		If $numBlockedBarracks == $numBarracksAvaiables Then ; Hard deadlock.
 			SetLog("Hard deadlock")
 			; Gotta stop training on something. Probably the barracks with the least training.
 			Local $bestBarracks
@@ -347,10 +343,10 @@ Func getArmyComposition($currentArmy)
 
 	; army composition calculations
 
-	Local $tankUnits[2] = [$iGolem, $iGiant]
-	Local $meleeUnits[3] = [$iPekka, $iValkyrie, $iBarbarian]
-	Local $rangedUnits[2] = [$iWizard, $iArcher]
-	Local $resourceUnits[1] = [$iGoblin]
+	Local $TankUnits[2] = [$iGolem, $iGiant]
+	Local $MeleeUnits[3] = [$iPekka, $iValkyrie, $iBarbarian]
+	Local $RangedUnits[2] = [$iWizard, $iArcher]
+	Local $ResourceUnits[1] = [$iGoblin]
 
 	; dark vs elixir units are in globals but for syntax similarity I'll reproduce here.
 	; high value elixir units
@@ -382,33 +378,22 @@ Func getArmyComposition($currentArmy)
 
 	Local $weightedElixir = (Number($iElixirCurrent) - $rtElixirRes) / ($rtElixirMax - $rtElixirRes)
 	If $weightedElixir < 0 Then $weightedElixir = 0
-	$weightedElixir = $weightedElixir*$weightedElixir
 	Local $weightedDarkElixir = (Number($iDarkCurrent) - $rtDarkRes) / ($rtDarkMax - $rtDarkRes)
 	If $weightedDarkElixir < 0 Then $weightedDarkElixir = 0
-	$weightedDarkElixir = $weightedDarkElixir * $weightedDarkElixir
 
-	; trying squaring the weights. This should let me spend when I'm capped but ease off SHARPLY as I approach my reserve.
-	; ; Estimate of de value over elixir value. Started with 3. I'd like to use more DE troops so I set it to 2.	
-	; ; Changing to 1. Maybe just let the reserve handle it.
-	; Local $deValue = 1 
-	; $weightedDarkElixir = $weightedDarkElixir / $deValue ; This is an estimate of relative dark elixir value 
+	$weightedDarkElixir = $weightedDarkElixir / 3 ; This is an estimate of relative dark elixir value
 
 
-	Local $base = $weightedElixir + $weightedDarkElixir
-	If $base < 1 Then
-		$base = 1
+	Local $elixirRatio
+	If $weightedElixir > 0 Then
+		$elixirRatio = $weightedElixir / ($weightedElixir + $weightedDarkElixir)
+	Else 
+		$elixirRatio = 1
 	EndIf
-	Local $elixirRatio = $weightedElixir / $base
-	Local $darkElixirRatio = $weightedDarkElixir / $base
-
-	; this is hard coded. I could figure it based on my assigned categories...
-	Local $tankRatio[2] = [0, $weightedDarkElixir]		; how much of each ratio to apply
-	Local $meleeRatio[2] = [$elixirRatio, $darkElixirRatio]
-	Local $rangedRatio[2] = [$weightedElixir,0]
-	Local $resourceRatio[2] = [0, 0]
+	Local $darkElixirRatio = 1 - $elixirRatio
 
 	SetLog("Resource allocation:")
-	SetLog("  [E]: " & Round($weightedElixir*100) & "%  [DE]: " & Round($weightedDarkElixir*100) & "%    [E/DE]: " & Round($elixirRatio*100) & "/" & Round($darkElixirRatio*100))
+	SetLog("  [E]: " & Floor($weightedElixir*100) & "%  [DE]: " & Floor($weightedDarkElixir*100) & "%    [E/DE]: " & Floor($elixirRatio*100) & "/" & Floor($darkElixirRatio*100))
 	; SetLog("Elixir ratio = " & Floor($elixirRatio*100) & "%")
 
 	; I need some buckets.
@@ -429,7 +414,7 @@ Func getArmyComposition($currentArmy)
 	Local $rangedCount = Round($rtRangedPerc/100 * $capacity)
 	Local $resourceCount = Round($rtResourcePerc/100 * $capacity)
 
-	Local $hvCount = Round($capacity*$elixirRatio)
+	Local $hvCount = Round($capacity*$weightedElixir)
 	Local $deCount = Round($capacity*$darkElixirRatio)
 
 	SetLog("Base counts: [T]: " & $tankCount & " [M]: " & $meleeCount & " [R]: " & $rangedCount & " [r]:" & $resourceCount)
@@ -444,13 +429,13 @@ Func getArmyComposition($currentArmy)
 
 	For $iUnit = 0 To $iArmyEnd-1
 		If $currentArmy[$iUnit] > 0 Then
-			If _ArraySearch($tankUnits, $iUnit) <> -1 Then
+			If _ArraySearch($TankUnits, $iUnit) <> -1 Then
 				$tankCount -= $currentArmy[$iUnit]*$UnitSize[$iUnit]				
-			ElseIf _ArraySearch($meleeUnits, $iUnit) <> -1 Then
+			ElseIf _ArraySearch($MeleeUnits, $iUnit) <> -1 Then
 				$meleeCount -= $currentArmy[$iUnit]*$UnitSize[$iUnit]
-			ElseIf _ArraySearch($rangedUnits, $iUnit) <> -1 Then
+			ElseIf _ArraySearch($RangedUnits, $iUnit) <> -1 Then
 				$rangedCount -= $currentArmy[$iUnit]*$UnitSize[$iUnit]
-			ElseIf _ArraySearch($resourceUnits, $iUnit) <> -1 Then
+			ElseIf _ArraySearch($ResourceUnits, $iUnit) <> -1 Then
 				$resourceCount -= $currentArmy[$iUnit]*$UnitSize[$iUnit]
 			EndIf
 			If _ArraySearch($deUnits, $iUnit) <> -1 Then
@@ -503,25 +488,11 @@ Func getArmyComposition($currentArmy)
 	$rangedCount = Floor($rangedCount - $extraCount*$rangedCount/($sum))
 	$resourceCount = Floor($resourceCount - $extraCount*$resourceCount/($sum))
 
-	Local Enum $rHV, $rDE
-	Local $tankCounts[2]
-	$tankCounts[$rHV] = Floor($tankCount*$tankRatio[$rHV])
-	$tankCounts[$rDE] = Floor($tankCount*$tankRatio[$rDE])
-	Local $meleeCounts[3]
-	$meleeCounts[$rHV] = Floor($meleeCount*$meleeRatio[$rHV])
-	$meleeCounts[$rDE] = Floor($meleeCount*$meleeRatio[$rDE])
-	Local $rangedCounts[3]
-	$rangedCounts[$rHV] = Floor($rangedCount*$rangedRatio[$rHV])
-	$rangedCounts[$rDE] = Floor($rangedCount*$rangedRatio[$rDE])
-	Local $resourceCounts[3]
-	$resourceCounts[$rHV] = Floor($resourceCount*$resourceRatio[$rHV])
-	$resourceCounts[$rDE] = Floor($resourceCount*$resourceRatio[$rDE])
-
 	SetLog("Capacity: " & $troopCount)
-	SetLog("ToTrain counts: [T]: " & $tankCount & "(" & $tankCounts[$rHV] & "/" & $tankCounts[$rDE] & ")" & _
-		                  " [M]: " & $meleeCount & "(" & $meleeCounts[$rHV] & "/" & $meleeCounts[$rDE] & ")" & _
-		                  " [R]: " & $rangedCount & "(" & $rangedCounts[$rHV] & "/" & $rangedCounts[$rDE] & ")" & _
-		                  " [r]: " & $resourceCount & "(" & $resourceCounts[$rHV] & "/" & $resourceCounts[$rDE] & ")")
+	SetLog("ToTrain counts: [T]: " & $tankCount & " [M]: " & $meleeCount & " [R]: " & $rangedCount & " [r]:" & $resourceCount)
+
+	; I think at this point $tankCount + $meleeCount + $rangeCount + $resourceCount should still equal $troopCount
+	; we should have balanced the negatives
 
 	; I'm thinking 2 passes evaluating units in order
 	; First pass: assign the base army
@@ -531,53 +502,48 @@ Func getArmyComposition($currentArmy)
 	; 	Ignore the type and respect the resource only and assign more troops.
 	; 	Subtract the counts
 
-	; We go into our slot picking with a de and a hv ratio.
-	; This ratio is applied to each slot to get a count. Assuming 40 space in the slot and full 
-
-
-
 	For $iUnit In $unitEvalOrder
 		If _ArraySearch($deUnits, $iUnit) <> -1 Then
-			If _ArraySearch($tankUnits, $iUnit) <> -1 Then
-				$newArmyComp[$iUnit] = Floor($tankCounts[$rDE]/$UnitSize[$iUnit])
+			If _ArraySearch($TankUnits, $iUnit) <> -1 Then
+				$newArmyComp[$iUnit] = Floor($tankCount*$darkElixirRatio/$UnitSize[$iUnit])
 				$tankCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
-			ElseIf _ArraySearch($meleeUnits, $iUnit) <> -1 Then
-				$newArmyComp[$iUnit] = Floor($meleeCounts[$rDE]/$UnitSize[$iUnit])
+			ElseIf _ArraySearch($MeleeUnits, $iUnit) <> -1 Then
+				$newArmyComp[$iUnit] = Floor($meleeCount*$darkElixirRatio/$UnitSize[$iUnit])
 				$meleeCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
-			ElseIf _ArraySearch($rangedUnits, $iUnit) <> -1 Then
-				$newArmyComp[$iUnit] = Floor($rangedCounts[$rDE]/$UnitSize[$iUnit])
+			ElseIf _ArraySearch($RangedUnits, $iUnit) <> -1 Then
+				$newArmyComp[$iUnit] = Floor($rangedCount*$darkElixirRatio/$UnitSize[$iUnit])
 				$rangedCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
-			ElseIf _ArraySearch($resourceUnits, $iUnit) <> -1 Then
-				$newArmyComp[$iUnit] = Floor($resourceCounts[$rDE]/$UnitSize[$iUnit])
+			ElseIf _ArraySearch($ResourceUnits, $iUnit) <> -1 Then
+				$newArmyComp[$iUnit] = Floor($resourceCount*$darkElixirRatio/$UnitSize[$iUnit])
 				$resourceCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
 			EndIf
 			$deCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
 		ElseIf _ArraySearch($hvUnits, $iUnit) <> -1 Then
-			If _ArraySearch($tankUnits, $iUnit) <> -1 Then
-				$newArmyComp[$iUnit] = Floor($tankCounts[$rHV]/$UnitSize[$iUnit])
+			If _ArraySearch($TankUnits, $iUnit) <> -1 Then
+				$newArmyComp[$iUnit] = Floor($tankCount*$weightedElixir/$UnitSize[$iUnit])
 				$tankCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
-			ElseIf _ArraySearch($meleeUnits, $iUnit) <> -1 Then
-				$newArmyComp[$iUnit] = Floor($meleeCounts[$rHV]/$UnitSize[$iUnit])
+			ElseIf _ArraySearch($MeleeUnits, $iUnit) <> -1 Then
+				$newArmyComp[$iUnit] = Floor($meleeCount*$weightedElixir/$UnitSize[$iUnit])
 				$meleeCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
-			ElseIf _ArraySearch($rangedUnits, $iUnit) <> -1 Then
-				$newArmyComp[$iUnit] = Floor($rangedCounts[$rHV]/$UnitSize[$iUnit])
+			ElseIf _ArraySearch($RangedUnits, $iUnit) <> -1 Then
+				$newArmyComp[$iUnit] = Floor($rangedCount*$weightedElixir/$UnitSize[$iUnit])
 				$rangedCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
-			ElseIf _ArraySearch($resourceUnits, $iUnit) <> -1 Then
-				$newArmyComp[$iUnit] = Floor($resourceCounts[$rHV]/$UnitSize[$iUnit])
+			ElseIf _ArraySearch($ResourceUnits, $iUnit) <> -1 Then
+				$newArmyComp[$iUnit] = Floor($resourceCount*$weightedElixir/$UnitSize[$iUnit])
 				$resourceCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
 			EndIf
 			$hvCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
 		Else
-			If _ArraySearch($tankUnits, $iUnit) <> -1 Then
+			If _ArraySearch($TankUnits, $iUnit) <> -1 Then
 				$newArmyComp[$iUnit] = Floor($tankCount/$UnitSize[$iUnit])
 				$tankCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
-			ElseIf _ArraySearch($meleeUnits, $iUnit) <> -1 Then
+			ElseIf _ArraySearch($MeleeUnits, $iUnit) <> -1 Then
 				$newArmyComp[$iUnit] = Floor($meleeCount/$UnitSize[$iUnit])
 				$meleeCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
-			ElseIf _ArraySearch($rangedUnits, $iUnit) <> -1 Then
+			ElseIf _ArraySearch($RangedUnits, $iUnit) <> -1 Then
 				$newArmyComp[$iUnit] = Floor($rangedCount/$UnitSize[$iUnit])
 				$rangedCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
-			ElseIf _ArraySearch($resourceUnits, $iUnit) <> -1 Then
+			ElseIf _ArraySearch($ResourceUnits, $iUnit) <> -1 Then
 				$newArmyComp[$iUnit] = Floor($resourceCount/$UnitSize[$iUnit])
 				$resourceCount -= $newArmyComp[$iUnit]*$UnitSize[$iUnit]
 			EndIf

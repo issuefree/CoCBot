@@ -6,7 +6,7 @@
 ; Return values .: None
 ; Author ........: GkevinOD (2014)
 ; Modified ......: Hervidero (2015)
-; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
+; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......:
 ; Link ..........: https://github.com/MyBotRun/MyBot/wiki
@@ -226,7 +226,10 @@ Func chkRestartSearchLimit()
 	EndIf
 EndFunc   ;==>chkRestartSearchLimit
 
-
-Func btnConfigureCollectors()
-	OpenGUI2()
-EndFunc
+Func chkenable75percent()
+	If GUICtrlRead($chkenable75percent) = $GUI_CHECKED Then
+		GUICtrlSetState($cmbenable75percent, $GUI_ENABLE)
+	Else
+		GUICtrlSetState($cmbenable75percent, $GUI_DISABLE)
+	EndIf
+EndFunc   ;==>chkenable75percent

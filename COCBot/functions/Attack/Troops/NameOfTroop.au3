@@ -1,86 +1,62 @@
-; #FUNCTION# ====================================================================================================================
-; Name ..........: NameOfTroop
-; Description ...: Returns the string value of the troopname in singular or plural form
-; Syntax ........: NameOfTroop($iKind[, $iPlural = 0])
-; Parameters ....: $iKind      - an integer value, enumerated value of the troops, like $eBarb = 0, $eArch = 1 etc.
-;                  $iPlural    - [optional] a integer value to indicate the $sTroopname returned must be in plural form. Default is 0.
-; Return values .: $sTroopname
-; Author ........: Unknown (2015)
-; Modified ......: ZengZeng (2016-01), Hervidero (2016-01)
-; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
-;                  MyBot is distributed under the terms of the GNU GPL
-; Related .......:
-; Link ..........: https://github.com/MyBotRun/MyBot/wiki
-; Example .......: No
-; ===============================================================================================================================
-
-Func NameOfTroop($iKind, $iPlural = 0)
-	Local $sTroopname
-	Switch $iKind
+Func NameOfTroop($kind, $plurial = 0)
+	Switch $kind
 		Case $eBarb
-			$sTroopname = "Barbarian"
+			Return "Barbarians"
 		Case $eArch
-			$sTroopname = "Archer"
+			Return "Archers"
 		Case $eGobl
-			$sTroopname = "Goblin"
+			Return "Goblins"
 		Case $eGiant
-			$sTroopname = "Giant"
+			Return "Giants"
 		Case $eWall
-			$sTroopname = "Wall Breaker"
+			Return "Wall Breakers"
 		Case $eWiza
-			$sTroopname = "Wizard"
+			Return "Wizards"
 		Case $eBall
-			$sTroopname = "Balloon"
-		Case $eHeal
-			$sTroopname = "Healer"
-		Case $eDrag
-			$sTroopname = "Dragon"
-		Case $ePekk
-			$sTroopname = "Pekka"
+			Return "Balloons"
+	    Case $eHeal
+			Return "Healers"
+	    Case $eDrag
+			Return "Dragons"
+	    Case $ePekk
+			Return "Pekkas"
 		Case $eMini
-			$sTroopname = "Minion"
+			Return "Minions"
 		Case $eHogs
-			$sTroopname = "Hog Rider"
+			Return "Hog Riders"
 		Case $eValk
-			$sTroopname = "Valkyrie"
+			Return "Valkyries"
 		Case $eWitc
-			$sTroopname = "Witch"
+			Return "Witches"
 		Case $eGole
-			$sTroopname = "Golem"
+			Return "Golems"
 		Case $eLava
-			$sTroopname = "Lava Hound"
+			Return "Lava Hounds"
 		Case $eKing
-			$sTroopname = "King"
-			$iPlural = 0 ; safety reset, $sTroopname of $eKing cannot be plural
+			Return "King"
 		Case $eQueen
-			$sTroopname = "Queen"
-			$iPlural = 0 ; safety reset
-		Case $eWarden
-			$sTroopname = "Grand Warden"
-			$iPlural = 0 ; safety reset
+			Return "Queen"
 		Case $eCastle
-			$sTroopname = "Clan Castle"
-			$iPlural = 0 ; safety reset
+			Return "Clan Castle"
 		Case $eLSpell
-			$sTroopname = "Lightning Spell"
+			Return "Lightning Spells"
 		Case $eHSpell
-			$sTroopname = "Heal Spell"
+			Return "Heal Spells"
 		Case $eRSpell
-			$sTroopname = "Rage Spell"
-		Case $eJSpell
-			$sTroopname = "Jump Spell"
+			Return "Rage Spells"
+	    Case $eJSpell
+			Return "Jump Spells"
 		Case $eFSpell
-			$sTroopname = "Freeze Spell"
+			Return "Freeze Spells"
 		Case $ePSpell
-			$sTroopname = "Poison Spell"
+			Return "Poison Spells"
 		Case $eESpell
-			$sTroopname = "Earthquake Spell"
+			Return "Earthquake Spells"
 		Case $eHaSpell
-			$sTroopname = "Haste Spell"
+			Return "Haste Spells"
+		Case $eWarden
+			Return "Grand Warden"
 		Case Else
-			Return "" ; error or unknown case
+			Return ""
 	EndSwitch
-	If $iPlural = 1 And $iKind = $eWitc Then $sTroopname &= "e" ; adding the "e" for "witches"
-	If $iPlural = 1 Then $sTroopname &= "s" ; if troop is not $eKing, $eQueen, $eCastle, $eWarden add the plural "s"
-	Return $sTroopname
 EndFunc   ;==>NameOfTroop

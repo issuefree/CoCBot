@@ -1,20 +1,4 @@
-;
-; #FUNCTION# ====================================================================================================================
-; Name ..........: _FindPixelCloser
-; Description ...: Search the closer array of pixel in the array of pixel
-; Syntax ........: _FindPixelCloser($arrPixel, $pixel[, $nb = 1])
-; Parameters ....: $arrPixel            - an array of unknowns.
-;                  $pixel               - a pointer value.
-;                  $nb                  - [optional] a general number value. Default is 1.
-; Return values .: None
-; Author ........: didipe
-; Modified ......:
-; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
-;                  MyBot is distributed under the terms of the GNU GPL
-; Related .......:
-; Link ..........: https://github.com/MyBotRun/MyBot/wiki
-; Example .......: No
-; ===============================================================================================================================
+; Search the closer array of pixel in the array of pixel
 Func _FindPixelCloser($arrPixel, $pixel, $nb = 1)
 
 	If IsArray($arrPixel) = False Then Return ; Prevent error

@@ -8,7 +8,7 @@
 ; Return values .: None
 ; Author ........:
 ; Modified ......: KnowJack (July/Aug 2015) , TheMaster (2015)
-; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2016
+; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......: checkObstacles(), waitMainScreen()
 ; Link ..........: https://github.com/MyBotRun/MyBot/wiki
@@ -22,28 +22,18 @@ Func checkMainScreen($Check = True) ;Checks if in main screen
 		_WinAPI_EmptyWorkingSet(WinGetProcess($Title)) ; Reduce BlueStacks Memory Usage
 	Else
 		If $debugsetlog = 1 Then SetLog("checkMainScreen start quiet mode", $COLOR_PURPLE)
-    EndIf
-	WinGetAndroidHandle()
-	If $HWnD = 0 Then
+	EndIf
+	If WinExists($Title) = False Then
 		OpenAndroid(True)
 		Return
     EndIf
 	getBSPos() ; Update $HWnd and Android Window Positions
 	If $ichkBackground = 0 Then
-	    Local $hTimer = TimerInit(), $hWndActive = -1
-		While TimerDiff($hTimer) < 1000 And $hWndActive <> $HWnD And Not _Sleep(100)
-		   getBSPos() ; update $HWnD
-		   $hWndActive = WinActivate($HWnD) ; ensure bot has window focus
-		WEnd
-		If $hWndActive <> $HWnD Then
-		   ; something wrong with window, restart Android
-		   RebootAndroid()
-		   Return
-	    EndIf
+	    WinActivate($HWnD)  	; ensure bot has window focus
     EndIf
 	$iCount = 0
 	While _CheckPixel($aIsMain, $bCapturePixel) = False
-		WinGetAndroidHandle()
+		$HWnD = WinGetHandle($Title)
 		If _Sleep($iDelaycheckMainScreen1) Then Return
 		$Result = checkObstacles()
 		If $debugsetlog = 1 Then Setlog("CheckObstacles Result = "&$Result, $COLOR_PURPLE)
@@ -56,7 +46,6 @@ Func checkMainScreen($Check = True) ;Checks if in main screen
 			$Restart = True
 		EndIf
 		waitMainScreen()  ; Due to differeneces in PC speed, let waitMainScreen test for CoC restart
-		If Not $RunState Then Return
 		If @extended Then Return SetError(1, 1, -1)
 		If @error Then $iCount += 1
 		If $iCount > 2 Then
@@ -66,7 +55,6 @@ Func checkMainScreen($Check = True) ;Checks if in main screen
 		EndIf
 	WEnd
 	ZoomOut()
-	If Not $RunState Then Return
 
 	If $Check = True Then
 		SetLog("Main Screen Located", $COLOR_GREEN)

@@ -1,5 +1,6 @@
 #include <Array.au3>
 #include <String.au3>
+#include "findDeCollector.au3"
 ; I know a lot of this info is already defined in the bot but I like my format better :)
 
 Global Enum _
@@ -19,7 +20,7 @@ Global Enum _
 	$iGolem, _
 	$iWitch, _
 	$iLavaHound, _
-	$iArmyEnd	
+	$iArmyEnd
 
 
 Global $ArmyComposition[$iArmyEnd]
@@ -122,7 +123,6 @@ Global $UnitTrainOrder[$iArmyEnd] = [ _
 	$iWitch, _
 	$iMinion _
 ]
-
 
 Global $UnitShortName[$iArmyEnd]
 $UnitShortName[$iBarbarian] = "Barb"
