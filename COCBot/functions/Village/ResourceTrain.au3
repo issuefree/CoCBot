@@ -197,8 +197,8 @@ SetLog("Check for deadlocks:")
 
 SetLog("Get army composition:")
 	; figure already trained troops and add the ones in training
-	Local $currentArmy = $ArmyTraining
-	If $fullarmy <> True Then
+	Local $currentArmy = $ArmyTraining	
+	If $fullarmy <> True Then  ; If the army is full we're training our next army so don't consider the currently trained ones.
 		For $i = 0 To $iArmyEnd-1
 			$currentArmy[$i] += $ArmyTrained[$i]
 		Next
@@ -206,16 +206,14 @@ SetLog("Get army composition:")
 
 	$ArmyToTrain = getArmyComposition($currentArmy)
 
-	SetLog("Army to train: " & getArmySize($ArmyToTrain))
-	dumpUnitArray($ArmyToTrain)
+	dumpArmy($ArmyToTrain, "Army to train:")
 
 	$ArmyComposition = $ArmyToTrain
 	For $i = 0 To $iArmyEnd-1
 		$ArmyComposition[$i] += $currentArmy[$i]
 	Next
 
-	SetLog("Final army: " & getArmySize($ArmyComposition))
-	dumpUnitArray($ArmyComposition)
+	dumpArmy($ArmyComposition, "Final army:")
 
 SetLog("Assign to barracks:")
 	; 4. Assign troops to barracks.
@@ -342,8 +340,7 @@ Func getArmyComposition($currentArmy)
 	Local $capacity = $TotalCamp
 	; Resource based troop comp
 
-	; SetLog("Current army: " & getArmySize($currentArmy))
-	; dumpUnitArray($currentArmy)
+	; dumpArmy($currentArmy, "Current army:")
 
 	; army composition calculations
 
@@ -671,7 +668,11 @@ Func getShortestBarracks($iUnit, $barracksTrainingTime)
 	Return _ArrayMinIndex($bTime) + $offset
 EndFunc
 
-Func dumpUnitArray($unitArray)
+Func dumpArmy($unitArray, $heading = "Army:", $showSize = True)
+	If $showSize Then
+		$heading &= " " getArmySize($unitArray)
+	EndIf
+	SetLog($heading)
 	For $iUnit = 0 To $iArmyEnd-1
 		If $unitArray[$iUnit] <> 0 Then
 			SetLog($UnitName[$iUnit] & " : " & $unitArray[$iUnit])
