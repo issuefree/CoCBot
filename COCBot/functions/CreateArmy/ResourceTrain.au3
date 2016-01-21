@@ -95,7 +95,7 @@ SetLog("Check for deadlocks:")
 			SetLog("Hard deadlock")
 			; Gotta stop training on something. Probably the barracks with the least training.
 			Local $bestBarracks
-			Local $bestBarracksSpace = 9999
+			Local $bestBarracksTime = 9999
 			SetLog("Finding best barracks to clean out")
 			For $barracksNumber = 0 To $numBarracksAvaiables-1
 				If $barracksTrainingTime[$barracksNumber] < $bestBarracksTime Then
