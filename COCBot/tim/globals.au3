@@ -181,19 +181,6 @@ Func goHome($maxDelay = 5000)
 	Return False
 EndFunc
 
-Func goArmyOverview($maxDelay = 5000)
-	
-	Local $icount = 0
-	While True
-		Click($aArmyTrainButton[0], $aArmyTrainButton[1], 1, 0, "#9998") ; Button Army Overview
-		If _Sleep(250) Then Return
-		If IsTrainPage() Then Return True
-		$icount += 1
-		If $icount = $maxDelay/250 Then ExitLoop
-	WEnd
-	Return False
-EndFunc
-
 Func clearTroops()
 	Local $icount = 0
 
