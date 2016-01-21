@@ -9,23 +9,8 @@ Func ResourceTrain()
 	If $debugSetlog = 1 Then SetLog("Func Train ", $COLOR_PURPLE)
 	If $bTrainEnabled = False Then Return
 
-	; Read Resource Values For army cost Stats
-	Local $tempElixir = ""	
-	Local $tempDElixir = ""
-	Local $tempElixirSpent = 0
-	Local $tempDElixirSpent = 0
-
+	; get a village report to store current resources before train into globals
 	VillageReport(True, True)
-
-	$tempCounter = 0
-	While ($iElixirCurrent = "" Or ($iDarkCurrent = "" And $iDarkStart <> "")) And $tempCounter < 5
-		$tempCounter += 1
-		If _Sleep(100) Then Return
-		VillageReport(True, True)
-	WEnd
-	$tempElixir = $iElixirCurrent
-	$tempDElixir = $iDarkCurrent
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	; in halt attack mode Make sure army reach 100% regardless of user Percentage of full army
 	If ($CommandStop = 3 Or $CommandStop = 0) Then
@@ -293,35 +278,7 @@ SetLog("End train")
 	If _Sleep($iDelayTrain4) Then Return
 	BrewSpells() ; Create Spells
 
-
-	If _Sleep($iDelayTrain4) Then Return
-	ClickP($aAway, 2, $iDelayTrain5, "#0504"); Click away twice with 250ms delay
-	$FirstStart = False
-
-	;;;;;; Protect Army cost stats from being messed up by DC and other errors ;;;;;;;
-	If _Sleep($iDelayTrain4) Then Return
-	VillageReport(True, True)
-
-	$tempCounter = 0
-	While ($iElixirCurrent = "" Or ($iDarkCurrent = "" And $iDarkStart <> "")) And $tempCounter < 30
-		$tempCounter += 1
-		If _Sleep(100) Then Return
-		VillageReport(True, True)
-	WEnd
-
-	If $tempElixir <> "" And $iElixirCurrent <> "" Then
-		$tempElixirSpent = ($tempElixir - $iElixirCurrent)
-		$iTrainCostElixir += $tempElixirSpent
-		$iElixirTotal -= $tempElixirSpent
-	EndIf
-
-	If $tempDElixir <> "" And $iDarkCurrent <> "" Then
-		$tempDElixirSpent = ($tempDElixir - $iDarkCurrent)
-		$iTrainCostDElixir += $tempDElixirSpent
-		$iDarkTotal -= $tempDElixirSpent
-	EndIf
-
-	UpdateStats()
+	getTrainCosts()
 
 	; assume matching accounts. I'll put UI on this to do it better.
 	$currentAccount = Number($sCurrProfile)-1
@@ -713,4 +670,38 @@ Func barracksReport($barracks)
 			SetLog($line, $COLOR_PURPLE, "Lucida Console")
 		EndIf
 	Next
+EndFunc
+
+Func getTrainCosts()
+	; store off current resources before we recheck village
+	Local $tempElixir = $iElixirCurrent
+	Local $tempDElixir = $iDarkCurrent
+
+	; copy pasta
+	If _Sleep($iDelayTrain4) Then Return
+	ClickP($aAway, 2, $iDelayTrain5, "#0504"); Click away twice with 250ms delay
+	$FirstStart = False
+
+	; Read Resource Values For army cost Stats
+	Local $tempElixirSpent = 0
+	Local $tempDElixirSpent = 0
+
+	;;;;;; Protect Army cost stats from being messed up by DC and other errors ;;;;;;;
+	If _Sleep($iDelayTrain4) Then Return
+	VillageReport(True, True)
+
+	If $tempElixir <> "" And $iElixirCurrent <> "" Then
+		$tempElixirSpent = ($tempElixir - $iElixirCurrent)
+		$iTrainCostElixir += $tempElixirSpent
+		$iElixirTotal -= $tempElixirSpent
+	EndIf
+
+	If $tempDElixir <> "" And $iDarkCurrent <> "" Then
+		$tempDElixirSpent = ($tempDElixir - $iDarkCurrent)
+		$iTrainCostDElixir += $tempDElixirSpent
+		$iDarkTotal -= $tempDElixirSpent
+	EndIf
+
+	UpdateStats()
+
 EndFunc
