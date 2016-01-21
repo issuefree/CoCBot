@@ -12,6 +12,8 @@
 ; Example .......: No
 ; ===============================================================================================================================
 
+#include "ResourceTrain.au3"
+
 Global $LastBarrackTrainDonatedTroop = 1
 Global $LastDarkBarrackTrainDonatedTroop = 1
 
