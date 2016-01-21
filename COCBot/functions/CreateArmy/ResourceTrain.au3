@@ -14,9 +14,11 @@ Func ResourceTrain()
 	SetLog("Training Troops & Spells", $COLOR_BLUE)
 
 	If goHome() == False Then Return
-	If goArmyOverview() == False Then Return			
+	If openArmyOverview() == False Then Return			
 
 	checkAttackDisable($iTaBChkIdle) ; Check for Take-A-Break after opening train page
+	checkArmyCamp()  ; sets up state variables for training 
+	; I'll recheck troop counts after training counts to avoid gaps
 	
 	; Determine training
 	; Note there WILL be errors in this caused by the detection not the algorithm.
@@ -33,10 +35,6 @@ Func ResourceTrain()
 	; 4. Assign troops to barracks.
 	;;;;;
 
-	; 1. Figure out what we've already trained.
-SetLog("Currently trained:")
-	ZeroArray($ArmyTrained) ; Zero out the in-training array before we check the camp. checkArmyCamp populates this
-	checkArmyCamp()
 
 	; 2. Figure out what we have in training.
 	;	a. figure out how much time is already in each barracks
@@ -55,13 +53,12 @@ SetLog("Currently in training:")
 	Local $numBlockedBarracks = 0
 
 	If goHome() == False Then Return
-	If goArmyOverview() == False Then Return	
+	If openArmyOverview() == False Then Return	
 SetLog("Debug: goToBarracks(0)")
 	If goToBarracks(0) == False Then Return
 SetLog("After goToBarracks(0)")
 
 	ZeroArray($ArmyTraining)
-	Local $maxTrainTime = 0
 	While isBarrack() Or isDarkBarrack()
 		If $barracksNumber >= $numBarracksAvaiables + $numDarkBarracksAvaiables Then ExitLoop
 
@@ -73,10 +70,6 @@ SetLog("After goToBarracks(0)")
 			$barracksTrainingSpace[$barracksNumber] += $num*$UnitSize[$iUnit]
 			$barracksTrainingUnits[$barracksNumber][$iUnit] += $num
 		Next
-
-		If $barracksTrainingTime[$barracksNumber] > $maxTrainTime Then
-			$maxTrainTime = $barracksTrainingTime[$barracksNumber]
-		EndIf
 
 		; SetLog("Checking barracks " & $barracksNumber)
 		$blockedBarracks[$barracksNumber] = CheckFullBarrack()
@@ -93,6 +86,13 @@ SetLog("After goToBarracks(0)")
 		If _Sleep($iDelayTrain2) Then Return
 	WEnd
 	barracksReport($barracksTrainingUnits)
+
+	; 1. Figure out what we've already trained.
+
+SetLog("Currently trained:")
+	goHome()
+	ZeroArray($ArmyTrained) ; Zero out the in-training array before we check the camp.
+	getArmyTroopCount(True)
 
 SetLog("Check for deadlocks:")
 	; check for deadlock.
@@ -119,7 +119,7 @@ SetLog("Check for deadlocks:")
 			; Stop training all troops in $bestBarracks
 
 			If goHome() == False Then Return
-			If goArmyOverview() == False Then Return			
+			If openArmyOverview() == False Then Return			
 			goToBarracks($bestBarracks)
 			clearTroops()
 
@@ -150,7 +150,7 @@ SetLog("Check for deadlocks:")
 					SetLog("Train " & $TotalCamp - $CurCamp & " Archers")
 
 					If goHome() == False Then Return
-					If goArmyOverview() == False Then Return			
+					If openArmyOverview() == False Then Return			
 					goToBarracks($barracksNumber)
 
 					TrainIt($eArch, $TotalCamp - $CurCamp)
@@ -212,7 +212,7 @@ SetLog("Train troops:")
 		barracksReport($barracksTraining)
 
 		If goHome() == False Then Return
-		If goArmyOverview() == False Then Return	
+		If openArmyOverview() == False Then Return	
 		goToBarracks(0)
 
 		$barracksNumber = 0
@@ -235,6 +235,14 @@ SetLog("Train troops:")
 			If _Sleep($iDelayTrain2) Then Return
 		WEnd
 	EndIf
+
+
+	Local $maxTrainTime = 0
+	For $barracksNumber = 0 To $numBarracksAvaiables + $numDarkBarracksAvaiables - 1
+		If $barracksTrainingTime[$barracksNumber] > $maxTrainTime Then
+			$maxTrainTime = $barracksTrainingTime[$barracksNumber]
+		EndIf
+	Next
 
 	If $rtAccountSwitch == True Then
 		SetLog("")
