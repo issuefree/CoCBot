@@ -100,7 +100,7 @@ SetLog("Check for deadlocks:")
 			For $barracksNumber = 0 To $numBarracksAvaiables-1
 				If $barracksTrainingTime[$barracksNumber] < $bestBarracksTime Then
 					$bestBarracks = $barracksNumber
-					$bestBarracksTime = $blockedTrainingTime
+					$bestBarracksTime = $barracksTrainingTime[$barracksNumber]
 				EndIf
 			Next
 			; Stop training all troops in $bestBarracks
