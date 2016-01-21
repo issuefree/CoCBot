@@ -54,12 +54,11 @@ SetLog("Currently in training:")
 	Local $blockedBarracks[$numBarracksAvaiables+$numDarkBarracksAvaiables]
 	Local $numBlockedBarracks = 0
 
-SetLog("Debug: goHome()")
 	If goHome() == False Then Return
-SetLog("Debug: goArmyOverview()")
 	If goArmyOverview() == False Then Return	
-SetLog("Debug: goHomeToBarracks(0)")
+SetLog("Debug: goToBarracks(0)")
 	If goToBarracks(0) == False Then Return
+SetLog("After goToBarracks(0)")
 
 	ZeroArray($ArmyTraining)
 	Local $maxTrainTime = 0
@@ -610,7 +609,7 @@ EndFunc
 
 Func dumpArmy($unitArray, $heading = "Army:", $showSize = True)
 	If $showSize Then
-		$heading &= " " getArmySize($unitArray)
+		$heading &= " " & getArmySize($unitArray)
 	EndIf
 	SetLog($heading)
 	For $iUnit = 0 To $iArmyEnd-1
