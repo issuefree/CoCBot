@@ -1,14 +1,4 @@
 Func ResourceTrain()
-
-;	If $icmbTroopComp <> 10 Then Return
-
-
-	Local $tempCounter = 0			; for looping on village check
-
-
-	If $debugSetlog = 1 Then SetLog("Func Train ", $COLOR_PURPLE)
-	If $bTrainEnabled = False Then Return
-
 	; get a village report to store current resources before train into globals
 	VillageReport(True, True)
 
@@ -190,9 +180,9 @@ SetLog("Get army composition:")
 	EndIf
 
 	$ArmyToTrain = getArmyComposition($currentArmy)
-
 	dumpArmy($ArmyToTrain, "Army to train:")
 
+	; build final army
 	$ArmyComposition = $ArmyToTrain
 	For $i = 0 To $iArmyEnd-1
 		$ArmyComposition[$i] += $currentArmy[$i]
@@ -251,12 +241,6 @@ SetLog("Train troops:")
 		SetLog("")
 		SetLog("Checking account switch:")
 		SetLog("  Train time: " & Round($maxTrainTime/60) & " mins")
-		; If $fullarmy Then 
-		; 	SetLog("  $fullarmy = True")
-		; Else
-		; 	SetLog("  $fullarmy = False")
-		; EndIf
-		; SetLog("  timer: " & Floor(TimerDiff($accountSwitchTimer)) & "/" & $accountSwitchTimeout)
 		SetLog("  Can swap in " & Round(($accountSwitchTimeout - TimerDiff($accountSwitchTimer))/60/1000) & " mins")
 
 		If $maxTrainTime > 600 And _  ; I can't get an attack in in under 10 mins probably so no point in switching
@@ -268,7 +252,6 @@ SetLog("Train troops:")
 			$accountSwitchTimer = TimerInit()
 			$accountSwitchTimeout = ($maxTrainTime / 2)*1000 ; Don't come back until I'm half way done training. I'm thinking this will keep me balanced between accounts.
 			SetLog("Can come back in " & Round($maxTrainTime / 60 / 2) & " mins")
-			SetLog("  " & $accountSwitchTimeout)
 			$restartAfterTrain = True
 		EndIf
 	EndIf
