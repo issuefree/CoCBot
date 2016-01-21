@@ -21,23 +21,15 @@ Func ResourceTrain()
 	; I'll recheck troop counts after training counts to avoid gaps
 	
 	; Determine training
-	; Note there WILL be errors in this caused by the detection not the algorithm.
-	; Since it checks what's trained then what's training and it takes time to check training
-	; Things could finish between these steps leaving GAPS. These can get pretty big if when it
-	; checks for trained troops there's nothing and before it checks for training a pekka finishes
-	; now I have a ghost pekka and my algorithm will try to fill the gap. It should recover every
-	; pass but just because the counts are a little off doesn't mean there's a bug.
-	; This of course makes finding real bugs trickier.
-	; 1. Figure out what we've already trained. (This is done above in checkArmyCamp)
-	; 2. Figure out what we have in training.
-	;	a. figure out how much time is already in each barracks
+	; Note there WILL be errors in this caused by the detection not the algorithm due to troops finishing training mid process.
+
+	; 1. Figure out what we have in training.
+	; 2. Figure out what we've already trained.
 	; 3. Figure out what is left to train for our desired comp.
 	; 4. Assign troops to barracks.
-	;;;;;
 
 
-	; 2. Figure out what we have in training.
-	;	a. figure out how much time is already in each barracks
+	; 1. Figure out what we have in training.
 
 Local $restartAfterTrain = False
 
@@ -54,27 +46,26 @@ SetLog("Currently in training:")
 
 	If goHome() == False Then Return
 	If openArmyOverview() == False Then Return	
+	$debugSetlog = 1
 SetLog("Debug: goToBarracks(0)")
 	If goToBarracks(0) == False Then Return
 SetLog("After goToBarracks(0)")
+	$debugSetlog = 0
 
 	ZeroArray($ArmyTraining)
 	While isBarrack() Or isDarkBarrack()
 		If $barracksNumber >= $numBarracksAvaiables + $numDarkBarracksAvaiables Then ExitLoop
 
-		Local $darkBarracks = isDarkBarrack()
 		For $iUnit = 0 to $iArmyEnd-1
-			Local $num = getNumTraining($iUnit, $darkBarracks)
+			Local $num = getNumTraining($iUnit, isDarkBarrack())
 			$ArmyTraining[$iUnit] += $num
 			$barracksTrainingTime[$barracksNumber] += $num*$UnitTime[$iUnit]
 			$barracksTrainingSpace[$barracksNumber] += $num*$UnitSize[$iUnit]
 			$barracksTrainingUnits[$barracksNumber][$iUnit] += $num
 		Next
 
-		; SetLog("Checking barracks " & $barracksNumber)
 		$blockedBarracks[$barracksNumber] = CheckFullBarrack()
 		If $blockedBarracks[$barracksNumber] Then
-			; SetLog("Found blocked barracks: " & $barracksNumber)
 			$numBlockedBarracks += 1
 		EndIf
 
@@ -107,13 +98,9 @@ SetLog("Check for deadlocks:")
 			Local $bestBarracksSpace = 9999
 			SetLog("Finding best barracks to clean out")
 			For $barracksNumber = 0 To $numBarracksAvaiables-1
-				Local $blockedTrainingSpace = 0
-				; SetLog("Find blocked space in barracks " & $barracksNumber)
-				$blockedTrainingSpace += $barracksTrainingSpace[$barracksNumber]
-				; SetLog("Checking if this is the best one")
-				If $blockedTrainingSpace < $bestBarracksSpace Then
+				If $barracksTrainingTime[$barracksNumber] < $bestBarracksTime Then
 					$bestBarracks = $barracksNumber
-					$bestBarracksSpace = $blockedTrainingSpace
+					$bestBarracksTime = $blockedTrainingTime
 				EndIf
 			Next
 			; Stop training all troops in $bestBarracks
@@ -123,40 +110,16 @@ SetLog("Check for deadlocks:")
 			goToBarracks($bestBarracks)
 			clearTroops()
 
-			; Set capacity to what we need for a full army.
-			SetLog("Train " & $TotalCamp - $CurCamp & " Archers")
-			TrainIt($eArch, $TotalCamp - $CurCamp)
+			; ; Set capacity to what we need for a full army.
+			; SetLog("Train " & $TotalCamp - $CurCamp & " Archers")
+			; TrainIt($eArch, $TotalCamp - $CurCamp)
 		Else ; Possible deadlock
-			SetLog("Possible deadlock")
-
-			; There's significant room for improvement here.
-			; I think this will always either get us out of deadlock or let it escalate to a full deadlock
-			; which we can get out of.
-
-			Local $unblockedTrainingSpace = 0
-			For $barracksNumber = 0 To $numBarracksAvaiables-1
-				If $blockedBarracks[$barracksNumber] == False Then ; check for troops training in unblocked barracks
-					; If there are we could leave it alone or we could check all of the barracks to
-					; see if we'll get an attackable army...
-
-					; ; Count up the space we have training in unblocked barracks
-					; For $iUnit = 0 To $iArmyEnd-1
-					; 	$unblockedTrainingSpace += $barracksTrainingSpace[$barracksNumber]
-					; Next
-					; Find out if there's a gap between what's training and a complete army
-					; If there is... fill it (by making a limited size army comp and training). 
-					; If there isn't ignore it.
-
-					SetLog("Train " & $TotalCamp - $CurCamp & " Archers")
-
-					If goHome() == False Then Return
-					If openArmyOverview() == False Then Return			
-					goToBarracks($barracksNumber)
-
-					TrainIt($eArch, $TotalCamp - $CurCamp)
-					ExitLoop
-				EndIf	
-			Next
+			SetLog("Possible deadlock.")
+			; maybe prevent training into the blocked barracks? seems unlikely.
+			; I could remove the troops in blocked baracks from army consideration.
+			; Then we'd build an army on the remaining barracks. This might get messy.
+			; I have no elegant solutions. I propose we wait to until it resolves itslef or results in a full deadlock.
+			; We'll handle it there.
 		EndIf
 	EndIf
 
