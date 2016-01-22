@@ -176,6 +176,7 @@ EndFunc
 Func goHome($maxDelay = 5000)
 	ClickP($aAway, 2, $iDelayTrain5, "#0501"); Click away twice with 250ms delay
 	If WaitforPixel(28, 505, 30, 507, Hex(0xE4A438, 6), 5, $maxDelay/500) Then
+		If _Sleep(500) Then Return
 		Return True
 	EndIf
 	Return False
