@@ -14,7 +14,7 @@
 ; Link ..........: https://github.com/MyBotRun/MyBot/wiki
 ; Example .......: No
 ; ===============================================================================================================================
-Func getArmyCapacity($bOpenArmyWindow = False, $bCloseArmyWindow = False)
+Func getArmyCapacity($bOpenArmyWindow = False, $bCloseArmyWindow = False, $retry = False)
 
 	If $debugSetlog = 1 Then SETLOG("Begin getArmyCapacity:", $COLOR_PURPLE)
 
@@ -23,7 +23,7 @@ Func getArmyCapacity($bOpenArmyWindow = False, $bCloseArmyWindow = False)
 		Return ; not open, not requested to be open - error.
 	ElseIf $bOpenArmyWindow = True Then
 		openArmyOverview()
-		If _Sleep($iDelaycheckArmyCamp5) Then Return
+		If _Sleep($iDelaycheckArmyCamp4) Then Return
 	EndIf
 
 	Local $aGetArmySize[3] = ["", "", ""]
@@ -37,7 +37,8 @@ Func getArmyCapacity($bOpenArmyWindow = False, $bCloseArmyWindow = False)
 	$sArmyInfo = getArmyCampCap(192, 144 + $midOffsetY) ; OCR read army trained and total
 	If $debugSetlog = 1 Then Setlog("OCR $sArmyInfo = " & $sArmyInfo, $COLOR_PURPLE)
 
-	While $iTried < 100 ; 30 - 40 sec
+	Local $tries = 30
+	While $iTried < $tries ; ~$tries / 3 seconds
 
 		$iTried += 1
 		If _Sleep($iDelaycheckArmyCamp5) Then Return ; Wait 250ms before reading again
@@ -63,14 +64,19 @@ Func getArmyCapacity($bOpenArmyWindow = False, $bCloseArmyWindow = False)
 
 	WEnd
 
-	If $iTried <= 99 Then
+	Local $failState = False
+	If $iTried < $tries Then
 		$CurCamp = $tmpCurCamp
 		If $TotalCamp = 0 Then $TotalCamp = $tmpTotalCamp
 		If $debugSetlog = 1 Then Setlog("$CurCamp = " & $CurCamp & ", $TotalCamp = " & $TotalCamp, $COLOR_PURPLE)
 	Else
-		Setlog("Army size read error, Troop numbers may not train correctly", $COLOR_RED) ; log if there is read error
-		$CurCamp = 0
-		CheckOverviewFullArmy()
+		Setlog("Army size read error, Troop numbers may not train correctly. Setting retry flag.", $COLOR_RED) ; log if there is read error
+		$failState = True
+		If $retry Then
+			Initiate()  ; We tried a couple times and failed. This is the best way I know how to reset everything.
+		EndIf
+		; $CurCamp = 0
+		; CheckOverviewFullArmy()
 	EndIf
 
 	If $TotalCamp = 0 Or ($TotalCamp <> $tmpTotalCamp) Then ; if Total camp size is still not set or value not same as read use forced value
@@ -103,6 +109,11 @@ Func getArmyCapacity($bOpenArmyWindow = False, $bCloseArmyWindow = False)
 	If $bCloseArmyWindow = True Then
 		ClickP($aAway, 1, 0, "#0000") ;Click Away
 		If _Sleep($iDelaycheckArmyCamp4) Then Return
+	EndIf
+
+	If $failState Then
+		goHome()		
+		getArmyCapacity(True, $bCloseArmyWindow, True)
 	EndIf
 
 EndFunc   ;==>getArmyCapacity

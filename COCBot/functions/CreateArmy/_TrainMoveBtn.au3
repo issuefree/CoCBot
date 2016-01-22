@@ -72,6 +72,10 @@ Func _TrainMoveBtn($direction)
 			If $j = 9 Then $j = 1
 			While (($Trainavailable[$j] = 0) And ($j <> $i))
 				If $j = 8 Then
+					If $i = 0 Then
+						SetLog("No available barracks detected.", $COLOR_RED)
+						Return
+					EndIf
 					$j = 1
 				Else
 					$j += 1
