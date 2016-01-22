@@ -110,9 +110,10 @@ SetLog("Check for deadlocks:")
 			goToBarracks($bestBarracks)
 			clearTroops()
 
-			; ; Set capacity to what we need for a full army.
-			; SetLog("Train " & $TotalCamp - $CurCamp & " Archers")
-			; TrainIt($eArch, $TotalCamp - $CurCamp)
+			; we can probably do better than spamming archers here but for now it'll do.
+			; Set capacity to what we need for a full army. 
+			SetLog("Train " & $TotalCamp - $CurCamp & " Archers")
+			TrainIt($eArch, $TotalCamp - $CurCamp)
 		Else ; Possible deadlock
 			SetLog("Possible deadlock.")
 			; maybe prevent training into the blocked barracks? seems unlikely.
