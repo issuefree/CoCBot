@@ -46,11 +46,7 @@ SetLog("Currently in training:")
 
 	If goHome() == False Then Return
 	If openArmyOverview() == False Then Return	
-	$debugSetlog = 1
-SetLog("Debug: goToBarracks(0)")
 	If goToBarracks(0) == False Then Return
-SetLog("After goToBarracks(0)")
-	$debugSetlog = 0
 
 	ZeroArray($ArmyTraining)
 	While isBarrack() Or isDarkBarrack()
@@ -132,6 +128,7 @@ SetLog("Check for deadlocks:")
 
 	; Build what I was going to. It will build too much. Troop capacity will reach 200 with some leftover troops. Next pass through they'll either (likely since they'll probably be archers barbs or goblins) be absorbed into the proper composition or treated as "extras" but they're not "bad" since they're the tail end of a proper build.
 	; I'll do this in the above loop.
+
 
 SetLog("Get army composition:")
 	; figure already trained troops and add the ones in training
@@ -350,6 +347,7 @@ Func getArmyComposition($currentArmy)
 	; We just care if at the end there's leftover capacity we need to fill. We won't fill negative capacity
 	; and we don't use the $troopCount for building before then, just the bucket counts.
 
+
 	For $iUnit = 0 To $iArmyEnd-1
 		If $currentArmy[$iUnit] > 0 Then
 			If _ArraySearch($tankUnits, $iUnit) <> -1 Then
@@ -368,7 +366,9 @@ Func getArmyComposition($currentArmy)
 			EndIf
 			$troopCount -= $currentArmy[$iUnit]*$UnitSize[$iUnit]
 		EndIf
+
 	Next
+
 
 	SetLog("Need counts: [T]: " & $tankCount & " [M]: " & $meleeCount & " [R]: " & $rangedCount & " [r]:" & $resourceCount)
 
@@ -517,6 +517,23 @@ Func getArmyComposition($currentArmy)
 			$troopCount -= $leftoverCount*$UnitSize[$iUnit]
 		Next
 	EndIf
+
+SetLog("Check for troops needed for donation:")
+dumpArmy($ArmyDonationTraining, "Donation training:")
+	
+	; See if we already have or are planning on training what we need to donate.
+	For $iUnit = 0 To $iArmyEnd-1
+		$ArmyDonationTraining[$iUnit] -= $currentArmy[$iUnit]
+		$ArmyDonationTraining[$iUnit] -= $newArmyComp[$iUnit]
+	Next
+
+	; Add to our comp anything we have leftover to train.
+	For $iUnit = 0 To $iArmyEnd-1
+		If $ArmyDonationTraining[$iUnit] > 0 Then
+			SetLog("Adding " & $ArmyDonationTraining[$iUnit] & " " & $UnitName[$iUnit])
+			$newArmyComp[$iUnit] += $ArmyDonationTraining[$iUnit]
+		EndIf
+	Next
 
 	Return $newArmyComp
 EndFunc

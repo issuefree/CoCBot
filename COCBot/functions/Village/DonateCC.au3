@@ -169,6 +169,8 @@ Func DonateCC($Check = False)
 				If $bDonateTroop = 1 And $bSkipDonTroops = False Then
 					If $debugSetlog = 1 Then Setlog("Troop checkpoint.", $COLOR_PURPLE)
 
+					ZeroArray($ArmyDonationTraining)
+
 					;;; Custom Combination Donate by ChiefM3
 					If $iChkDonateCustom = 1 And CheckDonateTroop(19, $aDonCustom, $aBlkCustom, $aBlackList, $ClanString) Then
 						For $i = 0 To 2
@@ -454,7 +456,11 @@ Func DonateTroopType($Type, $Quant = 0, $Custom = False, $bDonateAll = False)
 	; Detect the Troops Slot
 	$Slot = DetectSlotTroop($Type)
 
-	If $Slot = -1 Then Return
+	If $Slot = -1 Then 
+		SetLog("Clan asked for " & $UnitName[$Type] & " but didn't find any to donate.", $COLOR_ORANGE)
+		$ArmyDonationTraining[$Type] = $iDonTroopsQuantity
+		Return
+	EndIf
 
 	If $Slot >= 7 And $Slot <= 13 Then
 		$Slot = $Slot - 7

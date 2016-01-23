@@ -2,6 +2,7 @@
 #include <String.au3>
 ; I know a lot of this info is already defined in the bot but I like my format better :)
 
+; These should map directly to the $e[Troop] enum from the bot. Bugs could be introduced if this changes.
 Global Enum _
 	$iBarbarian, _
 	$iArcher, _
@@ -25,6 +26,8 @@ Global Enum _
 Global $ArmyComposition[$iArmyEnd]
 Global $ArmyTrained[$iArmyEnd]
 Global $ArmyTraining[$iArmyEnd]
+
+Global $ArmyDonationTraining[$iArmyEnd]
 
 Global $UnitIsDark[$iArmyEnd]
 $UnitIsDark[$iBarbarian] = False
