@@ -31,7 +31,41 @@ Func CompareResources($pMode) ;Compares resources and returns true if conditions
 		EndIf
 	EndIf
 
-	Local $G = (Number($searchGold) >= Number($iAimGold[$pMode])), $E = (Number($searchElixir) >= Number($iAimElixir[$pMode])), $D = (Number($searchDark) >= Number($iAimDark[$pMode])), $T = (Number($searchTrophy) >= Number($iAimTrophy[$pMode])), $GPE = ((Number($searchGold) + Number($searchElixir)) >= Number($iAimGoldPlusElixir[$pMode]))
+
+	; For simplicity I'll assume your elixir max and your max gold are equivalent.
+	; For simplicity I'm using the max elixir setting from the resource troop training.
+	; I'm looking at some sort of falloff of threshold based on resources.
+	; 	like mult the thresh by % of resource over 75% of your resource.
+	;	At 75% you need 100% of your threshold.
+	;	At 100% you need 0% of your threshold.
+	; 	At 90% you need 60% of your threshold.
+
+	Local $gThresh = Number($iAimGold[$pMode])
+	Local $eThresh = Number($iAimElixir[$pMode])
+
+SetLog("Checking resource caps:", $COLOR_PURPLE)
+	Local $softCap = .75
+	Local $gRich = (($iGoldCurrent/$rtElixirMax) - $softCap) / (1-$softCap)
+SetLog("  $gRich: " & $gRich, $COLOR_PURPLE)
+	Local $eRich = (($iElixirCurrent/$rtElixirMax) - $softCap) / (1-$softCap)
+SetLog("  $eRich: " & $eRich, $COLOR_PURPLE)
+
+	If $gRich > 0 Then
+		$gThresh = $gThresh * (1 - $gRich)
+SetLog("  $gThresh: " & $gThresh, $COLOR_PURPLE)		
+	EndIf
+	If $eRich > 0 Then
+		$eThresh = $eThresh * (1 - $eRich)
+SetLog("  $eThresh: " & $eThresh, $COLOR_PURPLE)		
+	EndIf
+
+	Local $G = (Number($searchGold) >= $gThresh)
+	Local $E = (Number($searchElixir) >= $eThresh)
+
+	Local $D = (Number($searchDark) >= Number($iAimDark[$pMode]))
+	Local $T = (Number($searchTrophy) >= Number($iAimTrophy[$pMode]))
+	Local $GPE = ((Number($searchGold) + Number($searchElixir)) >= Number($iAimGoldPlusElixir[$pMode]))
+
 	Local $THL = -1, $THLO = -1
 
 	For $i = 0 To 5 ;add th11
@@ -55,11 +89,6 @@ Func CompareResources($pMode) ;Compares resources and returns true if conditions
 	;		$YourTHNumHere = 0
 	;	endif
 	If $THL > -1 And $THL <= $YourTH And $searchTH <> "-" Then $SearchTHLResult = 1
-
-	If $iElixirCurrent >= 5500000 Then
-		$E = True
-		SetLog("Elixir > 5500000 ignore elixir check", $COLOR_GREEN, "Lucida Console", 7.5)
-	EndIf
 
 	If $iChkMeetOne[$pMode] = 1 Then
 		;		If $iChkWeakBase[$pMode] = 1 Then
