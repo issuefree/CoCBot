@@ -955,6 +955,8 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	GUICtrlSetData($rtMeleePercTxt, $rtMeleePerc)
 	GUICtrlSetData($rtRangedPercTxt, $rtRangedPerc)
 
+	GUICtrlSetData($rtGoldMaxTxt, $rtGoldMax)
+	GUICtrlSetData($rtGoldResTxt, $rtGoldRes)
 	GUICtrlSetData($rtElixirMaxTxt, $rtElixirMax)
 	GUICtrlSetData($rtElixirResTxt, $rtElixirRes)
 	GUICtrlSetData($rtDarkMaxTxt, $rtDarkMax)

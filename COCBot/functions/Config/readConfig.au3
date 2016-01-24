@@ -449,6 +449,8 @@ Func readConfig() ;Reads config and sets it to the variables
 		$rtRangedPerc = IniRead($config, "troop", "rtRanged", "20")
 		$rtResourcePerc = 100 - $rtTankPerc - $rtMeleePerc - $rtRangedPerc
 
+		$rtGoldMax = IniRead($config, "troop", "rtGoldMax", 6000000)
+		$rtGoldRes = IniRead($config, "troop", "rtGoldRes", 1000000)
 		$rtElixirMax = IniRead($config, "troop", "rtElixirMax", 6000000)
 		$rtElixirRes = IniRead($config, "troop", "rtElixirRes", 1000000)
 		$rtDarkMax = IniRead($config, "troop", "rtDarkMax", 80000)

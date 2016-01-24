@@ -428,6 +428,15 @@ Global $resourceTroopsUI[0]
 		Local $x = 10, $y = 310
 		_ArrayAdd($resourceTroopsUI, GUICtrlCreateGroup("Resources", $x, $y, 300, 195))
 		$y += 20
+		_ArrayAdd($resourceTroopsUI, GUICtrlCreateIcon($pIconLib, $eIcnGold, $x+10, $y-2, 16, 16))
+		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Max:", $x+30, $y))
+		$rtGoldMaxTxt = GUICtrlCreateInput("6000000", $x+56, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
+		_ArrayAdd($resourceTroopsUI, $rtGoldMaxTxt)
+		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Reserve:", $x+135, $y))
+		$rtGoldResTxt = GUICtrlCreateInput("1000000", $x+180, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
+		_ArrayAdd($resourceTroopsUI, $rtGoldResTxt)
+
+		$y += 24
 		_ArrayAdd($resourceTroopsUI, GUICtrlCreateIcon($pIconLib, $eIcnElixir, $x+10, $y-2, 16, 16))
 		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Max:", $x+30, $y))
 		$rtElixirMaxTxt = GUICtrlCreateInput("6000000", $x+56, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
@@ -444,6 +453,7 @@ Global $resourceTroopsUI[0]
 		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Reserve:", $x+135, $y))
 		$rtDarkResTxt = GUICtrlCreateInput("40000", $x+180, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
 		_ArrayAdd($resourceTroopsUI, $rtDarkResTxt)
+
 		
 		$y += 30
 		$x += 10

@@ -232,6 +232,8 @@ Global $rtMeleePerc
 Global $rtRangedPerc
 Global $rtResourcePerc
 
+Global $rtGoldMax
+Global $rtGoldRes
 Global $rtElixirMax
 Global $rtElixirRes
 Global $rtDarkMax

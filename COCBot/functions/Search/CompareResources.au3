@@ -32,8 +32,7 @@ Func CompareResources($pMode) ;Compares resources and returns true if conditions
 	EndIf
 
 
-	; For simplicity I'll assume your elixir max and your max gold are equivalent.
-	; For simplicity I'm using the max elixir setting from the resource troop training.
+	; For simplicity I'm using the max elixir/gold setting from the resource troop training.
 	; I'm looking at some sort of falloff of threshold based on resources.
 	; 	like mult the thresh by % of resource over 75% of your resource.
 	;	At 75% you need 100% of your threshold.
@@ -45,7 +44,7 @@ Func CompareResources($pMode) ;Compares resources and returns true if conditions
 
 SetLog("Checking resource caps:", $COLOR_PURPLE)
 	Local $softCap = .75
-	Local $gRich = (($iGoldCurrent/$rtElixirMax) - $softCap) / (1-$softCap)
+	Local $gRich = (($iGoldCurrent/$rtGoldMax) - $softCap) / (1-$softCap)
 SetLog("  $gRich: " & $gRich, $COLOR_PURPLE)
 	Local $eRich = (($iElixirCurrent/$rtElixirMax) - $softCap) / (1-$softCap)
 SetLog("  $eRich: " & $eRich, $COLOR_PURPLE)
