@@ -456,7 +456,7 @@ Func DonateTroopType($Type, $Quant = 0, $Custom = False, $bDonateAll = False)
 	; Detect the Troops Slot
 	$Slot = DetectSlotTroop($Type)
 
-	If $Slot = -1 Then 
+	If $Slot = -1 And $Type < $iArmyEnd Then 
 		SetLog("Clan asked for " & $UnitName[$Type] & " but didn't find any to donate.", $COLOR_ORANGE)
 		$ArmyDonationTraining[$Type] = $iDonTroopsQuantity
 		Return
