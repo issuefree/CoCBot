@@ -527,13 +527,15 @@ dumpArmy($ArmyDonationTraining, "Donation training:")
 		$ArmyDonationTraining[$iUnit] -= $newArmyComp[$iUnit]
 	Next
 
-	; Add to our comp anything we have leftover to train.
+	; Add to our comp any donations we have leftover to train.
 	For $iUnit = 0 To $iArmyEnd-1
 		If $ArmyDonationTraining[$iUnit] > 0 Then
 			SetLog("Adding " & $ArmyDonationTraining[$iUnit] & " " & $UnitName[$iUnit])
 			$newArmyComp[$iUnit] += $ArmyDonationTraining[$iUnit]
 		EndIf
 	Next
+	ZeroArray($ArmyDonationTraining)
+
 
 	Return $newArmyComp
 EndFunc
