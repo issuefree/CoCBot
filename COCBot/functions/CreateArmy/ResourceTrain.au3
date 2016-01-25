@@ -7,6 +7,7 @@ Func ResourceTrain()
 		CheckOverviewFullArmy(True)
 		If $fullarmy Then
 			If $debugSetlog = 1 Then SetLog("FullArmy & TotalTrained = skip training", $COLOR_PURPLE)
+			checkSwitchAccount()
 			Return
 		EndIf
 	EndIf
@@ -113,7 +114,7 @@ SetLog("Check for deadlocks:")
 		Else ; Possible deadlock
 			SetLog("Possible deadlock.")
 			; maybe prevent training into the blocked barracks? seems unlikely.
-			; I could remove the troops in blocked baracks from army consideration.
+			; I could remove the troops in blocked barracks from army consideration.
 			; Then we'd build an army on the remaining barracks. This might get messy.
 			; I have no elegant solutions. I propose we wait to until it resolves itslef or results in a full deadlock.
 			; We'll handle it there.
@@ -231,16 +232,22 @@ SetLog("End train")
 
 	getTrainCosts()
 
-	; assume matching accounts. I'll put UI on this to do it better.
-	$currentAccount = Number($sCurrProfile)-1
-	If $restartAfterTrain == True Then
-		If $currentAccount == 0 Then
-			loadAccount(1)
-		Else
-			loadAccount(0)
+	checkSwitchAccount($restartAfterTrain)
+
+EndFunc
+
+Func checkSwitchAccount($canSwitch=True)
+	If $rtAccountSwitch Then
+		; assume matching accounts. I'll put UI on this to do it better.
+		$currentAccount = Number($sCurrProfile)-1
+		If $canSwitch == True Then
+			If $currentAccount == 0 Then
+				loadAccount(1)
+			Else
+				loadAccount(0)
+			EndIf
 		EndIf
 	EndIf
-
 EndFunc
 
 ; this will figure out my target army based on 
@@ -677,4 +684,22 @@ Func getTrainCosts()
 
 	UpdateStats()
 
+EndFunc
+
+Func canTrainTroop($iUnit)
+	If $UnitIsDark($iUnit) Then
+		For $i = 4 To 5
+			If $rtBarracksLevel[$i] >= $UnitRequiresBarracksLevel[$iUnit] Then Return True
+		Next
+	Else
+		For $i = 0 To 3
+			If $rtBarracksLevel[$i] >= $UnitRequiresBarracksLevel[$iUnit] Then Return True
+		Next
+	EndIf
+	Return False
+EndFunc
+
+; 0-3 for normal 4-5 for dark
+Func canTrainTroopInBarracks($iUnit, $iBarracks)
+	Return $rtBarracksLevel[$iBarracks] >= $UnitRequiresBarracksLevel[$iUnit]
 EndFunc
