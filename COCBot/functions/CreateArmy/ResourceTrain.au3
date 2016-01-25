@@ -14,6 +14,7 @@ Func ResourceTrain()
 
 	SetLog("Training Troops & Spells", $COLOR_BLUE)
 
+
 	If goHome() == False Then Return
 	If openArmyOverview() == False Then Return			
 
@@ -21,6 +22,9 @@ Func ResourceTrain()
 	checkArmyCamp()  ; sets up state variables for training 
 	; I'll recheck troop counts after training counts to avoid gaps
 	
+	; whether the barracks can be used
+	Local $barracksAvailable[6] = _ArrayExtract($Trainavailable, 1, 6)
+
 	; Determine training
 	; Note there WILL be errors in this caused by the detection not the algorithm due to troops finishing training mid process.
 
@@ -35,14 +39,14 @@ Func ResourceTrain()
 Local $restartAfterTrain = False
 
 SetLog("Currently in training:")
-	Local $barracksTrainingTime[$numBarracksAvaiables + $numDarkBarracksAvaiables]
-	Local $barracksTrainingSpace[$numBarracksAvaiables + $numDarkBarracksAvaiables]
+	Local $barracksTrainingTime[6]
+	Local $barracksTrainingSpace[6]
 
-	Local $barracksTrainingUnits[$numBarracksAvaiables + $numDarkBarracksAvaiables][$iArmyEnd]
+	Local $barracksTrainingUnits[6][$iArmyEnd]
 
 	Local $barracksNumber = 0
 
-	Local $blockedBarracks[$numBarracksAvaiables+$numDarkBarracksAvaiables]
+	Local $blockedBarracks[6]
 	Local $numBlockedBarracks = 0
 
 	If goHome() == False Then Return
@@ -50,8 +54,12 @@ SetLog("Currently in training:")
 	If goToBarracks(0) == False Then Return
 
 	ZeroArray($ArmyTraining)
-	While isBarrack() Or isDarkBarrack()
-		If $barracksNumber >= $numBarracksAvaiables + $numDarkBarracksAvaiables Then ExitLoop
+	For $barracksNumber = 0 To 5
+		If Not (isBarrack() Or isDarkBarrack()) Then ExitLoop
+		If Not $barracksAvailable[$barracksNumber] Then 
+SetLog("Continuing loop at "& $barracksNumber &" because I'm unavailable")
+			ContinueLoop
+		EndIf
 
 		For $iUnit = 0 to $iArmyEnd-1
 			Local $num = getNumTraining($iUnit, isDarkBarrack())
@@ -68,11 +76,9 @@ SetLog("Currently in training:")
 
 		; SetLog("Barracks " & $barracksNumber & ":" & $barracksTrainingTime[$barracksNumber])
 
-		$barracksNumber += 1
-		; SetLog("Moving to barracks " & $barracksNumber+1 & "/" & $numBarracksAvaiables + $numDarkBarracksAvaiables)
 		_TrainMoveBtn(+1) ;click Next button
 		If _Sleep($iDelayTrain2) Then Return
-	WEnd
+	Next
 	barracksReport($barracksTrainingUnits)
 
 	; 1. Figure out what we've already trained.
@@ -94,16 +100,21 @@ SetLog("Check for deadlocks:")
 			Local $bestBarracks
 			Local $bestBarracksTime = 9999
 			SetLog("Finding best barracks to clean out")
-			For $barracksNumber = 0 To $numBarracksAvaiables-1
-				If $barracksTrainingTime[$barracksNumber] < $bestBarracksTime Then
+			$barracksNumber = 0
+			For $i = 0 To 5
+				If Not $barracksAvailable[$i] Then 
+					ContinueLoop
+				EndIf
+				$barracksNumber =+ 1
+				If $barracksTrainingTime[$i] < $bestBarracksTime Then
 					$bestBarracks = $barracksNumber
-					$bestBarracksTime = $barracksTrainingTime[$barracksNumber]
+					$bestBarracksTime = $barracksTrainingTime[$i]
 				EndIf
 			Next
 			; Stop training all troops in $bestBarracks
 
 			If goHome() == False Then Return
-			If openArmyOverview() == False Then Return			
+			If openArmyOverview() == False Then Return
 			goToBarracks($bestBarracks)
 			clearTroops()
 
@@ -157,12 +168,12 @@ SetLog("Assign to barracks:")
 	; How about I find the barracks with the lowest train time and put the highest train time unit into it. Repeat until I'm out of units.
 
 	Local $needTraining = False
-	Local $barracksTraining[$numBarracksAvaiables + $numDarkBarracksAvaiables][$iArmyEnd]
+	Local $barracksTraining[6][$iArmyEnd]
 
 	While findLongestUnit($ArmyToTrain) >= 0
 		Local $needTraining = True
 		Local $longestUnit = findLongestUnit($ArmyToTrain)
-		Local $lowBarracks = getShortestBarracks($longestUnit, $barracksTrainingTime)
+		Local $lowBarracks = getShortestBarracks($longestUnit, $barracksTrainingTime, $barracksAvailable)
 		$barracksTrainingTime[$lowBarracks] += $UnitTime[$longestUnit]
 		$barracksTraining[$lowBarracks][$longestUnit] += 1
 		$ArmyToTrain[$longestUnit] -= 1
@@ -177,12 +188,15 @@ SetLog("Train troops:")
 		If openArmyOverview() == False Then Return	
 		goToBarracks(0)
 
-		$barracksNumber = 0
-		While isBarrack() Or isDarkBarrack()
+		For $barracksNumber = 0 To 5
 			If $debugSetlog = 1 Then SetLog("====== Checking available Barrack: " & $barracksNumber & " ======", $COLOR_PURPLE)
+			If Not (isBarrack() Or isDarkBarrack()) Then ExitLoop
+			If Not $barracksAvailable[$barracksNumber] Then 
+SetLog("Continuing loop at "& $barracksNumber &" because I'm unavailable")
+				ContinueLoop
+			EndIf
 
 			If Not (IsTrainPage()) Then Return
-			If $barracksNumber >= $numBarracksAvaiables + $numDarkBarracksAvaiables Then ExitLoop
 
 			For $iUnit In $UnitTrainOrder
 				If $barracksTraining[$barracksNumber][$iUnit] > 0 Then
@@ -191,16 +205,14 @@ SetLog("Train troops:")
 				EndIf
 			Next
 
-			$barracksNumber += 1
-			; SetLog("Moving to barracks " & $barracksNumber+1 & "/" & $numBarracksAvaiables + $numDarkBarracksAvaiables)
 			_TrainMoveBtn(+1) ;click Next button
 			If _Sleep($iDelayTrain2) Then Return
-		WEnd
+		Next
 	EndIf
 
 
 	Local $maxTrainTime = 0
-	For $barracksNumber = 0 To $numBarracksAvaiables + $numDarkBarracksAvaiables - 1
+	For $barracksNumber = 0 To 5
 		If $barracksTrainingTime[$barracksNumber] > $maxTrainTime Then
 			$maxTrainTime = $barracksTrainingTime[$barracksNumber]
 		EndIf
@@ -452,6 +464,8 @@ Func getArmyComposition($currentArmy)
 
 
 	For $iUnit In $unitEvalOrder
+		If Not canTrainTroop($iUnit) Then ContinueLoop
+
 		If _ArraySearch($deUnits, $iUnit) <> -1 Then
 			If _ArraySearch($tankUnits, $iUnit) <> -1 Then
 				$newArmyComp[$iUnit] = Floor($tankCounts[$rDE]/$UnitSize[$iUnit])
@@ -506,6 +520,8 @@ Func getArmyComposition($currentArmy)
 
 	If $troopCount > 0 Then ; I've build my comp as best I can but I have some slots left over.
 		For $iUnit In $unitEvalOrder
+			If Not canTrainTroop($iUnit) Then ContinueLoop
+
 			If $deCount > $troopCount Then $deCount = $troopCount
 			If $hvCount > $troopCount Then $hvCount = $troopCount
 			Local $leftoverCount = 0
@@ -530,12 +546,15 @@ dumpArmy($ArmyDonationTraining, "Donation training:")
 	
 	; See if we already have or are planning on training what we need to donate.
 	For $iUnit = 0 To $iArmyEnd-1
+		If Not canTrainTroop($iUnit) Then ContinueLoop
+
 		$ArmyDonationTraining[$iUnit] -= $currentArmy[$iUnit]
 		$ArmyDonationTraining[$iUnit] -= $newArmyComp[$iUnit]
 	Next
 
 	; Add to our comp any donations we have leftover to train.
 	For $iUnit = 0 To $iArmyEnd-1
+		If Not canTrainTroop($iUnit) Then ContinueLoop
 		If $ArmyDonationTraining[$iUnit] > 0 Then
 			SetLog("Adding " & $ArmyDonationTraining[$iUnit] & " " & $UnitName[$iUnit])
 			$newArmyComp[$iUnit] += $ArmyDonationTraining[$iUnit]
@@ -592,17 +611,19 @@ Func getNumTraining($iUnit, $darkBarracks = False)
 	Return $num
 EndFunc
 
-Func getShortestBarracks($iUnit, $barracksTrainingTime)
-	Local $bTime
-	Local $offset = 0
-	If $UnitIsDark[$iUnit] Then
-		$bTime = _ArrayExtract($barracksTrainingTime, $numBarracksAvaiables, UBound($barracksTrainingTime)-1)
-		$offset = $numBarracksAvaiables 
-	Else
-		$bTime = _ArrayExtract($barracksTrainingTime, 0, $numBarracksAvaiables-1)
-	EndIf
-
-	Return _ArrayMinIndex($bTime) + $offset
+Func getShortestBarracks($iUnit, $barracksTrainingTime, $barracksAvailable)
+	Local $bestTime = 99999
+	Local $bestBarracks
+	For $barracksNumber = 0 to 5
+		If canTrainTroopInBarracks($iUnit, $barracksNumber) And _
+		   $barracksAvailable[$barracksNumber] And _
+		   $barracksTrainingTime[$barracksNumber] < $bestTime _
+		Then
+			$bestTime = $barracksTrainingTime[$barracksNumber]
+			$bestBarracks = $barracksNumber
+		EndIf
+	Next
+	Return $bestBarracks
 EndFunc
 
 Func dumpArmy($unitArray, $heading = "Army:", $showSize = True)
@@ -686,8 +707,9 @@ Func getTrainCosts()
 
 EndFunc
 
+; 0-3 for normal 4-5 for dark
 Func canTrainTroop($iUnit)
-	If $UnitIsDark($iUnit) Then
+	If $UnitIsDark[$iUnit] Then
 		For $i = 4 To 5
 			If $rtBarracksLevel[$i] >= $UnitRequiresBarracksLevel[$iUnit] Then Return True
 		Next
@@ -701,5 +723,13 @@ EndFunc
 
 ; 0-3 for normal 4-5 for dark
 Func canTrainTroopInBarracks($iUnit, $iBarracks)
-	Return $rtBarracksLevel[$iBarracks] >= $UnitRequiresBarracksLevel[$iUnit]
+	If $UnitIsDark[$iUnit] Then
+		If $iBarracks == 4 Or $iBarracks == 5 Then
+			Return $rtBarracksLevel[$iBarracks] >= $UnitRequiresBarracksLevel[$iUnit]
+		EndIf
+		Return False
+	ElseIf $iBarracks < 4 Then
+		Return $rtBarracksLevel[$iBarracks] >= $UnitRequiresBarracksLevel[$iUnit]
+	EndIf
+	Return False
 EndFunc

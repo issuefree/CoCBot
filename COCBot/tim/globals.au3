@@ -65,6 +65,25 @@ $UnitName[$iGolem] = "Golem"
 $UnitName[$iWitch] = "Witch"
 $UnitName[$iLavaHound] = "LaavHound"
 
+Global $UnitRequiresBarracksLevel[$iArmyEnd]
+$UnitRequiresBarracksLevel[$iBarbarian] = 1
+$UnitRequiresBarracksLevel[$iArcher] = 2
+$UnitRequiresBarracksLevel[$iGiant] = 3
+$UnitRequiresBarracksLevel[$iGoblin] = 4
+$UnitRequiresBarracksLevel[$iWallBreaker ] = 5
+$UnitRequiresBarracksLevel[$iBalloon] = 6
+$UnitRequiresBarracksLevel[$iWizard] = 7
+$UnitRequiresBarracksLevel[$iHealer] = 8
+$UnitRequiresBarracksLevel[$iDragon] = 9
+$UnitRequiresBarracksLevel[$iPekka] = 10
+$UnitRequiresBarracksLevel[$iMinion] = 1
+$UnitRequiresBarracksLevel[$iHogRider] = 2
+$UnitRequiresBarracksLevel[$iValkyrie] = 3
+$UnitRequiresBarracksLevel[$iGolem] = 4
+$UnitRequiresBarracksLevel[$iWitch] = 5
+$UnitRequiresBarracksLevel[$iLavaHound] = 6
+
+
 Func getI($name)
 	For $i = 0 to UBound($UnitName) - 1
 		If $UnitName[$i] == $name Then Return $i
@@ -239,6 +258,8 @@ Global $rtElixirRes
 Global $rtDarkMax
 Global $rtDarkRes
 
+Global $rtBarracksLevel[6]
+
 ; this requires that your profiles are the same number as your accounts in play
 Global $currentAccount = 1
 Global $accountSwitchTimer = TimerInit()
@@ -358,3 +379,7 @@ Func StringJoin($array, $delim=",")
 	Return $str
 EndFunc
 
+Local $foo = 0
+If Not $foo Then
+	ConsoleWrite("hi")
+EndIf

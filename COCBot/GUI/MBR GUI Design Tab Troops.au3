@@ -432,8 +432,8 @@ Global $resourceTroopsUI[0]
 		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Max:", $x+30, $y))
 		$rtGoldMaxTxt = GUICtrlCreateInput("6000000", $x+56, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
 		_ArrayAdd($resourceTroopsUI, $rtGoldMaxTxt)
-		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Reserve:", $x+135, $y))
-		$rtGoldResTxt = GUICtrlCreateInput("1000000", $x+180, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
+		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Reserve:", $x+125, $y))
+		$rtGoldResTxt = GUICtrlCreateInput("1000000", $x+170, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
 		_ArrayAdd($resourceTroopsUI, $rtGoldResTxt)
 
 		$y += 24
@@ -441,8 +441,8 @@ Global $resourceTroopsUI[0]
 		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Max:", $x+30, $y))
 		$rtElixirMaxTxt = GUICtrlCreateInput("6000000", $x+56, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
 		_ArrayAdd($resourceTroopsUI, $rtElixirMaxTxt)
-		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Reserve:", $x+135, $y))
-		$rtElixirResTxt = GUICtrlCreateInput("1000000", $x+180, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
+		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Reserve:", $x+125, $y))
+		$rtElixirResTxt = GUICtrlCreateInput("1000000", $x+170, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
 		_ArrayAdd($resourceTroopsUI, $rtElixirResTxt)
 
 		$y += 24
@@ -450,15 +450,19 @@ Global $resourceTroopsUI[0]
 		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Max:", $x+30, $y))
 		$rtDarkMaxTxt = GUICtrlCreateInput("80000", $x+56, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
 		_ArrayAdd($resourceTroopsUI, $rtDarkMaxTxt)
-		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Reserve:", $x+135, $y))
-		$rtDarkResTxt = GUICtrlCreateInput("40000", $x+180, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
+		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Reserve:", $x+125, $y))
+		$rtDarkResTxt = GUICtrlCreateInput("40000", $x+170, $y-3, 60, -1, BitOR($GUI_SS_DEFAULT_INPUT, $ES_RIGHT, $ES_NUMBER))
 		_ArrayAdd($resourceTroopsUI, $rtDarkResTxt)
 
-		
 		$y += 30
 		$x += 10
 		$rtAccountSwitchCheck = GUICtrlCreateCheckbox("Account switch during training", $x, $y)
 		_ArrayAdd($resourceTroopsUI, $rtAccountSwitchCheck)
+
+		_ArrayAdd($resourceTroopsUI, GUICtrlCreateButton("", $x+175, $y, 40, 40, $BS_ICON))
+		GUICtrlSetImage(-1, $pIconLib, $eIcnBarrack, 1)
+		GUICtrlSetTip(-1, "Configure barracks")
+		GUICtrlSetOnEvent(-1, "openBarracksConfig")
 
 		$y += 20
 		_ArrayAdd($resourceTroopsUI, GUICtrlCreateLabel("Warning: Early dev. Fragile", $x+30, $y))
@@ -533,3 +537,65 @@ Global $resourceTroopsUI[0]
 			GUICtrlSetOnEvent(-1, "chkUpgradeWarden")
  	GUICtrlCreateGroup("", -99, -99, 1, 1)
 GUICtrlCreateTabItem("")
+
+Global $cmbBarracksLevel[6]
+Local $configBarracksWin
+Func openBarracksConfig()
+	$gui2open = True
+	Local $winWidth = 305
+	Local $winHeight = 300
+	$configBarracksWin = GUICreate("Configure Barracks", $winWidth, $winHeight, 85, 60, -1, $WS_EX_MDICHILD, $frmbot)
+	GUICtrlSetBkColor(-1, $COLOR_WHITE)
+	GUISetIcon($pIconLib, $eIcnGUI)
+	GUISetOnEvent($GUI_EVENT_CLOSE, "closeBarracksConfig") ; Run this function when the secondary GUI [X] is clicked
+
+	$x = 6
+	$y = 8
+	GUICtrlCreateGroup("Barracks levels:", $x, $y, 90, 190)
+
+	$y += 20
+	$x += 11
+
+	Local $rowHeight = 26
+	For $i = 0 To 3
+		createBarracksRow($x, $y, $i)
+		$y += $rowHeight
+	Next
+	$y += 8
+	For $i = 4 To 5
+		createBarracksRow($x, $y, $i, True)
+		$y += $rowHeight
+	Next
+
+	For $i = 0 to 5
+		_GUICtrlComboBox_SetCurSel($cmbBarracksLevel[$i], $rtBarracksLevel[$i])
+	Next
+
+	GUISetState(@SW_SHOW, $configBarracksWin)
+	GUISetState(@SW_DISABLE, $frmBot)
+EndFunc
+
+Func closeBarracksConfig()
+	$gui2open = False
+	
+	For $i = 0 to 5
+		$rtBarracksLevel[$i] = _GUICtrlComboBox_GetCurSel($cmbBarracksLevel[$i])
+	Next
+	IniWrite($config, "troop", "rtBarracksLevel", _ArrayToString($rtBarracksLevel, ","))		
+
+	GUIDelete($configBarracksWin)
+	GUISetState(@SW_ENABLE, $frmBot)
+	WinActivate($frmBot)
+EndFunc
+
+Func createBarracksRow($x, $y, $i, $dark = False)
+	Local $icon = $eIcnBarrack
+	Local $levels = "0|1|2|3|4|5|6|7|8|9|10"
+	If $dark Then
+		$icon = $eIcnDarkBarrack
+		$levels = "0|1|2|3|4|5|6"
+	EndIf
+	GUICtrlCreateIcon($pIconLib, $icon, $x, $y-1, 24, 24)
+	$cmbBarracksLevel[$i] = GUICtrlCreateCombo("", $x + 28, $y, 40, 25)
+	GUICtrlSetData(-1, $levels, "0")
+EndFunc
