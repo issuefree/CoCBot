@@ -187,7 +187,7 @@ Func Train()
 
 
 	; PREPARE TROOPS IF FULL ARMY
-	; Baracks status to false , after the first loop and train Selected Troops composition = True
+	; Barracks status to false , after the first loop and train Selected Troops composition = True
 	;
 	If $debugSetlog = 1 Then Setlog("Fullarmy = " & $fullarmy & " CurCamp = " & $CurCamp & " TotalCamp = " & $TotalCamp & " - result = " & ($fullarmy = True And $CurCamp = $TotalCamp), $COLOR_PURPLE)
 	If $fullarmy = True Then
