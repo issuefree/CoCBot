@@ -181,6 +181,9 @@ Func btnStart()
 		$bDisableBreakCheck = False  ; reset flag to check for early warning message when bot start/restart in case user stopped in middle
 		$bDisableDropTrophy = False ; Reset Disabled Drop Trophy because the user has no Tier 1 or 2 Troops
 
+$accountSwitchTimer = TimerInit()
+$accountSwitchTimeout = 0
+
 		If Not $bSearchMode Then
 			CreateLogFile()
 			CreateAttackLogFile()
