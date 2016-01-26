@@ -43,6 +43,7 @@ $sBotTitle = "Tim's My Bot " & $sBotVersion & " "
 
 Opt("WinTitleMatchMode", 3) ; Window Title exact match mode
 #include "COCBot\functions\Main Screen\Android.au3"
+#include "COCBot\tim\globals.au3"
 
 If $aCmdLine[0] < 2 Then
 	DetectRunningAndroid()
