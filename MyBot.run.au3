@@ -20,7 +20,7 @@
 #pragma compile(ProductName, My Bot)
 
 #pragma compile(ProductVersion, 5.1)
-#pragma compile(FileVersion, 5.1.2)
+#pragma compile(FileVersion, 5.1.3)
 #pragma compile(LegalCopyright, © https://mybot.run)
 #pragma compile(Out, MyBot.run.exe)  ; Required
 
@@ -36,12 +36,10 @@ If Not FileExists(@ScriptDir & "\License.txt") Then
 EndIf
 
 ;~ ProcessSetPriority(@AutoItPID, $PROCESS_ABOVENORMAL)
-
 #include "COCBot\MBR Global Variables.au3"
-#include "COCBot\tim\globals.au3"
 
-$sBotVersion = "v5.1.2" ;~ Don't add more here, but below. Version can't be longer than vX.y.z because it it also use on Checkversion()
-$sBotTitle = "My Bot " & $sBotVersion & " TIM " & $DEFAULT_WIDTH & "x" & $DEFAULT_HEIGHT & " "
+$sBotVersion = "v5.1.3" ;~ Don't add more here, but below. Version can't be longer than vX.y.z because it it also use on Checkversion()
+$sBotTitle = "Tim's My Bot " & $sBotVersion & " "
 
 Opt("WinTitleMatchMode", 3) ; Window Title exact match mode
 #include "COCBot\functions\Main Screen\Android.au3"
