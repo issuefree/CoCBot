@@ -198,6 +198,9 @@ Func runBot() ;Bot that runs everything in order
 			CheckTombs()
 				If _Sleep($iDelayRunBot3) Then Return
 				If $Restart = True Then ContinueLoop
+			CheckLootCart()
+				If _Sleep($iDelayRunBot3) Then Return
+				If $Restart = True Then ContinueLoop
 			ReArm()
 				If _Sleep($iDelayRunBot3) Then Return
 				If $Restart = True Then ContinueLoop
@@ -229,10 +232,7 @@ Func runBot() ;Bot that runs everything in order
 				If $Restart = True Then ContinueLoop
 			BoostWarden()
 				If $Restart = True Then ContinueLoop
-			RequestCC()
-				If _Sleep($iDelayRunBot1) Then Return
 				checkMainScreen(False) ; required here due to many possible exits
-				If $Restart = True Then ContinueLoop
 			If $iUnbreakableMode >= 1 Then
 				If Unbreakable() = True Then ContinueLoop
 			EndIf
