@@ -56,6 +56,38 @@ Func algorithm_AllTroops() ;Attack Algorithm for all existing troops
 		;SetLog("	[" & UBound($PixelBottomLeft) & "] pixels BottomLeft")
 		;SetLog("	[" & UBound($PixelBottomRight) & "] pixels BottomRight")
 
+		Local $gRich = getRich($eGold)
+		Local $eRich = getRich($eElixir)
+		Local $dRich = getRich($eDark)
+
+		Local $targetGold, $targetElixir, $targetDark
+
+		; If we have selected a resource type but we don't really need it, don't target it.
+		; This should focus us on the stuff we really need.
+		Local $rThresh = .75
+		If $iChkSmartAttack[$iMatchMode][$eGold] == 1 And $gRich < $rThresh Then
+			$targetGold = True
+		Else
+			SetLog("Don't target Gold")
+		EndIf
+		If $iChkSmartAttack[$iMatchMode][$eElixir] == 1 And $eRich < $rThresh Then
+			$targetElixir = True
+		Else
+			SetLog("Don't target Elixir")
+		EndIf
+		If $iChkSmartAttack[$iMatchMode][$eDark] == 1 And $dRich < $rThresh Then
+			$targetDark = True
+		Else
+			SetLog("Don't target Dark")
+		EndIf
+
+		; If we have decided we don't need anything we've selected, just revert to settings.
+		If Not ($targetGold Or $targetElixir Or $targetDark) Then
+			$targetGold = $iChkSmartAttack[$iMatchMode][$eGold]
+			$targetElixir = $iChkSmartAttack[$iMatchMode][$eElixir]
+			$targetDark = $iChkSmartAttack[$iMatchMode][$eDark]
+		EndIf
+
 
 		If ($iChkSmartAttack[$iMatchMode][0] = 1 Or $iChkSmartAttack[$iMatchMode][1] = 1 Or $iChkSmartAttack[$iMatchMode][2] = 1) Then
 			SetLog("Locating Mines, Collectors & Drills", $COLOR_BLUE)
@@ -65,21 +97,21 @@ Func algorithm_AllTroops() ;Attack Algorithm for all existing troops
 			Global $PixelDarkElixir[0]
 			Global $PixelNearCollector[0]
 			; If drop troop near gold mine
-			If ($iChkSmartAttack[$iMatchMode][0] = 1) Then
+			If $targetGold Then
 				$PixelMine = GetLocationMine()
 				If (IsArray($PixelMine)) Then
 					_ArrayAdd($PixelNearCollector, $PixelMine)
 				EndIf
 			EndIf
 			; If drop troop near elixir collector
-			If ($iChkSmartAttack[$iMatchMode][1] = 1) Then
+			If $targetElixir Then
 				$PixelElixir = GetLocationElixir()
 				If (IsArray($PixelElixir)) Then
 					_ArrayAdd($PixelNearCollector, $PixelElixir)
 				EndIf
 			EndIf
 			; If drop troop near dark elixir drill
-			If ($iChkSmartAttack[$iMatchMode][2] = 1) Then
+			If $targetDark Then
 				$PixelDarkElixir = GetLocationDarkElixir()
 				If (IsArray($PixelDarkElixir)) Then
 					_ArrayAdd($PixelNearCollector, $PixelDarkElixir)
