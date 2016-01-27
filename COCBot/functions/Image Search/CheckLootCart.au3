@@ -19,7 +19,7 @@ Func CheckLootCart()
 				If WaitforPixel($collectButton[0], $collectButton[1], $collectButton[0]+1, $collectButton[1]+1, $collectButton[2], 1, 5) Then
 					Click($collectButton[0], $collectButton[1])
 				Else
-					SetLog("Clicked on the wrong thing at tolerance: " & $TomTol)
+					SetLog("Clicked on the wrong thing at tolerance: " & $TombTol)
 				EndIf
 				If _Sleep($iDelayCheckTombs1) Then Return
 				Return
