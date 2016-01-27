@@ -383,3 +383,15 @@ Local $foo = 0
 If Not $foo Then
 	ConsoleWrite("hi")
 EndIf
+
+Global Enum $rGold, $rElixir, $rDark
+Func getRich($resource, $softCap=.75)
+	Switch $resource
+		Case $rGold
+			Return (($iGoldCurrent/$rtGoldMax) - $softCap) / (1-$softCap)
+		Case $rElixir
+			Return (($iElixirCurrent/$rtElixirMax) - $softCap) / (1-$softCap)
+		Case $rDarkElixir
+			Return (($iDarkCurrent/$rtDarkMax) - $softCap) / (1-$softCap)
+	EndSwitch
+EndFunc

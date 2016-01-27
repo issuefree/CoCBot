@@ -42,21 +42,17 @@ Func CompareResources($pMode) ;Compares resources and returns true if conditions
 	Local $gThresh = Number($iAimGold[$pMode])
 	Local $eThresh = Number($iAimElixir[$pMode])
 
-SetLog("Checking resource caps:", $COLOR_PURPLE)
-	Local $softCap = .75
-	Local $gRich = (($iGoldCurrent/$rtGoldMax) - $softCap) / (1-$softCap)
-SetLog("  $gRich: " & $gRich, $COLOR_PURPLE)
-	Local $eRich = (($iElixirCurrent/$rtElixirMax) - $softCap) / (1-$softCap)
-SetLog("  $eRich: " & $eRich, $COLOR_PURPLE)
+	Local $gRich = getRich($rGold)
+	Local $eRich = getRich($rElixir)
 
 	If $gRich > 0 Then
 		$gThresh = $gThresh * (1 - $gRich)
-SetLog("  $gThresh: " & $gThresh, $COLOR_PURPLE)		
 	EndIf
 	If $eRich > 0 Then
 		$eThresh = $eThresh * (1 - $eRich)
-SetLog("  $eThresh: " & $eThresh, $COLOR_PURPLE)		
 	EndIf
+
+	SetLog("      [G]:  " & $gThresh & " [E]:  " & $eThresh)
 
 	Local $G = (Number($searchGold) >= $gThresh)
 	Local $E = (Number($searchElixir) >= $eThresh)
