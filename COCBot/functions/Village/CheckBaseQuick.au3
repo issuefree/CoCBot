@@ -1,6 +1,6 @@
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: CheckBaseQuick
-; Description ...: Performs a quick check of base; requestCC, DonateCC, Train if required, collect resources, and pick up healed heroes.
+; Description ...: Performs a quick check of base; RequestCC, DonateCC, Train if required, collect resources, and pick up healed heroes.
 ;                : Used for prep before take a break & Personal Break exit, or during long trophy drops
 ; Syntax ........: CheckBasepQuick()
 ; Parameters ....:
