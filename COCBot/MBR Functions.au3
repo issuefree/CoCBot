@@ -102,6 +102,7 @@
 #include "functions\Image Search\checkWall.au3"
 ;#include "functions\Image Search\checkDElixS.au3"
 #include "functions\Image Search\CheckTombs.au3"
+#include "functions\Image Search\CheckLootCart.au3"
 #include "functions\Image Search\THSearch.au3"
 
 #include "functions\Main Screen\BlueStacks1Shortcuts.au3"
