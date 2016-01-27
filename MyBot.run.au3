@@ -214,11 +214,8 @@ Func runBot() ;Bot that runs everything in order
 				If _Sleep($iDelayRunBot1) Then Return
 				checkMainScreen(False) ; required here due to many possible exits
 				If $Restart = True Then ContinueLoop
-			RequestCC()
-				If $Restart = True Then ContinueLoop
 			Train()
 				If _Sleep($iDelayRunBot1) Then Return
-				checkMainScreen(False)
 				If $Restart = True Then ContinueLoop
 			BoostBarracks()
 				If $Restart = True Then ContinueLoop
@@ -232,7 +229,10 @@ Func runBot() ;Bot that runs everything in order
 				If $Restart = True Then ContinueLoop
 			BoostWarden()
 				If $Restart = True Then ContinueLoop
+			RequestCC()
+				If _Sleep($iDelayRunBot1) Then Return
 				checkMainScreen(False) ; required here due to many possible exits
+				If $Restart = True Then ContinueLoop
 			If $iUnbreakableMode >= 1 Then
 				If Unbreakable() = True Then ContinueLoop
 			EndIf
@@ -295,6 +295,9 @@ EndFunc   ;==>runBot
 Func Idle() ;Sequence that runs until Full Army
 	Local $TimeIdle = 0 ;In Seconds
 	;If $debugsetlog = 1 Then SetLog("Func Idle ", $COLOR_PURPLE)
+
+	checkSwitchAccount()
+
 	While $fullArmy = False
 		If $RequestScreenshot = 1 Then PushMsg("RequestScreenshot")
 		If _Sleep($iDelayIdle1) Then Return

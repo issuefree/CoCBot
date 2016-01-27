@@ -22,6 +22,7 @@ Global Enum _
 	$iLavaHound, _
 	$iArmyEnd	
 
+Global $ArmyTrainTime = 0
 
 Global $ArmyComposition[$iArmyEnd]
 Global $ArmyTrained[$iArmyEnd]
@@ -260,6 +261,8 @@ Global $rtDarkRes
 
 Global $rtBarracksLevel[6]
 
+Global $SentRequestCC = False
+
 ; this requires that your profiles are the same number as your accounts in play
 Global $currentAccount = 1
 Global $accountSwitchTimer = TimerInit()
@@ -389,4 +392,37 @@ Func getRich($resource, $softCap=.75)
 		Case $eDark
 			Return (($iDarkCurrent/$rtDarkMax) - $softCap) / (1-$softCap)
 	EndSwitch
+EndFunc
+
+Func checkSwitchAccount()
+	If $rtAccountSwitch Then
+		SetLog("Checking account switch.")
+
+		Local $canSwitch = False
+		If $CommandStop == 3 Then
+			$canSwitch = True
+			SetLog("In halt mode and full army.")
+		ElseIf $SentRequestCC Then
+			$canSwitch = True
+			SetLog("Just sent request for cc.")
+		ElseIf $ArmyTrainTime > 600 And _  ; I can't get an attack in in under 10 mins probably so no point in switching
+		   $fullarmy <> True And _
+		   TimerDiff($accountSwitchTimer) > $accountSwitchTimeout _
+		Then
+			SetLog("I have " & Round($ArmyTrainTime/60) & " mins left in training and I'm not ready for attack.")
+			$canSwitch = True
+		EndIf
+		If $canSwitch Then
+			$accountSwitchTimer = TimerInit()
+			$accountSwitchTimeout = ($ArmyTrainTime / 2)*1000 ; Don't come back until I'm half way done training. I'm thinking this will keep me balanced between accounts.
+			SetLog("Can come back in " & Round($ArmyTrainTime / 60 / 2) & " mins")
+			; assume matching accounts. I'll put UI on this to do it better.
+			$currentAccount = Number($sCurrProfile)-1
+			If $currentAccount == 0 Then
+				loadAccount(1)
+			Else
+				loadAccount(0)
+			EndIf
+		EndIf
+	EndIf
 EndFunc

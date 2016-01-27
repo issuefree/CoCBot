@@ -14,7 +14,8 @@
 ; ===============================================================================================================================
 
 Func RequestCC()
-
+	; the SentRequestCC var should remain "True" for one bot cycle giving me a chance to react to it before it gets reset.
+	$SentRequestCC = False
 	If $ichkRequest <> 1 Or $canRequestCC = False or $bDonationEnabled = False Then
 		Return
 	EndIf
@@ -109,6 +110,7 @@ Func _makerequest()
 		ControlFocus($title, "", "")  ; make sure BS has window focus
 		PureClick($aSendRequestCCBtn[0], $aSendRequestCCBtn[1], 1, 100, "#0256") ; click send button
 		$canRequestCC = False
+		$SentRequestCC = True
 	EndIf
 
 EndFunc   ;==>_makerequest

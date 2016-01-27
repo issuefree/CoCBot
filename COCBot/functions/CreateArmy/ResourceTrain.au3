@@ -7,7 +7,6 @@ Func ResourceTrain()
 		CheckOverviewFullArmy(True)
 		If $fullarmy Then
 			If $debugSetlog = 1 Then SetLog("FullArmy & TotalTrained = skip training", $COLOR_PURPLE)
-			checkSwitchAccount()
 			Return
 		EndIf
 	EndIf
@@ -211,31 +210,15 @@ SetLog("Continuing loop at "& $barracksNumber &" because I'm unavailable")
 	EndIf
 
 
-	Local $maxTrainTime = 0
+	$ArmyTrainTime = 0
 	For $barracksNumber = 0 To 5
-		If $barracksTrainingTime[$barracksNumber] > $maxTrainTime Then
-			$maxTrainTime = $barracksTrainingTime[$barracksNumber]
+		If $barracksTrainingTime[$barracksNumber] > $ArmyTrainTime Then
+			$ArmyTrainTime = $barracksTrainingTime[$barracksNumber]
 		EndIf
 	Next
 
-	If $rtAccountSwitch == True Then
-		SetLog("")
-		SetLog("Checking account switch:")
-		SetLog("  Train time: " & Round($maxTrainTime/60) & " mins")
-		SetLog("  Can swap in " & Round(($accountSwitchTimeout - TimerDiff($accountSwitchTimer))/60/1000) & " mins")
+	SetLog("  Train time: " & Round($ArmyTrainTime/60) & " mins")
 
-		If $maxTrainTime > 600 And _  ; I can't get an attack in in under 10 mins probably so no point in switching
-		   $fullarmy <> True And _
-		   TimerDiff($accountSwitchTimer) > $accountSwitchTimeout _
-		Then
-			SetLog("I have " & Round($maxTrainTime/60) & " mins left in training and I'm not ready for attack.")
-			SetLog("Swap accounts after train.")
-			$accountSwitchTimer = TimerInit()
-			$accountSwitchTimeout = ($maxTrainTime / 2)*1000 ; Don't come back until I'm half way done training. I'm thinking this will keep me balanced between accounts.
-			SetLog("Can come back in " & Round($maxTrainTime / 60 / 2) & " mins")
-			$restartAfterTrain = True
-		EndIf
-	EndIf
 	
 SetLog("End train")
 
@@ -244,22 +227,6 @@ SetLog("End train")
 
 	getTrainCosts()
 
-	checkSwitchAccount($restartAfterTrain)
-
-EndFunc
-
-Func checkSwitchAccount($canSwitch=True)
-	If $rtAccountSwitch Then
-		; assume matching accounts. I'll put UI on this to do it better.
-		$currentAccount = Number($sCurrProfile)-1
-		If $canSwitch == True Then
-			If $currentAccount == 0 Then
-				loadAccount(1)
-			Else
-				loadAccount(0)
-			EndIf
-		EndIf
-	EndIf
 EndFunc
 
 ; this will figure out my target army based on 

@@ -41,23 +41,28 @@ Func CompareResources($pMode) ;Compares resources and returns true if conditions
 
 	Local $gThresh = Number($iAimGold[$pMode])
 	Local $eThresh = Number($iAimElixir[$pMode])
+	Local $dThresh = Number($iAimDark[$pMode])
 
 	Local $gRich = getRich($eGold)
 	Local $eRich = getRich($eElixir)
+	Local $dRich = getRich($eDark)
 
 	If $gRich > 0 Then
-		$gThresh = $gThresh * (1 - $gRich)
+		$gThresh = Floor($gThresh * (1 - $gRich))
 	EndIf
 	If $eRich > 0 Then
-		$eThresh = $eThresh * (1 - $eRich)
+		$eThresh = Floor($eThresh * (1 - $eRich))
+	EndIf
+	If $dRich > 0 Then
+		$dThresh = Floor($dThresh * (1 - $dRich))
 	EndIf
 
-	SetLog("      [G]:  " & $gThresh & " [E]:  " & $eThresh)
+	SetLog("      [G]:  " & $gThresh & " [E]:  " & $eThresh & " [D]:  " & $dThresh)
 
 	Local $G = (Number($searchGold) >= $gThresh)
 	Local $E = (Number($searchElixir) >= $eThresh)
+	Local $D = (Number($searchDark) >= $dThresh)
 
-	Local $D = (Number($searchDark) >= Number($iAimDark[$pMode]))
 	Local $T = (Number($searchTrophy) >= Number($iAimTrophy[$pMode]))
 	Local $GPE = ((Number($searchGold) + Number($searchElixir)) >= Number($iAimGoldPlusElixir[$pMode]))
 
