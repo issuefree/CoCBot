@@ -42,8 +42,8 @@ Func CompareResources($pMode) ;Compares resources and returns true if conditions
 	Local $gThresh = Number($iAimGold[$pMode])
 	Local $eThresh = Number($iAimElixir[$pMode])
 
-	Local $gRich = getRich($rGold)
-	Local $eRich = getRich($rElixir)
+	Local $gRich = getRich($eGold)
+	Local $eRich = getRich($eElixir)
 
 	If $gRich > 0 Then
 		$gThresh = $gThresh * (1 - $gRich)

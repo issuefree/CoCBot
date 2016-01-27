@@ -379,19 +379,14 @@ Func StringJoin($array, $delim=",")
 	Return $str
 EndFunc
 
-Local $foo = 0
-If Not $foo Then
-	ConsoleWrite("hi")
-EndIf
-
-Global Enum $rGold, $rElixir, $rDark
+Global Enum $eGold, $eElixir, $eDark
 Func getRich($resource, $softCap=.75)
 	Switch $resource
-		Case $rGold
+		Case $eGold
 			Return (($iGoldCurrent/$rtGoldMax) - $softCap) / (1-$softCap)
-		Case $rElixir
+		Case $eElixir
 			Return (($iElixirCurrent/$rtElixirMax) - $softCap) / (1-$softCap)
-		Case $rDarkElixir
+		Case $eDark
 			Return (($iDarkCurrent/$rtDarkMax) - $softCap) / (1-$softCap)
 	EndSwitch
 EndFunc
