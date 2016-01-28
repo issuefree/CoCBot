@@ -394,7 +394,9 @@ Func getRich($resource, $softCap=.75)
 	EndSwitch
 EndFunc
 
+
 Func checkSwitchAccount()
+	Local $minTrainTime = 300 ; Don't switch accounts for long training if this is all I have left
 	If $rtAccountSwitch Then
 		SetLog("Checking account switch.")
 
@@ -405,17 +407,18 @@ Func checkSwitchAccount()
 		ElseIf $SentRequestCC Then
 			$canSwitch = True
 			SetLog("Just sent request for cc.")
-		ElseIf $ArmyTrainTime > 600 And _  ; I can't get an attack in in under 10 mins probably so no point in switching
+		ElseIf $ArmyTrainTime > $minTrainTime And _  ; I can't get an attack in in under 10 mins probably so no point in switching
 		   $fullarmy <> True And _
 		   TimerDiff($accountSwitchTimer) > $accountSwitchTimeout _
 		Then
 			SetLog("I have " & Round($ArmyTrainTime/60) & " mins left in training and I'm not ready for attack.")
 			$canSwitch = True
 		EndIf
+		SetLog("Can swap in " & Round(($accountSwitchTimeout - TimerDiff($accountSwitchTimer))/60/1000) & " mins")
 		If $canSwitch Then
 			$accountSwitchTimer = TimerInit()
 			$accountSwitchTimeout = ($ArmyTrainTime / 2)*1000 ; Don't come back until I'm half way done training. I'm thinking this will keep me balanced between accounts.
-			SetLog("Can come back in " & Round($ArmyTrainTime / 60 / 2) & " mins")
+			SetLog("Can come back in " & Round($ArmyTrainTime / 2 / 60) & " mins")
 			; assume matching accounts. I'll put UI on this to do it better.
 			$currentAccount = Number($sCurrProfile)-1
 			If $currentAccount == 0 Then
