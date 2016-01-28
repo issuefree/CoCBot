@@ -414,7 +414,7 @@ Func checkSwitchAccount()
 			SetLog("I have " & Round($ArmyTrainTime/60) & " mins left in training and I'm not ready for attack.")
 			$canSwitch = True
 		EndIf
-		SetLog("Can swap in " & Round(($accountSwitchTimeout - TimerDiff($accountSwitchTimer))/60/1000) & " mins")
+		; SetLog("Can swap in " & Round(($accountSwitchTimeout - TimerDiff($accountSwitchTimer))/60/1000) & " mins")
 		If $canSwitch Then
 			$accountSwitchTimer = TimerInit()
 			$accountSwitchTimeout = ($ArmyTrainTime / 2)*1000 ; Don't come back until I'm half way done training. I'm thinking this will keep me balanced between accounts.
