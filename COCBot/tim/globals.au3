@@ -233,9 +233,8 @@ Func clearTroops()
 EndFunc
 
 ; this relies on you being on the army overview
-Func goToBarracks($targetBarracks)
+Func goToBarracks($targetBarracks, $currentBarracks = -1)
 	; SetLog("goToBarracks(" & $targetBarracks & ")")
-	Local $currentBarracks = -1
 	While $currentBarracks < 6
 		_TrainMoveBtn(+1) ;click Next button
 		If _Sleep($iDelayTrain2) Then Return
