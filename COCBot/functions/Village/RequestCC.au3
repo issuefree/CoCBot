@@ -104,8 +104,8 @@ Func _makerequest()
 			If $icount > 25 Then ExitLoop  ; wait 26*500ms = 13 seconds max
 		WEnd
 		If $icount > 25 Then
-		If $debugSetlog = 1 Then SetLog("Send request button not found", $COLOR_PURPLE)
-			CheckMainScreen(False) ;emergency exit
+			SetLog("Send request button not found", $COLOR_PURPLE)
+			checkMainScreen(False) ;emergency exit
 		EndIf
 		ControlFocus($title, "", "")  ; make sure BS has window focus
 		PureClick($aSendRequestCCBtn[0], $aSendRequestCCBtn[1], 1, 100, "#0256") ; click send button
