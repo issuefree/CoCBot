@@ -6,7 +6,7 @@ Func CheckLootCart()
 	$TombLoc = 0
 	_CaptureRegion()
 	If _Sleep($iDelayCheckTombs1) Then Return
-	For $TombTol = 0 To 75
+	For $TombTol = 0 To 53
 		If $TombLoc = 0 Then
 			$TombX = 0
 			$TombY = 0
