@@ -91,6 +91,7 @@ SetLog("Check for deadlocks:")
 	; check for deadlock.
 	; A deadlock is when 1 or more barracks is blocked and all other barracks are not training.
 	; this is not a very aggressive check and could waste some time but it'll probably do for now.
+	; I'm ignoring dark barracks for all checks and resolutions. This may have errors but they should be minor and infrequent.
 
 	If $numBlockedBarracks > 0 And $CurCamp <> $TotalCamp Then	
 		If $numBlockedBarracks >= $numBarracksAvaiables Then ; Hard deadlock.
@@ -123,6 +124,41 @@ SetLog("Check for deadlocks:")
 			TrainIt($eArch, $TotalCamp - $CurCamp)
 		Else ; Possible deadlock
 			SetLog("Possible deadlock.")
+			; The scenario I care about is when I have only blocked barracks or empty barracks.
+			; check for empty barracks
+			Local $emptyBarracks[4]
+			Local $numEmptyBarracks = 0
+			For $barracksNumber = 0 To 3
+				If $barracksTrainingTime[$barracksNumber] == 0 And $barracksAvailable[$barracksNumber] Then
+					$emptyBarracks[$barracksNumber] = True
+					$numEmptyBarracks += 1
+				EndIf
+			Next
+			If $numBlockedBarracks + $numEmptyBarracks == $numBarracks Then
+				SetLog("Found deadlock. Blocked: " & $numBlockedBarracks & " Empty: " & $numEmptyBarracks)
+				; it seems like a good way to handle this would be to clean everything out of all barracks 
+				; except the blocking troops and then wait for another training cycle to fill up the empty
+				; barracks.
+				; the easy way to do this is to train some archers in your empty barracks.
+
+				If goHome() == False Then Return
+				If openArmyOverview() == False Then Return
+				Local $toTrain = $TotalCamp - $CurCamp
+				Local $archersPerBarracks = Ceiling($toTrain / $numEmptyBarracks)
+				Local $currentBarracks = -1
+				For $barracksNumber = 0 To 3
+					If $emptyBarracks[$barracksNumber] Then
+						goToBarracks($barracksNumber, $currentBarracks)
+						$currentBarracks = $barracksNumber
+						If $archersPerBarracks > $toTrain Then $archersPerBarracks = $toTrain
+						$toTrain -= $archersPerBarracks
+						SetLog("Go to B" & $barracksNumber & " and train " & $archersPerBarracks)
+						TrainIt($eArch, $archersPerBarracks)
+					EndIf
+				Next
+			EndIf
+
+
 			; maybe prevent training into the blocked barracks? seems unlikely.
 			; I could remove the troops in blocked barracks from army consideration.
 			; Then we'd build an army on the remaining barracks. This might get messy.
