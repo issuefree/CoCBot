@@ -182,8 +182,8 @@ Func algorithm_AllTroops() ;Attack Algorithm for all existing troops
 			, [$eBarb, $nbSides, 1, 2, 0] _
 			, [$ePekk, $nbSides, 1, 1, 0] _
 			, [$eValk, $nbSides, 1, 1, 0] _
-			, [$eWall, $nbSides, 1, 1, 1] _
 			, ["CC", 1, 1, 1, 1] _
+			, [$eWall, $nbSides, 1, 1, 1] _
 			, ["HEROES", 1, 2, 1, 1] _
 			, [$eArch, $nbSides, 1, 2, 0] _
 			, [$eBarb, $nbSides, 2, 2, 0] _
