@@ -870,8 +870,9 @@ Func saveConfig() ;Saves the controls settings to the config
 	IniWrite($config, "troop", "rtRanged", GUICtrlRead($rtRangedPercTxt))
 
 	IniWrite($config, "troop", "rtElixirMax", GUICtrlRead($rtElixirMaxTxt))
-	IniWrite($config, "troop", "rtGoldMax", GUICtrlRead($rtGoldMaxTxt))
 	IniWrite($config, "troop", "rtElixirRes", GUICtrlRead($rtElixirResTxt))
+	IniWrite($config, "troop", "rtGoldMax", GUICtrlRead($rtGoldMaxTxt))
+	IniWrite($config, "troop", "rtGoldRes", GUICtrlRead($rtGoldResTxt))
 	IniWrite($config, "troop", "rtDarkMax", GUICtrlRead($rtDarkMaxTxt))
 	IniWrite($config, "troop", "rtDarkRes", GUICtrlRead($rtDarkResTxt))
 
