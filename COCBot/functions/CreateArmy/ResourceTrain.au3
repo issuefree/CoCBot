@@ -276,18 +276,19 @@ Func getArmyComposition($currentArmy)
 
 	Local $tankUnits[2] = [$iGolem, $iGiant]
 	Local $meleeUnits[3] = [$iPekka, $iValkyrie, $iBarbarian]
-	Local $rangedUnits[2] = [$iWizard, $iArcher]
+	Local $rangedUnits[3] = [$iWitch, $iWizard, $iArcher]
 	Local $resourceUnits[1] = [$iGoblin]
 
 	; dark vs elixir units are in globals but for syntax similarity I'll reproduce here.
 	; high value elixir units
-	local $deUnits[2] = [$iGolem, $iValkyrie]
+	local $deUnits[3] = [$iGolem, $iValkyrie, $iWitch]
 	Local $hvUnits[2] = [$iPekka, $iWizard]
 
 	; by resource type then by size
 	Local $unitEvalOrder[$iArmyEnd] = [ _
 		$iGolem, _
 		$iValkyrie, _
+		$iWitch, _
 		$iPekka, _
 		$iGiant, _
 		$iWizard, _
@@ -296,7 +297,6 @@ Func getArmyComposition($currentArmy)
 		$iGoblin, _
 		$iWallBreaker, _
 		$iLavaHound, _
-		$iWitch, _
 		$iHogRider, _
 		$iMinion, _
 		$iDragon, _
@@ -307,35 +307,24 @@ Func getArmyComposition($currentArmy)
 
 	; resource calculations
 
-	Local $weightedElixir = (Number($iElixirCurrent) - $rtElixirRes) / ($rtElixirMax - $rtElixirRes)
-	If $weightedElixir < 0 Then $weightedElixir = 0
-	$weightedElixir = $weightedElixir*$weightedElixir
-	Local $weightedDarkElixir = (Number($iDarkCurrent) - $rtDarkRes) / ($rtDarkMax - $rtDarkRes)
-	If $weightedDarkElixir < 0 Then $weightedDarkElixir = 0
-	$weightedDarkElixir = $weightedDarkElixir * $weightedDarkElixir
+	Local $weightedElixir = getWeightedResource($iElixirCurrent, $rtElixirRes, $rtElixirMax)
+	Local $weightedDark = getWeightedResource($iDarkCurrent, $rtDarkRes, $rtDarkMax)
 
-	; trying squaring the weights. This should let me spend when I'm capped but ease off SHARPLY as I approach my reserve.
-	; ; Estimate of de value over elixir value. Started with 3. I'd like to use more DE troops so I set it to 2.	
-	; ; Changing to 1. Maybe just let the reserve handle it.
-	; Local $deValue = 1 
-	; $weightedDarkElixir = $weightedDarkElixir / $deValue ; This is an estimate of relative dark elixir value 
-
-
-	Local $base = $weightedElixir + $weightedDarkElixir
+	Local $base = $weightedElixir + $weightedDark
 	If $base < 1 Then
 		$base = 1
 	EndIf
 	Local $elixirRatio = $weightedElixir / $base
-	Local $darkElixirRatio = $weightedDarkElixir / $base
+	Local $darkRatio = $weightedDark / $base
 
 	; this is hard coded. I could figure it based on my assigned categories...
-	Local $tankRatio[2] = [0, $weightedDarkElixir]		; how much of each ratio to apply
-	Local $meleeRatio[2] = [$elixirRatio, $darkElixirRatio]
-	Local $rangedRatio[2] = [$weightedElixir,0]
+	Local $tankRatio[2] = [0, $weightedDark]		; how much of each ratio to apply
+	Local $meleeRatio[2] = [$elixirRatio, $darkRatio]
+	Local $rangedRatio[2] = [$elixirRatio, $darkRatio]
 	Local $resourceRatio[2] = [0, 0]
 
 	SetLog("Resource allocation:")
-	SetLog("  [E]: " & Round($weightedElixir*100) & "%  [DE]: " & Round($weightedDarkElixir*100) & "%    [E/DE]: " & Round($elixirRatio*100) & "/" & Round($darkElixirRatio*100))
+	SetLog("  [E]: " & Round($weightedElixir*100) & "%  [DE]: " & Round($weightedDark*100) & "%    [E/DE]: " & Round($elixirRatio*100) & "/" & Round($darkRatio*100))
 	; SetLog("Elixir ratio = " & Floor($elixirRatio*100) & "%")
 
 	; I need some buckets.
@@ -357,7 +346,7 @@ Func getArmyComposition($currentArmy)
 	Local $resourceCount = Round($rtResourcePerc/100 * $capacity)
 
 	Local $hvCount = Round($capacity*$elixirRatio)
-	Local $deCount = Round($capacity*$darkElixirRatio)
+	Local $deCount = Round($capacity*$darkRatio)
 
 	SetLog("Base counts: [T]: " & $tankCount & " [M]: " & $meleeCount & " [R]: " & $rangedCount & " [r]:" & $resourceCount)
 
