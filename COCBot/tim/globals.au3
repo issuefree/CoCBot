@@ -269,21 +269,23 @@ Global $accountSwitchTimeout = 0
 Global $rtAccountSwitch
 Global $rtAccountList[5]
 
-Func loadAccount($accountNum)
-	SetLog("Loading account: " & $accountNum)
-	goHome()
-	Click(820, 590) ; settings button
-	; check pixel for b4de50 at 476 415
-	If WaitforPixel(476, 415, 477, 416, Hex(0xffffff, 6), 5, 2) Then ; White in connected button font
-		Click(476, 415)
-		_Sleep(500)
-	Else
-		SetLog("Failed to find connected button, it's ok maybe we're not connected. Try the disconnect button.")
-		SetLog(_GetPixelColor(476, 415, True))
+Func loadAccount($accountNum, $startDisconnected = False)
+	If Not $startDisconnected Then
+		SetLog("Loading account: " & $accountNum)
+		goHome()
+		Click(820, 590) ; settings button
+		; check pixel for b4de50 at 476 415
+		If WaitforPixel(476, 415, 477, 416, Hex(0xffffff, 6), 5, 2) Then ; White in connected button font
+			Click(476, 415)
+			_Sleep(500)
+		Else
+			SetLog("Failed to find connected button, it's ok maybe we're not connected. Try the disconnect button.")
+			SetLog(_GetPixelColor(476, 415, True))
+		EndIf
 	EndIf
 	; wait for ffffff at 500 415
 	If WaitforPixel(500, 415, 501, 416, Hex(0xffffff, 6), 5, 2) Then ; White in disconnected button font
-		Click(500, 415)
+		Click(500, 415, 2) ; click a couple times. This click seem spotty.
 		_Sleep(500)
 	Else
 		SetLog("Failed to find disconnected button aborting")
@@ -307,7 +309,7 @@ Func loadAccount($accountNum)
 	_Sleep(500)
 
 	;Wait for 284807 at 534 437
-	If WaitForPixel(403, 409, 404, 410, Hex(0xf0bc68, 6), 5, 20) Then ; orange in cancel button
+	If WaitForPixel(403, 409, 404, 410, Hex(0xf0bc68, 6), 5, 30) Then ; orange in cancel button
 		Click(534, 437) ; click load
 		_Sleep(500)
 	Else
@@ -321,7 +323,8 @@ Func loadAccount($accountNum)
 			cmbProfile()
 			Return True
 		EndIf
-		SetLog("Abort. Unknown state.")
+		SetLog("Couldn't connect, retry.")
+		loadAccount($accountNum, True)
 		Return False
 	EndIf
 	
@@ -381,18 +384,6 @@ Func StringJoin($array, $delim=",")
 	Return $str
 EndFunc
 
-Global Enum $eGold, $eElixir, $eDark
-Func getRich($resource, $softCap=.75)
-	Switch $resource
-		Case $eGold
-			Return (($iGoldCurrent/$rtGoldMax) - $softCap) / (1-$softCap)
-		Case $eElixir
-			Return (($iElixirCurrent/$rtElixirMax) - $softCap) / (1-$softCap)
-		Case $eDark
-			Return (($iDarkCurrent/$rtDarkMax) - $softCap) / (1-$softCap)
-	EndSwitch
-EndFunc
-
 
 Func checkSwitchAccount()
 	Local $minTrainTime = 300 ; Don't switch accounts for long training if this is all I have left
@@ -400,7 +391,7 @@ Func checkSwitchAccount()
 		SetLog("Checking account switch.")
 
 		Local $canSwitch = False
-		If $CommandStop == 3 Then
+		If $CommandStop == 0 Or $CommandStop == 3 Then
 			$canSwitch = True
 			SetLog("In halt mode and full army.")
 		ElseIf $SentRequestCC Then
@@ -428,3 +419,43 @@ Func checkSwitchAccount()
 		EndIf
 	EndIf
 EndFunc
+
+
+Global Enum $eGold, $eElixir, $eDark
+Func getRich($resource, $softCap=.75)
+	Switch $resource
+		Case $eGold
+			Return (($iGoldCurrent/$rtGoldMax) - $softCap) / (1-$softCap)
+		Case $eElixir
+			Return (($iElixirCurrent/$rtElixirMax) - $softCap) / (1-$softCap)
+		Case $eDark
+			Return (($iDarkCurrent/$rtDarkMax) - $softCap) / (1-$softCap)
+	EndSwitch
+EndFunc
+
+
+; Get an approximation of how much "extra" resource we have over our reserve
+
+Func getWeightedResource($current, $reserve, $max)
+	Local $weighted = ($current - $reserve) / ($max - $reserve)
+	If $weighted < 0 Then $weighted = 0
+	If $current < $reserve*1.5 Then
+	; trying squaring the weights. This should let me spend when I'm capped but ease off SHARPLY as I approach my reserve.
+		$weighted = $weighted*$weighted
+	EndIf
+	Return $weighted
+EndFunc
+
+
+ConsoleWrite(getWeightedResource(6500000, 4000000, 8000000))
+ConsoleWrite(@CRLF)
+ConsoleWrite(((6500000/8000000) - .5) / (1-.5))
+
+
+
+
+
+
+
+
+
