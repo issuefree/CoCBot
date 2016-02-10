@@ -899,6 +899,7 @@ Func saveConfig() ;Saves the controls settings to the config
 	IniWrite($config, "Spells", "RageSpell", GUICtrlRead($txtNumRageSpell))
 	IniWrite($config, "Spells", "HealSpell", GUICtrlRead($txtNumHealSpell))
 	IniWrite($config, "Spells", "PoisonSpell", GUICtrlRead($txtNumPoisonSpell))
+	IniWrite($config, "Spells", "EarthquakeSpell", GUICtrlRead($txtNumEarthquakeSpell))
 	IniWrite($config, "Spells", "HasteSpell", GUICtrlRead($txtNumHasteSpell))
 	IniWrite($config, "Spells", "SpellFactory", GUICtrlRead($txtTotalCountSpell))
 

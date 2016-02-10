@@ -107,7 +107,7 @@ Func BrewSpells()
 			EndIf
 		EndIf
 
-		If $numFactoryDarkSpellAvaiables = 1 And ($PoisonSpellComp > 0 Or $HasteSpellComp > 0) Then
+		If $numFactoryDarkSpellAvaiables = 1 And ($PoisonSpellComp > 0 Or $EarthquakeSpellComp > 0 Or $HasteSpellComp > 0) Then
 			$iBarrHere = 0
 			While Not (isDarkSpellFactory())
 				If Not (IsTrainPage()) Then Return
@@ -138,6 +138,30 @@ Func BrewSpells()
 						EndIf
 					Else
 						Setlog("Already done Poison Spell(s)")
+					EndIf
+				EndIf
+
+				If $EarthquakeSpellComp > 0 Then ; Earthquake Spells
+					$TempEarthquakeSpell = Number(getBarracksTroopQuantity(175 + 107 * 0, 296 + $midOffsetY))
+					Local $EarthquakeSpell = $EarthquakeSpellComp - ($CurEarthSpell + $TempEarthquakeSpell)
+					If $debugSetlog = 1 Then SetLog("Making Poision Spell: " & $EarthquakeSpell)
+					If _sleep($iDelayTrain2) Then Return
+					If $TempEarthquakeSpell = 0 Then
+						If _sleep($iDelayTrain2) Then Return
+						If _ColorCheck(_GetPixelColor(239, 375 + $midOffsetY, True), Hex(0xFFFFFF, 6), 20) = False Then
+							setlog("Not enough Elixir to create Spell", $COLOR_RED)
+							Return
+						ElseIf _ColorCheck(_GetPixelColor(200, 346 + $midOffsetY, True), Hex(0x414141, 6), 20) Then
+							setlog("Spell Factory Full", $COLOR_RED)
+							Return
+						Else
+							If $EarthquakeSpell > 0 Then
+								GemClick(326, 354 + $midOffsetY, $EarthquakeSpell, $iDelayTrain7, "#0290")
+								SetLog("Created " & $EarthquakeSpell & " Earthquake Spell(s)", $COLOR_BLUE)
+							EndIf
+						EndIf
+					Else
+						Setlog("Already done Earthquake Spell(s)")
 					EndIf
 				EndIf
 

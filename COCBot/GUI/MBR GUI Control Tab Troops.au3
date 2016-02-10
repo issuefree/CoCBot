@@ -358,18 +358,19 @@ Func lblTotalCount()
  EndFunc   ;==>lblTotalCount
 
  Func lblTotalCountSpell()
-	; GUICtrlSetData($lblTotalCountSpell, GUICtrlRead($txtNumLightningSpell)*2 + GUICtrlRead($txtNumHealSpell)*2 + GUICtrlRead($txtNumRageSpell)*2 + GUICtrlRead($txtNumPoisonSpell) + GUICtrlRead($txtNumHasteSpell))
-	If (GUICtrlRead($txtNumLightningSpell)*2 + GUICtrlRead($txtNumHealSpell)*2 + GUICtrlRead($txtNumRageSpell)*2 + GUICtrlRead($txtNumPoisonSpell) + GUICtrlRead($txtNumHasteSpell)) < GUICtrlRead($txtTotalCountSpell)+1 Then
+	If (GUICtrlRead($txtNumLightningSpell)*2 + GUICtrlRead($txtNumHealSpell)*2 + GUICtrlRead($txtNumRageSpell)*2 + GUICtrlRead($txtNumPoisonSpell) + GUICtrlRead($txtNumEarthquakeSpell) + GUICtrlRead($txtNumHasteSpell)) < GUICtrlRead($txtTotalCountSpell)+1 Then
 		GUICtrlSetBkColor($txtNumLightningSpell, $COLOR_MONEYGREEN)
 		GUICtrlSetBkColor($txtNumHealSpell, $COLOR_MONEYGREEN)
 		GUICtrlSetBkColor($txtNumRageSpell, $COLOR_MONEYGREEN)
 		GUICtrlSetBkColor($txtNumPoisonSpell, $COLOR_MONEYGREEN)
+		GUICtrlSetBkColor($txtNumEarthquakeSpell, $COLOR_MONEYGREEN)
 		GUICtrlSetBkColor($txtNumHasteSpell, $COLOR_MONEYGREEN)
 	Else
 		GUICtrlSetBkColor($txtNumLightningSpell, $COLOR_RED)
 		GUICtrlSetBkColor($txtNumHealSpell, $COLOR_RED)
 		GUICtrlSetBkColor($txtNumRageSpell, $COLOR_RED)
 		GUICtrlSetBkColor($txtNumPoisonSpell, $COLOR_RED)
+		GUICtrlSetBkColor($txtNumEarthquakeSpell, $COLOR_RED)
 		GUICtrlSetBkColor($txtNumHasteSpell, $COLOR_RED)
 	EndIf
 
@@ -378,17 +379,20 @@ Func lblTotalCount()
 		GUICtrlSetState($txtNumHealSpell, $GUI_DISABLE)
 		GUICtrlSetState($txtNumRageSpell, $GUI_DISABLE)
 		GUICtrlSetState($txtNumPoisonSpell, $GUI_DISABLE)
+		GUICtrlSetState($txtNumEarthquakeSpell, $GUI_DISABLE)
 		GUICtrlSetState($txtNumHasteSpell, $GUI_DISABLE)
 		GUICtrlSetBkColor($txtNumLightningSpell, $COLOR_WHITE)
 		GUICtrlSetBkColor($txtNumHealSpell, $COLOR_WHITE)
 		GUICtrlSetBkColor($txtNumRageSpell, $COLOR_WHITE)
 		GUICtrlSetBkColor($txtNumPoisonSpell, $COLOR_WHITE)
+		GUICtrlSetBkColor($txtNumEarthquakeSpell, $COLOR_WHITE)
 		GUICtrlSetBkColor($txtNumHasteSpell, $COLOR_WHITE)
 	Else
 		GUICtrlSetState($txtNumLightningSpell, $GUI_ENABLE)
 		GUICtrlSetState($txtNumHealSpell, $GUI_ENABLE)
 		GUICtrlSetState($txtNumRageSpell, $GUI_ENABLE)
 		GUICtrlSetState($txtNumPoisonSpell, $GUI_ENABLE)
+		GUICtrlSetState($txtNumEarthquakeSpell, $GUI_ENABLE)
 		GUICtrlSetState($txtNumHasteSpell, $GUI_ENABLE)
 	EndIf
 
