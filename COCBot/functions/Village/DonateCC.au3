@@ -119,7 +119,7 @@ Func DonateCC($Check = False)
 				If $ClanString = "" Or $ClanString = " " Then
 					SetLog("Unable to read Chat Request!", $COLOR_RED)
 					$bDonate = True
-					$y = $DonatePixel[1] + 30
+					$y = $DonatePixel[1] + 10
 					ContinueLoop
 				Else
 					If $ichkExtraAlphabets = 1 Then
@@ -151,7 +151,7 @@ Func DonateCC($Check = False)
 			; open Donate Window
 			If DonateWindow($bOpen) = False Then
 				$bDonate = True
-				$y = $DonatePixel[1] + 30
+				$y = $DonatePixel[1] + 10
 				ContinueLoop ; go to next button if donate window did not open
 			EndIf
 
@@ -162,7 +162,7 @@ Func DonateCC($Check = False)
 				DonateWindowCap($bSkipDonTroops, $bSkipDonSpells)
 				If $bSkipDonTroops And $bSkipDonSpells Then
 					$bDonate = True
-					$y = $DonatePixel[1] + 30
+					$y = $DonatePixel[1] + 10
 					ContinueLoop ; go to next button if already donated, maybe this is an impossible case..
 				EndIf
 
@@ -222,7 +222,7 @@ Func DonateCC($Check = False)
 				DonateWindowCap($bSkipDonTroops, $bSkipDonSpells)
 				If $bSkipDonTroops And $bSkipDonSpells Then
 					$bDonate = True
-					$y = $DonatePixel[1] + 30
+					$y = $DonatePixel[1] + 10
 					ContinueLoop ; go to next button if already donated max, maybe this is an impossible case..
 				EndIf
 
@@ -297,7 +297,7 @@ Func DonateCC($Check = False)
 			DonateWindow($bClose)
 
 			$bDonate = True
-			$y = $DonatePixel[1] + 30
+			$y = $DonatePixel[1] + 10
 			ClickP($aAway, 1, 0, "#0171")
 			If _Sleep($iDelayDonateCC2) Then ExitLoop
 		EndIf
