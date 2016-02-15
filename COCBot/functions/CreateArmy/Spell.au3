@@ -142,7 +142,7 @@ Func BrewSpells()
 				EndIf
 
 				If $EarthquakeSpellComp > 0 Then ; Earthquake Spells
-					$TempEarthquakeSpell = Number(getBarracksTroopQuantity(175 + 107 * 0, 296 + $midOffsetY))
+					$TempEarthquakeSpell = Number(getBarracksTroopQuantity(175 + 107 * 1, 296 + $midOffsetY))
 					Local $EarthquakeSpell = $EarthquakeSpellComp - ($CurEarthSpell + $TempEarthquakeSpell)
 					If $debugSetlog = 1 Then SetLog("Making Poision Spell: " & $EarthquakeSpell)
 					If _sleep($iDelayTrain2) Then Return
