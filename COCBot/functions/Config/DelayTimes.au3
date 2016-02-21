@@ -250,8 +250,8 @@ Global Const $iDelayCollect2 = 250
 Global Const $iDelayCollect3 = 500
 
 ;DonateCC
-Global Const $iDelayDonateCC1 = 200
-Global Const $iDelayDonateCC2 = 250
+Global Const $iDelayDonateCC1 = 250
+Global Const $iDelayDonateCC2 = 750 ; Trying to up this to prevent bad donates orig value 250
 Global Const $iDelayDonateCC3 = 50 ; click
 
 ;DonateTroopType

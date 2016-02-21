@@ -65,7 +65,7 @@ Func DonateCC($Check = False)
 	If _Sleep($iDelayDonateCC1) Then Return
 
 	ClickP($aClanTab, 1, 0, "#0169") ; clicking clan tab
-	If _Sleep($iDelayDonateCC2) Then Return
+	If _Sleep($iDelayDonateCC1) Then Return
 
 	Local $Scroll, $offColors[3][3] = [[0x010101, 0, -4], [0xb8e050, 0, 13], [0xb0da49, 0, 16]]; $offColors[3][3] = [[0x000000, 0, -2], [0x262926, 0, 1], [0xF8FCF0, 0, 11]]
 	While $bDonate
