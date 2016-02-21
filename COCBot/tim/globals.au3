@@ -293,11 +293,10 @@ Func loadAccount($accountNum, $startDisconnected = False)
 		Return False
 	EndIf
 
-	;wait for 689f38 at 460 230
-	If WaitForPixel(460, 230, 461, 231, Hex(0x689f38, 6), 5, 30) Then ; green in header of profile picker
+	If WaitForPixel(190, 140, 191, 241, Hex(0x33b5e5, 6), 5, 30) Then ; blue line
 		;click account number at 175 x 290+num*50 (num = 0-n)
 		SetLog("Selecting account " & $accountNum)
-		Click(175, 290+($accountNum*50))
+		Click(175, 275+($accountNum*75))
 		_Sleep(500)
 	Else
 		SetLog("Failed to find account screen, this isn't great.")
