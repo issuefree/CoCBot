@@ -315,7 +315,7 @@ Func Idle() ;Sequence that runs until Full Army
 
 		Local $hTimer = TimerInit()
 		Local $iReHere = 0
-		While $iReHere < 7
+		While $iReHere < 3
 			$iReHere += 1
 			DonateCC(True)
 			If _Sleep($iDelayIdle2) Then ExitLoop
