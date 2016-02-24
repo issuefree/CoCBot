@@ -293,11 +293,22 @@ Func loadAccount($accountNum, $startDisconnected = False)
 		Return False
 	EndIf
 
-	If WaitForPixel(190, 140, 191, 241, Hex(0x33b5e5, 6), 5, 30) Then ; blue line
-		;click account number at 175 x 290+num*50 (num = 0-n)
-		SetLog("Selecting account " & $accountNum)
-		Click(175, 275+($accountNum*75))
-		_Sleep(500)
+	If WaitForPixel(690, 325, 691, 2326, Hex(0xf5f5f5, 6), 5, 30) Then ; almost white from popup.
+
+		$image = @ScriptDir & "\COCBot\tim\blueLine.png"
+		_CaptureRegion()
+		Local $imageX, $imageY
+		$success = _ImageSearch($image, 1, $imageX, $imageY, 10)
+
+		If $success = 1 Then
+			SetLog("Found line at: " & $imageX & "," & $imageY)
+			;click account number at 175 x 290+num*50 (num = 0-n)
+			SetLog("Selecting account " & $accountNum)
+			Click(175, $imageY+35+($accountNum*75))
+			_Sleep(500)
+		Else
+			SetLog("Couldn't find blue line for vertical align")
+		EndIf
 	Else
 		SetLog("Failed to find account screen, this isn't great.")
 		SetLog(_GetPixelColor(460,230, True))
