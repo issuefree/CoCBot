@@ -305,6 +305,7 @@ Func Idle() ;Sequence that runs until Full Army
 	;If $debugsetlog = 1 Then SetLog("Func Idle ", $COLOR_PURPLE)
 
 	checkSwitchAccount()
+	If $Restart = True Then Return
 
 	While $fullArmy = False Or $bFullArmyHero = False
 		If $RequestScreenshot = 1 Then PushMsg("RequestScreenshot")
@@ -312,6 +313,7 @@ Func Idle() ;Sequence that runs until Full Army
 		If $CommandStop = -1 Then SetLog("====== Waiting for full army ======", $COLOR_GREEN)
 
 	checkSwitchAccount()
+	If $Restart = True Then ExitLoop	
 
 		Local $hTimer = TimerInit()
 		Local $iReHere = 0

@@ -357,7 +357,8 @@ Func loadAccount($accountNum, $startDisconnected = False)
 	cmbProfile()
 
 	$currentAccount = $accountNum
-	Initiate()
+	$Restart = True
+	; Initiate()
 EndFunc
 
 Func runTest()
@@ -377,7 +378,7 @@ EndFunc
 
 Global $gLogFileHandle = ""
 Func CreateGlobalLogFile()
-    Local $sLogFName = @YEAR & "-" & @MON & "-" & @MDAY & "_" & @HOUR & "." & @MIN & "." & @SEC & ".log"
+    Local $sLogFName = "bot.log"
 	Local $sLogPath = @ScriptDir & "\Logs\"
 	DirCreate($sLogPath)
 	$gLogFileHandle = FileOpen($sLogPath & $sLogFName, $FO_APPEND)
@@ -406,6 +407,7 @@ Func checkSwitchAccount()
 			SetLog("In halt mode and full army.")
 		ElseIf $SentRequestCC Then
 			$canSwitch = True
+			$SentRequestCC = False
 			SetLog("Just sent request for cc.")
 		ElseIf $ArmyTrainTime > $minTrainTime And _  ; I can't get an attack in in under 10 mins probably so no point in switching
 		   $fullarmy <> True And _
