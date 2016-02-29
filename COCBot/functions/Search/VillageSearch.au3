@@ -71,8 +71,12 @@ Func VillageSearch() ;Control for searching a village that meets conditions
 			If $iChkMeetTH[$x] = 1 Then $iAimTHtext[$x] = " [TH]:" & StringFormat("%2s", $iMaxTH[$x]) ;$icmbTH
 			If $iChkMeetTHO[$x] = 1 Then $iAimTHtext[$x] &= ", Out"
 
-
-			If $iCmbMeetGE[$x] = 2 Then
+			If $iCmbMeetGE[$x] = 3 Then
+				If Not ($Is_SearchLimit) Then 
+					SetLog("Aim: [Need]:" & StringFormat("%7s", $iAimGoldPlusElixir[$x]) & " [T]:" & StringFormat("%2s", $iAimTrophy[$x]) & $iAimTHtext[$x] & " for: " & $sModeText[$x], $COLOR_GREEN, "Lucida Console", 7.5)
+					SetLog("Rich: [G]: " & getRich($eGold) & " [E]: " & getRich($eElixir) & " [D]: " & getRich($eDark))
+				EndIf
+			ElseIf $iCmbMeetGE[$x] = 2 Then
 				If Not ($Is_SearchLimit) Then SetLog("Aim: [G+E]:" & StringFormat("%7s", $iAimGoldPlusElixir[$x]) & " [D]:" & StringFormat("%5s", $iAimDark[$x]) & " [T]:" & StringFormat("%2s", $iAimTrophy[$x]) & $iAimTHtext[$x] & " for: " & $sModeText[$x], $COLOR_GREEN, "Lucida Console", 7.5)
 			Else
 				If Not ($Is_SearchLimit) Then SetLog("Aim: [G]:" & StringFormat("%7s", $iAimGold[$x]) & " [E]:" & StringFormat("%7s", $iAimElixir[$x]) & " [D]:" & StringFormat("%5s", $iAimDark[$x]) & " [T]:" & StringFormat("%2s", $iAimTrophy[$x]) & $iAimTHtext[$x] & " for: " & $sModeText[$x], $COLOR_GREEN, "Lucida Console", 7.5)

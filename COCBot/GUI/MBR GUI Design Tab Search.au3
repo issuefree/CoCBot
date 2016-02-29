@@ -65,7 +65,12 @@ $tabSearch = GUICtrlCreateTabItem(GetTranslated(2,1, "Search"))
 		$y += 21
 		$cmbDBMeetGE = GUICtrlCreateCombo("", $x , $y + 10, 65, -1, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
 			$txtTip = GetTranslated(2,19, "Search for a base that meets the values set for Gold And/Or/Plus Elixir.") & @CRLF & GetTranslated(2,20, "AND: Both conditions must meet, Gold and Elixir.") & @CRLF & GetTranslated(2,21, "OR: One condition must meet, Gold or Elixir.") & @CRLF & GetTranslated(2,22, "+ (PLUS): Total amount of Gold + Elixir must meet.")
-			GUICtrlSetData(-1, GetTranslated(2,23, "G And E") &"|" & GetTranslated(2,24, "G Or E") & "|" & GetTranslated(2,25, "G + E"), GetTranslated(2,23, "G And E"))
+			GUICtrlSetData(-1, _
+				GetTranslated(2,23, "G And E") &"|" & _
+				GetTranslated(2,24, "G Or E") & "|" & _
+				GetTranslated(2,25, "G + E") & "|" & _
+				"Need", _
+				GetTranslated(2,23, "G And E") )
 			GUICtrlSetTip(-1, $txtTip)
 			GUICtrlSetOnEvent(-1, "cmbDBGoldElixir")
 		$txtDBMinGold = GUICtrlCreateInput("80000", $x + 80, $y, 50, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
@@ -94,6 +99,12 @@ $tabSearch = GUICtrlCreateTabItem(GetTranslated(2,1, "Search"))
 			GUICtrlSetTip(-1, $txtTip)
 			GUICtrlSetState (-1, $GUI_HIDE)
 		$picDBMinGPEElixir = GUICtrlCreateIcon($pIconLib, $eIcnElixir, $x + 153, $y + 1, 16, 16)
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetState (-1, $GUI_HIDE)
+		$lblDBMinGPEPD = GUICtrlCreateLabel("+", $x + 168, $y + 1, -1, -1)
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetState (-1, $GUI_HIDE)
+		$picDBMinGPEPD = GUICtrlCreateIcon($pIconLib, $eIcnDark, $x + 174, $y + 1, 16, 16)
 			GUICtrlSetTip(-1, $txtTip)
 			GUICtrlSetState (-1, $GUI_HIDE)
 		$y += 31
@@ -188,7 +199,12 @@ $tabSearch = GUICtrlCreateTabItem(GetTranslated(2,1, "Search"))
 		$y += 21
 		$cmbABMeetGE = GUICtrlCreateCombo("", $x , $y + 10, 65, -1, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
 			$txtTip = GetTranslated(2,19, -1) & @CRLF & GetTranslated(2,20, -1) & @CRLF & GetTranslated(2,21, -1) & @CRLF & GetTranslated(2,22, -1)
-			GUICtrlSetData(-1, GetTranslated(2,23, -1) & "|" & GetTranslated(2,24, -1) & "|" & GetTranslated(2,25, -1), GetTranslated(2,25, -1))
+			GUICtrlSetData(-1, _
+				GetTranslated(2,23, "G And E") &"|" & _
+				GetTranslated(2,24, "G Or E") & "|" & _
+				GetTranslated(2,25, "G + E") & "|" & _
+				"Need", _
+				GetTranslated(2,23, "G And E") )
 			GUICtrlSetTip(-1, $txtTip)
 			GUICtrlSetOnEvent(-1, "cmbABGoldElixir")
 		$txtABMinGold = GUICtrlCreateInput("80000", $x + 80, $y, 50, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
@@ -219,6 +235,12 @@ $tabSearch = GUICtrlCreateTabItem(GetTranslated(2,1, "Search"))
 			GUICtrlSetTip(-1, $txtTip)
 		$picABMinGPEElixir = GUICtrlCreateIcon($pIconLib, $eIcnElixir, $x + 153, $y + 1, 16, 16)
 			GUICtrlSetTip(-1, $txtTip)
+		$lblABMinGPEPD = GUICtrlCreateLabel("+", $x + 168, $y + 1, -1, -1)
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetState (-1, $GUI_HIDE)
+		$picABMinGPEPD = GUICtrlCreateIcon($pIconLib, $eIcnDark, $x + 174, $y + 1, 16, 16)
+			GUICtrlSetTip(-1, $txtTip)
+			GUICtrlSetState (-1, $GUI_HIDE)
 		$y += 31
 		$chkABMeetDE = GUICtrlCreateCheckbox(GetTranslated(2,29, -1), $x , $y, -1, -1)
 			$txtTip = GetTranslated(2,30, -1)

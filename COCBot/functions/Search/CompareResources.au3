@@ -46,17 +46,23 @@ Func CompareResources($pMode) ;Compares resources and returns true if conditions
 	Local $eRich = getRich($eElixir)
 	Local $dRich = getRich($eDark)
 
+	Local $showThresh = False
 	If $gRich > 0 Then
 		$gThresh = Floor($gThresh * (1 - $gRich))
+		$showThresh = True
 	EndIf
 	If $eRich > 0 Then
 		$eThresh = Floor($eThresh * (1 - $eRich))
+		$showThresh = True
 	EndIf
 	If $dRich > 0 Then
 		$dThresh = Floor($dThresh * (1 - $dRich))
+		$showThresh = True
 	EndIf
 
-	SetLog("      [G]:  " & $gThresh & " [E]:  " & $eThresh & " [D]:  " & $dThresh)
+	If $showThresh And ($iCmbMeetGE[$pMode] == 0 Or $iCmbMeetGE[$pMode] == 1) Then
+		SetLog("      [G]:  " & $gThresh & " [E]:  " & $eThresh & " [D]:  " & $dThresh)
+	EndIf
 
 	Local $G = (Number($searchGold) >= $gThresh)
 	Local $E = (Number($searchElixir) >= $eThresh)
@@ -122,11 +128,43 @@ Func CompareResources($pMode) ;Compares resources and returns true if conditions
 			If $GPE = True Then Return True
 		EndIf
 
+		If $iCmbMeetGE[$pMode] == 3 Then ; need
+			Local $resourceTarget = Number($iAimGoldPlusElixir[$pMode]) ; just for simplicity
+			Local $deFactor = 50 ; value of dark elixir
+
+			Local $baseValue = _
+				Number($searchGold) * (1-$gRich) + _
+				Number($searchElixir) * (1-$eRich) + _
+				Number($searchDark) * $deFactor * (1-$dRich)
+
+			SetLog("      Base value: " & Round($baseValue))
+
+			If $baseValue >= $resourceTarget Then
+				Return True
+			EndIf
+		EndIf
+
 		Return False
 	Else
 		;		If $iChkWeakBase[$pMode] = 1 Then
 		;			If Not $bIsWeakBase Then Return False
 		;		EndIf
+
+		If $iCmbMeetGE[$pMode] == 3 Then ; need
+			Local $resourceTarget = Number($iAimGoldPlusElixir[$pMode]) ; just for simplicity
+			Local $deFactor = 50 ; value of dark elixir
+
+			Local $baseValue = _
+				Number($searchGold) * (1-$gRich) + _
+				Number($searchElixir) * (1-$eRich) + _
+				Number($searchDark) * $deFactor * (1-$dRich)
+
+			SetLog("      Base value: " & Round($baseValue))
+			
+			If $baseValue < $resourceTarget Then
+				Return False
+			EndIf
+		EndIf
 
 		If $iCmbMeetGE[$pMode] = 0 Then
 			If $G = False Or $E = False Then Return False

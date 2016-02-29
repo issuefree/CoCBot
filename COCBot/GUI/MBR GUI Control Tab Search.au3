@@ -102,6 +102,9 @@ Func cmbDBGoldElixir()
 		GUICtrlSetState($picDBMinGPEGold, $GUI_HIDE)
 		GUICtrlSetState($lblDBMinGPE, $GUI_HIDE)
 		GUICtrlSetState($picDBMinGPEElixir, $GUI_HIDE)
+
+		GUICtrlSetState($lblDBMinGPEPD, $GUI_HIDE)
+		GUICtrlSetState($picDBMinGPEPD, $GUI_HIDE)
 	Else
 		GUICtrlSetState($txtDBMinGold, $GUI_HIDE)
 		GUICtrlSetState($picDBMinGold, $GUI_HIDE)
@@ -111,6 +114,13 @@ Func cmbDBGoldElixir()
 		GUICtrlSetState($picDBMinGPEGold, $GUI_SHOW)
 		GUICtrlSetState($lblDBMinGPE, $GUI_SHOW)
 		GUICtrlSetState($picDBMinGPEElixir, $GUI_SHOW)
+
+		GUICtrlSetState($lblDBMinGPEPD, $GUI_HIDE)
+		GUICtrlSetState($picDBMinGPEPD, $GUI_HIDE)
+		If _GUICtrlComboBox_GetCurSel($cmbDBMeetGE) = 3 Then
+			GUICtrlSetState($lblDBMinGPEPD, $GUI_SHOW)
+			GUICtrlSetState($picDBMinGPEPD, $GUI_SHOW)
+		EndIf
 	EndIf
 EndFunc   ;==>cmbDBGoldElixir
 
@@ -170,6 +180,9 @@ Func cmbABGoldElixir()
 		GUICtrlSetState($picABMinGPEGold, $GUI_HIDE)
 		GUICtrlSetState($lblABMinGPE, $GUI_HIDE)
 		GUICtrlSetState($picABMinGPEElixir, $GUI_HIDE)
+
+		GUICtrlSetState($lblABMinGPEPD, $GUI_HIDE)
+		GUICtrlSetState($picABMinGPEPD, $GUI_HIDE)
 	Else
 		GUICtrlSetState($txtABMinGold, $GUI_HIDE)
 		GUICtrlSetState($picABMinGold, $GUI_HIDE)
@@ -179,6 +192,13 @@ Func cmbABGoldElixir()
 		GUICtrlSetState($picABMinGPEGold, $GUI_SHOW)
 		GUICtrlSetState($lblABMinGPE, $GUI_SHOW)
 		GUICtrlSetState($picABMinGPEElixir, $GUI_SHOW)
+
+		GUICtrlSetState($lblABMinGPEPD, $GUI_HIDE)
+		GUICtrlSetState($picABMinGPEPD, $GUI_HIDE)
+		If _GUICtrlComboBox_GetCurSel($cmbABMeetGE) = 3 Then
+			GUICtrlSetState($lblABMinGPEPD, $GUI_SHOW)
+			GUICtrlSetState($picABMinGPEPD, $GUI_SHOW)
+		EndIf	
 	EndIf
 EndFunc   ;==>cmbABGoldElixir
 
