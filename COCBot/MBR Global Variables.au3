@@ -43,6 +43,8 @@
 #include <IE.au3>
 #include <Process.au3>
 
+; Global Const $DEFAULT_HEIGHT = 880
+; Global Const $DEFAULT_WIDTH = 1260
 Global Const $DEFAULT_HEIGHT = 780
 Global Const $DEFAULT_WIDTH = 860
 Global Const $midOffsetY = ($DEFAULT_HEIGHT - 720) / 2
