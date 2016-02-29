@@ -301,8 +301,6 @@ Func loadAccount($accountNum, $startDisconnected = False)
 		$success = _ImageSearch($image, 1, $imageX, $imageY, 10)
 
 		If $success = 1 Then
-			SetLog("Found line at: " & $imageX & "," & $imageY)
-			;click account number at 175 x 290+num*50 (num = 0-n)
 			SetLog("Selecting account " & $accountNum)
 			Click(175, $imageY+35+($accountNum*75))
 			_Sleep(500)
@@ -435,14 +433,19 @@ EndFunc
 
 Global Enum $eGold, $eElixir, $eDark
 Func getRich($resource, $softCap=.75)
+	Local $rich = 0
 	Switch $resource
 		Case $eGold
-			Return (($iGoldCurrent/$rtGoldMax) - $softCap) / (1-$softCap)
+			$rich = (($iGoldCurrent/$rtGoldMax) - $softCap) / (1-$softCap)
 		Case $eElixir
-			Return (($iElixirCurrent/$rtElixirMax) - $softCap) / (1-$softCap)
+			$rich = (($iElixirCurrent/$rtElixirMax) - $softCap) / (1-$softCap)
 		Case $eDark
-			Return (($iDarkCurrent/$rtDarkMax) - $softCap) / (1-$softCap)
+			$rich = (($iDarkCurrent/$rtDarkMax) - $softCap) / (1-$softCap)
 	EndSwitch
+	If $rich > 0 Then
+		Return $rich
+	EndIf
+	Return 0
 EndFunc
 
 
