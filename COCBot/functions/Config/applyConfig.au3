@@ -992,8 +992,8 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	For $i = 0 To UBound($TroopDarkName) - 1
 		GUICtrlSetData(Eval("txtNum" & $TroopDarkName[$i]), Eval($TroopDarkName[$i] & "Comp"))
 	Next
-	SetComboTroopComp()
 	SetComboDarkTroopComp()
+	SetComboTroopComp()
 	
 
 	GUICtrlSetData($rtTankPercTxt, $rtTankPerc)
