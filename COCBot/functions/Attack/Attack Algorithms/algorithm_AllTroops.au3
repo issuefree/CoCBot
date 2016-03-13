@@ -171,8 +171,8 @@ Func algorithm_AllTroops() ;Attack Algorithm for all existing troops
 				, [$eHogs, $nbSides, 1, 1, 1] _
 				, [$eWiza, $nbSides, 1, 1, 0] _
 				, [$eMini, $nbSides, 1, 1, 0] _
-				, [$eArch, $nbSides, 3, 3, 2] _
 				, [$eGobl, $nbSides, 1, 1, 1] _
+				, [$eArch, $nbSides, 3, 3, 2] _
 				]
 	Else
 		If $debugSetlog = 1 Then SetLog("listdeploy standard for attack", $COLOR_PURPLE)
@@ -185,15 +185,15 @@ Func algorithm_AllTroops() ;Attack Algorithm for all existing troops
 			, ["CC", 1, 1, 1, 1] _
 			, [$eWall, $nbSides, 1, 1, 1] _
 			, ["HEROES", 1, 2, 1, 1] _
+			, [$eGobl, $nbSides, 1, 2, 0] _
 			, [$eArch, $nbSides, 1, 2, 0] _
 			, [$eBarb, $nbSides, 2, 2, 0] _
-			, [$eGobl, $nbSides, 1, 2, 0] _
 			, [$eHogs, $nbSides, 1, 1, 1] _
 			, [$eWiza, $nbSides, 1, 1, 0] _
 			, [$eWitc, $nbSides, 1, 1, 0] _
 			, [$eMini, $nbSides, 1, 1, 0] _
-			, [$eArch, $nbSides, 2, 2, 0] _
 			, [$eGobl, $nbSides, 2, 2, 0] _
+			, [$eArch, $nbSides, 2, 2, 0] _
 			]
 
 	EndIf
