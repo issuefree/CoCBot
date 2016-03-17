@@ -90,10 +90,11 @@ Func _makerequest()
 			If $ichkBackground = 0 And $NoFocusTampering = False Then ControlFocus($Title,"", "")
 			PureClick($atxtRequestCCBtn[0], $atxtRequestCCBtn[1], 1, 0, "#0254") ;Select text for request $atxtRequestCCBtn[2] = [430, 140]
 			_Sleep($iDelaymakerequest2)
-			If SendText($sTxtRequest) = 0 Then
-				Setlog(" Request text entry failed, try again", $COLOR_RED)
-				Return
-			EndIf
+ControlSend($Title, "", "", $sTxtRequest, 0)
+			; If SendText($sTxtRequest) = 0 Then
+			; 	Setlog(" Request text entry failed, try again", $COLOR_RED)
+			; 	Return
+			; EndIf
 		EndIf
 		If _Sleep($iDelaymakerequest2) Then Return ; wait time for text request to complete
 		$icount = 0

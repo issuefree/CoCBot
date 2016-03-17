@@ -194,6 +194,8 @@ Func ZeroArray(ByRef $array)
 	Next
 EndFunc
 
+Opt("SendKeyDelay", 15)
+
 ;ConsoleWrite($iGolem)
 
 Func goHome($maxDelay = 5000)
