@@ -350,6 +350,7 @@ Func loadAccount($accountNum, $startDisconnected = False)
 	EndIf
 
 	ControlSend($Title, "", "", "{LSHIFT DOWN}{C DOWN}{C UP}{O DOWN}{O UP}{N DOWN}{N UP}{F DOWN}{F UP}{I DOWN}{I UP}{R DOWN}{R UP}{M DOWN}{M UP}{LSHIFT UP}")  ;Enter  Confirm  txt
+	_Sleep(500)
 	Click(586, 178) ; Confirm load
 
 
