@@ -5,7 +5,11 @@ messagenew = "Счастливого рождества всем!\nhttps://githu
 messageold = "Новая версия MyBot (v5.3) уже доступна!\nПожалуйста скачайте последнюю версию:\nhttps://mybot.run"
 =======
 ﻿[general]
-version = "v5.3.1"
+version = "v5.3.2"
 messagenew = "Счастливого рождества всем!\nhttps://github.com/MyBotRun/MyBot/wiki/ChangeLog\n\nТеперь вы можете выбрать язык перейдя на вкладку Разное (со временем будет добавлено больше языков)"
+<<<<<<< HEAD
 messageold = "Новая версия MyBot (v5.3.1) уже доступна!\nПожалуйста скачайте последнюю версию:\nhttps://mybot.run"
+>>>>>>> refs/remotes/MyBotRun/master
+=======
+messageold = "Новая версия MyBot (v5.3.2) уже доступна!\nПожалуйста скачайте последнюю версию:\nhttps://mybot.run"
 >>>>>>> refs/remotes/MyBotRun/master
