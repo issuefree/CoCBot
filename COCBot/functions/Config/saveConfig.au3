@@ -1821,32 +1821,6 @@ Func saveConfig() ;Saves the controls settings to the config
 		IniWriteS($config, "troop", $TroopDarkName[$i], GUICtrlRead(Eval("txtNum" & $TroopDarkName[$i])))
 	Next
 
-	IniWrite($config, "troop", "rtTank", GUICtrlRead($rtTankPercTxt))
-	IniWrite($config, "troop", "rtMelee", GUICtrlRead($rtMeleePercTxt))
-	IniWrite($config, "troop", "rtRanged", GUICtrlRead($rtRangedPercTxt))
-
-	IniWrite($config, "troop", "rtElixirMax", GUICtrlRead($rtElixirMaxTxt))
-	IniWrite($config, "troop", "rtElixirRes", GUICtrlRead($rtElixirResTxt))
-	IniWrite($config, "troop", "rtGoldMax", GUICtrlRead($rtGoldMaxTxt))
-	IniWrite($config, "troop", "rtGoldRes", GUICtrlRead($rtGoldResTxt))
-	IniWrite($config, "troop", "rtDarkMax", GUICtrlRead($rtDarkMaxTxt))
-	IniWrite($config, "troop", "rtDarkRes", GUICtrlRead($rtDarkResTxt))
-
-	If GUICtrlRead($rtAccountSwitchCheck) == $GUI_CHECKED Then
-		IniWrite($config, "troop", "rtAccountSwitch", 1)
-	Else
-		IniWrite($config, "troop", "rtAccountSwitch", 0)
-	EndIf
-	
-	IniWrite($config, "troop", "rtAccountList", GUICtrlRead($rtAccountListTxt))
-
-	IniWrite($config, "troop", "troop1", _GUICtrlComboBox_GetCurSel($cmbBarrack1))
-	IniWrite($config, "troop", "troop2", _GUICtrlComboBox_GetCurSel($cmbBarrack2))
-	IniWrite($config, "troop", "troop3", _GUICtrlComboBox_GetCurSel($cmbBarrack3))
-	IniWrite($config, "troop", "troop4", _GUICtrlComboBox_GetCurSel($cmbBarrack4))
-
-	IniWrite($config, "troop", "Darktroop1", _GUICtrlComboBox_GetCurSel($cmbDarkBarrack1))
-	IniWrite($config, "troop", "Darktroop2", _GUICtrlComboBox_GetCurSel($cmbDarkBarrack2))
 	IniWriteS($config, "troop", "troop1", _GUICtrlComboBox_GetCurSel($cmbBarrack1))
 	IniWriteS($config, "troop", "troop2", _GUICtrlComboBox_GetCurSel($cmbBarrack2))
 	IniWriteS($config, "troop", "troop3", _GUICtrlComboBox_GetCurSel($cmbBarrack3))
@@ -2267,4 +2241,3 @@ Func saveConfig() ;Saves the controls settings to the config
 	If $hFile <> -1 Then FileClose($hFile)
 
 EndFunc   ;==>saveConfig
-

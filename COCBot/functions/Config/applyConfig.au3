@@ -1459,38 +1459,6 @@ EndIf
 	; apply strategy
 	PopulatePresetComboBox()
 	MakeSavePresetMessage()
-	;Troop Settings--------------------------------------------------------------------------
-	_GUICtrlComboBox_SetCurSel($cmbTroopComp, $iCmbTroopComp)
-	_GUICtrlComboBox_SetCurSel($cmbDarkTroopComp, $iCmbDarkTroopComp)
-	For $i = 0 To UBound($TroopName) - 1
-		GUICtrlSetData(Eval("txtNum" & $TroopName[$i]), Eval($TroopName[$i] & "Comp"))
-	Next
-	For $i = 0 To UBound($TroopDarkName) - 1
-		GUICtrlSetData(Eval("txtNum" & $TroopDarkName[$i]), Eval($TroopDarkName[$i] & "Comp"))
-	Next
-	SetComboDarkTroopComp()
-	SetComboTroopComp()
-	
-
-	GUICtrlSetData($rtTankPercTxt, $rtTankPerc)
-	GUICtrlSetData($rtMeleePercTxt, $rtMeleePerc)
-	GUICtrlSetData($rtRangedPercTxt, $rtRangedPerc)
-
-	GUICtrlSetData($rtGoldMaxTxt, $rtGoldMax)
-	GUICtrlSetData($rtGoldResTxt, $rtGoldRes)
-	GUICtrlSetData($rtElixirMaxTxt, $rtElixirMax)
-	GUICtrlSetData($rtElixirResTxt, $rtElixirRes)
-	GUICtrlSetData($rtDarkMaxTxt, $rtDarkMax)
-	GUICtrlSetData($rtDarkResTxt, $rtDarkRes)
-
-	If $rtAccountSwitch Then
-		GUICtrlSetState($rtAccountSwitchCheck, $GUI_CHECKED)
-	Else
-		GUICtrlSetState($rtAccountSwitchCheck, $GUI_UNCHECKED)
-	EndIf
-	GUICtrlSetData($rtAccountListTxt, StringJoin($rtAccountList))
-
-
 	GUICtrlSetState($lblLoadPresetMessage, $GUI_SHOW)
 	GUICtrlSetState($txtPresetMessage, $GUI_HIDE)
 	GUICtrlSetState($btnGUIPresetLoadConf, $GUI_HIDE)

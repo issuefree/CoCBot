@@ -991,93 +991,6 @@ Func readConfig($inputfile = $config, $partial = False) ;Reads config and sets i
 
 		;InireadS(xxxx,$config, "attack", "xxxx", "0")
 
-
-
-		$rtTankPerc = IniRead($config, "troop", "rtTank", "30")
-		$rtMeleePerc = IniRead($config, "troop", "rtMelee", "20")
-		$rtRangedPerc = IniRead($config, "troop", "rtRanged", "20")
-		$rtResourcePerc = 100 - $rtTankPerc - $rtMeleePerc - $rtRangedPerc
-
-		$rtGoldMax = IniRead($config, "troop", "rtGoldMax", 6000000)
-		$rtGoldRes = IniRead($config, "troop", "rtGoldRes", 1000000)
-		$rtElixirMax = IniRead($config, "troop", "rtElixirMax", 6000000)
-		$rtElixirRes = IniRead($config, "troop", "rtElixirRes", 1000000)
-		$rtDarkMax = IniRead($config, "troop", "rtDarkMax", 80000)
-		$rtDarkRes = IniRead($config, "troop", "rtDarkRes", 40000)
-
-		$rtBarracksLevel = StringSplit(IniRead($config, "troop", "rtBarracksLevel", "0,0,0,0,0,0"), ",", $STR_NOCOUNT)
-
-		$rtAccountSwitch = IniRead($config, "troop", "rtAccountSwitch", 0) == 1
-		$rtAccountList = StringSplit(IniRead($config, "troop", "rtAccountList", "1,2"), ",", $STR_NOCOUNT)
-
-		$fulltroop = IniRead($config, "troop", "fullTroop", "100")
-
-		$isldTrainITDelay = IniRead($config, "troop", "TrainITDelay", "20")
-		;barracks boost not saved (no use)
-
-		; Spells Creation  ---------------------------------------------------------------------
-		$iLightningSpellComp = Int(IniRead($config, "Spells", "LightningSpell", "0"))
-		$iRageSpellComp = Int(IniRead($config, "Spells", "RageSpell", "0"))
-		$iHealSpellComp = Int(IniRead($config, "Spells", "HealSpell", "0"))
-		$iJumpSpellComp = Int(IniRead($config, "Spells", "JumpSpell", "0"))
-		$iFreezeSpellComp = Int(IniRead($config, "Spells", "FreezeSpell", "0"))
-		$iPoisonSpellComp = Int(IniRead($config, "Spells", "PoisonSpell", "0"))
-		$iHasteSpellComp = Int(IniRead($config, "Spells", "HasteSpell", "0"))
-		$iEarthSpellComp = Int(IniRead($config, "Spells", "EarthSpell", "0"))
-		$iTotalCountSpell = Int(IniRead($config, "Spells", "SpellFactory", "0"))
-
-		;Misc Settings--------------------------------------------------------------------------
-
-		;Laboratory
-		$ichkLab = IniRead($config, "upgrade", "upgradetroops", "0")
-		$icmbLaboratory = IniRead($config, "upgrade", "upgradetroopname", "0")
-		$sLabUpgradeTime = IniRead($building, "upgrade", "upgradelabtime", "")
-		$aLabPos[0] = Int(IniRead($building, "upgrade", "LabPosX", "0"))
-		$aLabPos[1] = Int(IniRead($building, "upgrade", "LabPosY", "0"))
-
-		;Heroes upgrade
-		$ichkUpgradeKing = IniRead($config, "upgrade", "UpgradeKing", "0")
-		$ichkUpgradeQueen = IniRead($config, "upgrade", "UpgradeQueen", "0")
-		$ichkUpgradeWarden = IniRead($config, "upgrade", "UpgradeWarden", "0")
-
-		$ichkWalls = IniRead($config, "other", "auto-wall", "0")
-		$iSaveWallBldr = IniRead($config, "other", "savebldr", "0")
-		$iUseStorage = IniRead($config, "other", "use-storage", "0")
-
-		$icmbWalls = IniRead($config, "other", "walllvl", "0")
-		$iMaxNbWall = IniRead($config, "other", "MaxNbWall", "8")
-
-		$itxtWallMinGold = IniRead($config, "other", "minwallgold", "0")
-		$itxtWallMinElixir = IniRead($config, "other", "minwallelixir", "0")
-
-		$itxtRestartGold = IniRead($config, "other", "minrestartgold", "10000")
-		$itxtRestartElixir = IniRead($config, "other", "minrestartelixir", "25000")
-		$itxtRestartDark = IniRead($config, "other", "minrestartdark", "500")
-
-		$ichkTrap = IniRead($config, "other", "chkTrap", "0")
-		$iChkCollect = IniRead($config, "other", "chkCollect", "1")
-		$ichkTombstones = IniRead($config, "other", "chkTombstones", "0")
-		$ichkCleanYard = IniRead($config, "other", "chkCleanYard", "0")
-		$sTimeWakeUp = IniRead($config, "other", "txtTimeWakeUp", "0")
-		$iVSDelay = IniRead($config, "other", "VSDelay", "0")
-		$iMaxVSDelay = IniRead($config, "other", "MaxVSDelay", "0")
-
-		$itxtMaxTrophy = IniRead($config, "other", "MaxTrophy", "5000")
-		$itxtdropTrophy = IniRead($config, "other", "MinTrophy", "5000")
-		$iChkTrophyHeroes = IniRead($config, "other", "chkTrophyHeroes", "0")
-		$iChkTrophyAtkDead = IniRead($config, "other", "chkTrophyAtkDead", "0")
-		$itxtDTArmyMin = IniRead($config, "other", "DTArmyMin", "70")
-
-		$iWAOffsetX = IniRead($config, "other", "WAOffsetX", "10")
-		$iWAOffsetY = IniRead($config, "other", "WAOffsetY", "0")
-
-		;PushBullet Settings ---------------------------------------------
-		$PushToken = IniRead($config, "pushbullet", "AccountToken", "")
-		$iOrigPushB = IniRead($config, "pushbullet", "OrigPushB", $sCurrProfile)
-
-		$iAlertPBVillage = IniRead($config, "pushbullet", "AlertPBVillage", "0")
-		$iLastAttack = IniRead($config, "pushbullet", "AlertPBLastAttack", "0")
-		$iAlertPBLastRaidTxt = IniRead($config, "pushbullet", "AlertPBLastRaidTxt", "0")
 		InireadS($chkLvl6Enabled,$config, "collectors", "lvl6Enabled", "1")
 		InireadS($chkLvl7Enabled,$config, "collectors", "lvl7Enabled", "1")
 		InireadS($chkLvl8Enabled,$config, "collectors", "lvl8Enabled", "1")
@@ -1102,5 +1015,4 @@ Func readConfig($inputfile = $config, $partial = False) ;Reads config and sets i
 		Return False
 	EndIf
 EndFunc   ;==>readConfig
-
 

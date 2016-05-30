@@ -208,6 +208,7 @@ Func algorithm_AllTroops() ;Attack Algorithm for all existing troops
 				, [$eGobl, $nbSides, 1, 1, 1] _
 				, [$eArch, $nbSides, 3, 3, 2] _
 				]
+		EndSwitch
 	Else
 		If $debugSetlog = 1 Then SetLog("listdeploy standard for attack", $COLOR_PURPLE)
 		Switch $icmbStandardAlgorithm[$iMatchMode]
