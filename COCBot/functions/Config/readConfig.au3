@@ -1016,3 +1016,4 @@ Func readConfig($inputfile = $config, $partial = False) ;Reads config and sets i
 	EndIf
 EndFunc   ;==>readConfig
 
+

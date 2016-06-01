@@ -30,6 +30,36 @@ Func CompareResources($pMode) ;Compares resources and returns true if conditions
 		EndIf
 	EndIf
 
+        Local $THL = -1, $THLO = -1
+
+	For $i = 0 To 5 ;add th11
+		If $searchTH = $THText[$i] Then $THL = $i
+	Next
+
+	Switch $THLoc
+		Case "In"
+			$THLO = 0
+		Case "Out"
+			$THLO = 1
+	EndSwitch
+	
+	$SearchTHLResult = 0
+	;   Local $YourTHNumHere
+	;   For $i = 0 To 4
+	;		If $YourTH = $THText[$i] Then $YourTHNumHere = $i
+	;	Next
+	;	if $YourTH < 7 then
+	;		$YourTHNumHere = 0
+	;	endif
+	If $THL > -1 And $THL <= $YourTH And $searchTH <> "-" Then $SearchTHLResult = 1
+
+	If $iChkMeetTH[$pMode] = 1 Then
+		If $THL <> -1 And $THL <= $iCmbTH[$pMode] Then Return True
+	EndIf
+
+	If $iChkMeetTHO[$pMode] = 1 Then
+		If $THLO = 1 Then Return True
+	EndIf
 
 	; For simplicity I'm using the max elixir/gold setting from the resource troop training.
 	; I'm looking at some sort of falloff of threshold based on resources.
@@ -70,9 +100,6 @@ Func CompareResources($pMode) ;Compares resources and returns true if conditions
 
 	Local $T = (Number($searchTrophy) >= Number($iAimTrophy[$pMode]))
 	Local $GPE = ((Number($searchGold) + Number($searchElixir)) >= Number($iAimGoldPlusElixir[$pMode]))
-
-
-
 
 
 

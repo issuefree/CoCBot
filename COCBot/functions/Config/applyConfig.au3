@@ -340,6 +340,8 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	Else
 		GUICtrlSetState($chkABKingWait, $GUI_UNCHECKED)
 	EndIf
+	;chkDBKingWait()    ; Moved - Need to run function after upgrade status is applied
+	;chkABKingWait()    ; Moved - Need to run function after upgrade status is applied
 
 	If BitAND($iHeroAttack[$DB], $HERO_QUEEN) = $HERO_QUEEN Then
 		GUICtrlSetState($chkDBQueenAttack, $GUI_CHECKED)
@@ -367,6 +369,8 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	Else
 		GUICtrlSetState($chkABQueenWait, $GUI_UNCHECKED)
 	EndIf
+	;chkDBQueenWait()  ; Moved - Need to run function after upgrade status is applied
+	;chkABQueenWait()  ; Moved - Need to run function after upgrade status is applied
 
 	If $iDropCC[$DB] = 1 Then
 		GUICtrlSetState($chkDBDropCC, $GUI_CHECKED)
@@ -411,8 +415,8 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	Else
 		GUICtrlSetState($chkABWardenWait, $GUI_UNCHECKED)
 	EndIf
-	chkDBHeroWait()
-	chkABHeroWait()
+	;chkDBWardenWait()  ; Moved - Need to run function after upgrade status is applied
+	;chkABWardenWait()  ; Moved - Need to run function after upgrade status is applied
 
 	If $iChkUseCCBalanced = 1 Then
 		GUICtrlSetState($chkUseCCBalanced, $GUI_CHECKED)
@@ -708,56 +712,14 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 
 	;Other Settings--------------------------------------------------------------------------
 
-
-
-	;Heroes upgrade
-	If $ichkUpgradeKing = 1 Then
-		GUICtrlSetState($chkUpgradeKing, $GUI_CHECKED)
-		GUICtrlSetState($chkDBKingWait, $GUI_UNCHECKED)
-		GUICtrlSetState($chkABKingWait, $GUI_UNCHECKED)
-		GUICtrlSetState($chkDBKingWait, $GUI_DISABLE)
-		GUICtrlSetState($chkABKingWait, $GUI_DISABLE)
-	Else
-		GUICtrlSetState($chkUpgradeKing, $GUI_UNCHECKED)
-		GUICtrlSetState($chkDBKingWait, $GUI_ENABLE)
-		GUICtrlSetState($chkABKingWait, $GUI_ENABLE)
-	EndIf
-	;chkUpgradeKing()
-
-	If $ichkUpgradeQueen = 1 Then
-		GUICtrlSetState($chkUpgradeQueen, $GUI_CHECKED)
-		GUICtrlSetState($chkDBQueenWait, $GUI_UNCHECKED)
-		GUICtrlSetState($chkABQueenWait, $GUI_UNCHECKED)
-		GUICtrlSetState($chkDBQueenWait, $GUI_DISABLE)
-		GUICtrlSetState($chkABQueenWait, $GUI_DISABLE)
-	Else
-		GUICtrlSetState($chkUpgradeQueen, $GUI_UNCHECKED)
-		GUICtrlSetState($chkDBQueenWait, $GUI_ENABLE)
-		GUICtrlSetState($chkABQueenWait, $GUI_ENABLE)
-	EndIf
-	;chkUpgradeQueen()
-
-	If $ichkUpgradeWarden = 1 Then
-		GUICtrlSetState($chkUpgradeWarden, $GUI_CHECKED)
-		GUICtrlSetState($chkDBWardenWait, $GUI_UNCHECKED)
-		GUICtrlSetState($chkABWardenWait, $GUI_UNCHECKED)
-		GUICtrlSetState($chkDBWardenWait, $GUI_DISABLE)
-		GUICtrlSetState($chkABWardenWait, $GUI_DISABLE)
-	Else
-		GUICtrlSetState($chkUpgradeWarden, $GUI_UNCHECKED)
-		GUICtrlSetState($chkDBWardenWait, $GUI_ENABLE)
-		GUICtrlSetState($chkABWardenWait, $GUI_ENABLE)
-	EndIf
-	;chkUpgradeWarden()
-
-		GUICtrlSetData($txtWall04ST, $itxtWall04ST)
-		GUICtrlSetData($txtWall05ST, $itxtWall05ST)
-		GUICtrlSetData($txtWall06ST, $itxtWall06ST)
-		GUICtrlSetData($txtWall07ST, $itxtWall07ST)
-		GUICtrlSetData($txtWall08ST, $itxtWall08ST)
-		GUICtrlSetData($txtWall09ST, $itxtWall09ST)
-		GUICtrlSetData($txtWall10ST, $itxtWall10ST)
-		GUICtrlSetData($txtWall11ST, $itxtWall11ST)
+	GUICtrlSetData($txtWall04ST, $itxtWall04ST)
+	GUICtrlSetData($txtWall05ST, $itxtWall05ST)
+	GUICtrlSetData($txtWall06ST, $itxtWall06ST)
+	GUICtrlSetData($txtWall07ST, $itxtWall07ST)
+	GUICtrlSetData($txtWall08ST, $itxtWall08ST)
+	GUICtrlSetData($txtWall09ST, $itxtWall09ST)
+	GUICtrlSetData($txtWall10ST, $itxtWall10ST)
+	GUICtrlSetData($txtWall11ST, $itxtWall11ST)
 
 	_GUICtrlComboBox_SetCurSel($cmbWalls, $icmbWalls)
 	Switch $iUseStorage
@@ -952,6 +914,7 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	Else
 		GUICtrlSetState($chkABLightSpell, $GUI_UNCHECKED)
 	EndIf
+
 	If $ichkLightSpell[$TS] = 1 Then
 		GUICtrlSetState($chkTSLightSpell, $GUI_CHECKED)
 	Else
@@ -974,6 +937,16 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 		GUICtrlSetState($chkTSHealSpell, $GUI_UNCHECKED)
 	EndIf
 
+
+
+	;location of TH, CC, Army Camp, Barrack and Spell Fact. not Applied, only read
+
+
+
+
+
+
+
 	If $ichkRageSpell[$DB] = 1 Then
 		GUICtrlSetState($chkDBRageSpell, $GUI_CHECKED)
 	Else
@@ -989,6 +962,12 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	Else
 		GUICtrlSetState($chkTSRageSpell, $GUI_UNCHECKED)
 	EndIf
+
+
+
+	GUICtrlSetData($txtSWTTiles, $itxtSWTtiles)
+	;ChkSnipeWhileTrain()
+
 
 	If $ichkJumpSpell[$DB] = 1 Then
 		GUICtrlSetState($chkDBJumpSpell, $GUI_CHECKED)
@@ -1583,18 +1562,24 @@ EndIf
 		GUICtrlSetState($chkUpgradeKing, $GUI_UNCHECKED)
 	EndIf
 	chkUpgradeKing()
+	chkDBKingWait()  ; Need to run function after upgrade status is applied
+	chkABKingWait()  ; Need to run function after upgrade status is applied
 	If $ichkUpgradeQueen = 1 Then
 		GUICtrlSetState($chkUpgradeQueen, $GUI_CHECKED)
 	Else
 		GUICtrlSetState($chkUpgradeQueen, $GUI_UNCHECKED)
 	EndIf
 	chkUpgradeQueen()
+	chkDBQueenWait()  ; Need to run function after upgrade status is applied
+	chkABQueenWait()  ; Need to run function after upgrade status is applied
 	If $ichkUpgradeWarden = 1 Then
 		GUICtrlSetState($chkUpgradeWarden, $GUI_CHECKED)
 	Else
 		GUICtrlSetState($chkUpgradeWarden, $GUI_UNCHECKED)
 	EndIf
 	chkUpgradeWarden()
+	chkDBWardenWait()  ; Need to run function after upgrade status is applied
+	chkABWardenWait()  ; Need to run function after upgrade status is applied
 
 	For $iz = 0 To UBound($aUpgrades, 1) - 1 ; Apply the buildings upgrade variable to GUI
 		GUICtrlSetImage($picUpgradeStatus[$iz], $pIconLib, $ipicUpgradeStatus[$iz]) ; Set GUI status pic

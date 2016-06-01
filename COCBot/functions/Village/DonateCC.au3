@@ -51,7 +51,7 @@ Func DonateCC($Check = False)
 		Return ; exit func if no planned donate checkmarks
 	EndIf
 
-	Local $y = 85
+	Local $y = 90
 
 	;check for new chats first
 	If $Check = True Then
@@ -68,16 +68,16 @@ Func DonateCC($Check = False)
 	If _Sleep($iDelayDonateCC1) Then Return
 
 	ClickP($aClanTab, 1, 0, "#0169") ; clicking clan tab
-	If _Sleep($iDelayDonateCC1) Then Return
+	If _Sleep($iDelayDonateCC2) Then Return
 
-	Local $Scroll
+	Local $Scroll, $offColors[3][3] = [[0xc9e871, 0, -4], [0x010101, 0, 10], [0x000000, 0, 25]]; $offColors[3][3] = [[0x000000, 0, -2], [0x262926, 0, 1], [0xF8FCF0, 0, 11]]
 	While $bDonate
 		checkAttackDisable($iTaBChkIdle) ; Early Take-A-Break detection
 
 
 		If _Sleep($iDelayDonateCC2) Then ExitLoop
 		ForceCaptureRegion()
-		$DonatePixel = _MultiPixelSearch(202, $y, 224, 660 + $bottomOffsetY, 50, 1, Hex(0x98D057, 6), $aChatDonateBtnColors, 15)
+		$DonatePixel = _MultiPixelSearch(222, $y, 223, 649 + $bottomOffsetY, 1, 1, Hex(0xFFFFFF, 6), $offColors, 20)
 		If IsArray($DonatePixel) Then ; if Donate Button found
 			If $debugsetlog = 1 Then Setlog("$DonatePixel: (" & $DonatePixel[0] & "," & $DonatePixel[1] & ")", $COLOR_PURPLE)
 
@@ -96,11 +96,11 @@ Func DonateCC($Check = False)
 				If $ichkExtraAlphabets = 1 Then
 					; Chat Request , Latin + Turkish + Extra latin + Cyrillic Alphabets / three paragraphs.
 					Local $ClanString = ""
-					$ClanString = getChatString(30, $DonatePixel[1] - 50, "coc-latin-cyr")
+					$ClanString = getChatString(30, $DonatePixel[1] - 28, "coc-latin-cyr") ;;;;  New update
 					If $ClanString = "" Then
-						$ClanString = getChatString(30, $DonatePixel[1] - 36, "coc-latin-cyr")
+						$ClanString = getChatString(30, $DonatePixel[1] - 64, "coc-latin-cyr")
 					Else
-						$ClanString &= " " & getChatString(30, $DonatePixel[1] - 36, "coc-latin-cyr")
+						$ClanString &= " " & getChatString(30, $DonatePixel[1] - 64, "coc-latin-cyr")
 					EndIf
 					If $ClanString = "" Or $ClanString = " " Then
 						$ClanString = getChatString(30, $DonatePixel[1] - 23, "coc-latin-cyr")
@@ -111,11 +111,11 @@ Func DonateCC($Check = False)
 				Else
 					; Chat Request , Latin + Turkish + Extra / three paragraphs.
 					Local $ClanString = ""
-					$ClanString = getChatString(30, $DonatePixel[1] - 50, "coc-latinA")
+					$ClanString = getChatString(30, $DonatePixel[1] - 28, "coc-latinA")  ;;;;  New update
 					If $ClanString = "" Then
-						$ClanString = getChatString(30, $DonatePixel[1] - 36, "coc-latinA")
+						$ClanString = getChatString(30, $DonatePixel[1] - 64, "coc-latinA")
 					Else
-						$ClanString &= " " & getChatString(30, $DonatePixel[1] - 36, "coc-latinA")
+						$ClanString &= " " & getChatString(30, $DonatePixel[1] - 64, "coc-latinA")
 					EndIf
 					If $ClanString = "" Or $ClanString = " " Then
 						$ClanString = getChatString(30, $DonatePixel[1] - 23, "coc-latinA")
@@ -140,6 +140,7 @@ Func DonateCC($Check = False)
 					EndIf
 				EndIf
 			EndIf
+
 
 			; Get remaining CC capacity of requested troops from your ClanMates
 			RemainingCCcapacity()
@@ -250,17 +251,17 @@ Func DonateCC($Check = False)
 								If $varDonateCustom[$i][0] < $eBarb Then
 									$varDonateCustom[$i][0] = $eArch ; Change strange small numbers to archer
 								ElseIf $varDonateCustom[$i][0] > $eLava Then
-									DonateWindow($bClose)
-									$bDonate = True
-									$y = $DonatePixel[1] + 50
-									If _Sleep($iDelayDonateCC2) Then ExitLoop
+;									DonateWindow($bClose)
+;									$bDonate = True
+;									$y = $DonatePixel[1] + 50
+;									If _Sleep($iDelayDonateCC2) Then ExitLoop
 									ContinueLoop ; If "Nothing" is selected then continue
 								EndIf
 								If $varDonateCustom[$i][1] < 1 Then
-									DonateWindow($bClose)
-									$bDonate = True
-									$y = $DonatePixel[1] + 50
-									If _Sleep($iDelayDonateCC2) Then ExitLoop
+;									DonateWindow($bClose)
+;									$bDonate = True
+;									$y = $DonatePixel[1] + 50
+;									If _Sleep($iDelayDonateCC2) Then ExitLoop
 									ContinueLoop ; If donate number is smaller than 1 then continue
 								ElseIf $varDonateCustom[$i][1] > 8 Then
 									$varDonateCustom[$i][1] = 8 ; Number larger than 8 is unnecessary
@@ -326,7 +327,7 @@ Func DonateCC($Check = False)
 			If _Sleep($iDelayDonateCC2) Then ExitLoop
 		EndIf
 		ForceCaptureRegion()
-		$DonatePixel = _MultiPixelSearch(202, $y, 224, 660 + $bottomOffsetY, 50, 1, Hex(0x98D057, 6), $aChatDonateBtnColors, 15)
+		$DonatePixel = _MultiPixelSearch(222, $y, 223, 649 + $bottomOffsetY, 1, 1, Hex(0xFFFFFF, 6), $offColors, 20)
 		If IsArray($DonatePixel) Then
 			If $debugsetlog = 1 Then Setlog("More Donate buttons found, new $DonatePixel: (" & $DonatePixel[0] & "," & $DonatePixel[1] & ")", $COLOR_PURPLE)
 			ContinueLoop
@@ -335,11 +336,13 @@ Func DonateCC($Check = False)
 		EndIf
 
 		ForceCaptureRegion()
-		$Scroll = _PixelSearch(288, 640 + $bottomOffsetY, 290, 655 + $bottomOffsetY, Hex(0x588800, 6), 20)
+		;$Scroll = _PixelSearch(288, 640 + $bottomOffsetY, 290, 655 + $bottomOffsetY, Hex(0x588800, 6), 20)
+		$y = 90
+		$Scroll = _PixelSearch(293, 8 + $y, 295, 23 + $y, Hex(0xFFFFFF, 6), 20)
 		If IsArray($Scroll) Then
 			$bDonate = True
 			Click($Scroll[0], $Scroll[1], 1, 0, "#0172")
-			$y = 119
+			$y = 90
 			If _Sleep($iDelayDonateCC2) Then ExitLoop
 			ContinueLoop
 		EndIf
@@ -427,6 +430,10 @@ Func DonateTroopType($Type, $Quant = 0, $Custom = False, $bDonateAll = False)
 
 	Local $debugdetect = 0
 
+	If $debugSetlog = 1 Then Setlog("$DonateTroopType Start: " & NameOfTroop($Type), $COLOR_PURPLE)
+
+	Local $debugdetect = 0
+
 	If $debugsetlog = 1 Then Setlog("$DonateTroopType Start: " & NameOfTroop($Type), $COLOR_PURPLE)
 
 	Local $Slot = -1, $YComp = 0, $sTextToAll = ""
@@ -492,19 +499,15 @@ Func DonateTroopType($Type, $Quant = 0, $Custom = False, $bDonateAll = False)
 	$Slot = DetectSlotTroop($Type)
 	If $debugdetect = 1 Then $debugOcr = $oldDebugOcr
 
-	If $Slot = -1 And $Type < $iArmyEnd Then 
-		SetLog("Clan asked for " & $UnitName[$Type] & " but didn't find any to donate.", $COLOR_ORANGE)
-		$ArmyDonationTraining[$Type] = $iDonTroopsQuantity
-		Return
-	EndIf
+	If $Slot = -1 Then Return
 
-	If $Slot >= 7 And $Slot <= 13 Then
-		$Slot = $Slot - 7
+	If $Slot >= 6 And $Slot <= 11 Then
+		$Slot = $Slot - 6
 		$YComp = 88 ; correct 860x780
 	EndIf
 
-	If $Slot >= 14 And $Slot <= 16 Then
-		$Slot = $Slot - 14
+	If $Slot >= 12 And $Slot <= 14 Then
+		$Slot = $Slot - 12
 		$YComp = 203 ; correct 860x780
 	EndIf
 
@@ -594,23 +597,27 @@ Func DonateWindow($Open = True)
 	EndIf
 
 	; Click on Donate Button and wait for the window
-	Local $iLeft = 0, $iTop = 0, $iRight = 0, $iBottom = 0, $i
-	For $i = 0 To UBound($aChatDonateBtnColors) - 1
-		If $aChatDonateBtnColors[$i][1] < $iLeft Then $iLeft = $aChatDonateBtnColors[$i][1]
-		If $aChatDonateBtnColors[$i][1] > $iRight Then $iRight = $aChatDonateBtnColors[$i][1]
-		If $aChatDonateBtnColors[$i][2] < $iTop Then $iTop = $aChatDonateBtnColors[$i][2]
-		If $aChatDonateBtnColors[$i][2] > $iBottom Then $iBottom = $aChatDonateBtnColors[$i][2]
-	Next
-	$iLeft += $DonatePixel[0]
-	$iTop += $DonatePixel[1]
-	$iRight += $DonatePixel[0] + 1
-	$iBottom += $DonatePixel[1] + 1
+;	Local $iLeft = 0, $iTop = 0, $iRight = 0, $iBottom = 0, $i
+;	For $i = 0 To UBound($aChatDonateBtnColors) - 1
+;		If $aChatDonateBtnColors[$i][1] < $iLeft Then $iLeft = $aChatDonateBtnColors[$i][1]
+;		If $aChatDonateBtnColors[$i][1] > $iRight Then $iRight = $aChatDonateBtnColors[$i][1]
+;		If $aChatDonateBtnColors[$i][2] < $iTop Then $iTop = $aChatDonateBtnColors[$i][2]
+;		If $aChatDonateBtnColors[$i][2] > $iBottom Then $iBottom = $aChatDonateBtnColors[$i][2]
+;	Next
+;	$iLeft += $DonatePixel[0]
+;	$iTop += $DonatePixel[1]
+;
+;	$iRight += $DonatePixel[0] + 1
+;	$iBottom += $DonatePixel[1] + 1
 	ForceCaptureRegion()
-	Local $DonatePixelCheck = _MultiPixelSearch($iLeft, $iTop, $iRight, $iBottom, 50, 1, Hex(0x98D057, 6), $aChatDonateBtnColors, 15)
-	If IsArray($DonatePixelCheck) Then
-		Click($DonatePixel[0] + 50, $DonatePixel[1] + 10, 1, 0, "#0174")
+;	Local $DonatePixelCheck = _MultiPixelSearch($iLeft, $iTop, $iRight, $iBottom, 50, 1, Hex(0x98D057, 6), $aChatDonateBtnColors, 15)
+;	If IsArray($DonatePixelCheck) Then
+;		Click($DonatePixel[0] + 50, $DonatePixel[1] + 10, 1, 0, "#0174")
+
+	If _ColorCheck(_GetPixelColor($DonatePixel[0], $DonatePixel[1], True), Hex(0xFFFFFF, 6), 5) Then
+		Click($DonatePixel[0] - 40, $DonatePixel[1] + 10, 1, 0, "#0174")
 	Else
-		If $debugsetlog = 1 Then SetLog("Could not find the Donate Button! $DonatePixelCheck " & (IsArray($DonatePixelCheck) = 0 ? "not found" : "found"), $COLOR_PURPLE)
+		If $debugSetlog = 1 Then SetLog("Could not find the Donate Button!", $COLOR_PURPLE)
 		Return False
 	EndIf
 	If _Sleep($iDelayDonateWindow1) Then Return
@@ -628,8 +635,8 @@ Func DonateWindow($Open = True)
 	; Will search in $Y column = 410 for the first pure white color and determinate that position the $DonationWindowTemp
 	$DonationWindowY = 0
 
-	Local $aDonWinOffColors[2][3] = [[0xFFFFFF, 0, 2], [0xD7D5CB, 0, 37]]
-	Local $aDonationWindow = _MultiPixelSearch(409, 0, 410, $DEFAULT_HEIGHT, 1, 1, Hex(0xFFFFFF, 6), $aDonWinOffColors, 30)
+	Local $aDonWinOffColors[2][3] = [[0xFFFFFF, 0, 2], [0xc7c5bc, 0, 209]]
+	Local $aDonationWindow = _MultiPixelSearch(409, 0, 410, $DEFAULT_HEIGHT, 1, 1, Hex(0xFFFFFF, 6), $aDonWinOffColors, 10)
 
 	If IsArray($aDonationWindow) Then
 		$DonationWindowY = $aDonationWindow[1]
@@ -648,7 +655,7 @@ Func DonateWindowCap(ByRef $bSkipDonTroops, ByRef $bSkipDonSpells)
 	If $debugsetlog = 1 Then Setlog("DonateCapWindow Start", $COLOR_PURPLE)
 	;read troops capacity
 	If $bSkipDonTroops = False Then
-		Local $sReadCCTroopsCap = getCastleDonateCap(428, $DonationWindowY + 12) ; use OCR to get donated/total capacity
+		Local $sReadCCTroopsCap = getCastleDonateCap(427, $DonationWindowY + 15) ; use OCR to get donated/total capacity
 		If $debugsetlog = 1 Then Setlog("$sReadCCTroopsCap: " & $sReadCCTroopsCap, $COLOR_PURPLE)
 
 		Local $aTempReadCCTroopsCap = StringSplit($sReadCCTroopsCap, "#")
@@ -668,7 +675,7 @@ Func DonateWindowCap(ByRef $bSkipDonTroops, ByRef $bSkipDonSpells)
 	EndIf
 
 	If $bSkipDonSpells = False Then
-		Local $sReadCCSpellsCap = getCastleDonateCap(421, $DonationWindowY + 218) ; use OCR to get donated/total capacity
+		Local $sReadCCSpellsCap = getCastleDonateCap(420, $DonationWindowY + 220) ; use OCR to get donated/total capacity
 		If $debugsetlog = 1 Then Setlog("$sReadCCSpellsCap: " & $sReadCCSpellsCap, $COLOR_PURPLE)
 		Local $aTempReadCCSpellsCap = StringSplit($sReadCCSpellsCap, "#")
 		If $aTempReadCCSpellsCap[0] >= 2 Then
@@ -713,15 +720,15 @@ Func RemainingCCcapacity()
 
 	; Verify with OCR the Donation Clan Castle capacity
 	If $debugsetlog = 1 Then Setlog("Started dual getOcrSpaceCastleDonate", $COLOR_PURPLE)
-	$aCapTroops = getOcrSpaceCastleDonate(49, $DonatePixel[1]) ; when the request is troops+spell
-	$aCapSpells = getOcrSpaceCastleDonate(153, $DonatePixel[1]) ; when the request is troops+spell
+	$aCapTroops = getOcrSpaceCastleDonate(52, $DonatePixel[1] - 7) ; when the request is troops+spell
+	$aCapSpells = getOcrSpaceCastleDonate(159, $DonatePixel[1] - 7) ; when the request is troops+spell
 
 	If $debugsetlog = 1 Then Setlog("$aCapTroops :" & $aCapTroops, $COLOR_PURPLE)
 	If $debugsetlog = 1 Then Setlog("$aCapSpells :" & $aCapSpells, $COLOR_PURPLE)
 
 	If Not (StringInStr($aCapTroops, "#") Or StringInStr($aCapSpells, "#")) Then; verify if the string is valid or it is just a number from request without spell
 		If $debugsetlog = 1 Then Setlog("Started single getOcrSpaceCastleDonate", $COLOR_PURPLE)
-		$aCapTroops = getOcrSpaceCastleDonate(78, $DonatePixel[1]) ; when the Request don�t have Spell
+		$aCapTroops = getOcrSpaceCastleDonate(85, $DonatePixel[1] - 7) ; when the Request don't have Spell
 
 		If $debugsetlog = 1 Then Setlog("$aCapTroops :" & $aCapTroops, $COLOR_PURPLE)
 		$aCapSpells = -1
@@ -797,36 +804,86 @@ EndFunc   ;==>RemainingCCcapacity
 Func DetectSlotTroop($Type)
 
 	If $Type >= $eBarb And $Type <= $eLava Then
-		For $Slot = 0 To 6
+		For $Slot = 0 To 5
 			If $debugsetlog = 1 Then Setlog(" Slot : " & $Slot, $COLOR_PURPLE)
-			Local $FullTemp = getOcrDonationTroopsDetection(358 + (68 * $Slot), $DonationWindowY + 38)
+			Local $FullTemp = getOcrDonationTroopsDetection(343 + (68 * $Slot), $DonationWindowY + 37)
 			If $debugsetlog = 1 Then Setlog(" getOcrDonationTroopsDetection: " & $FullTemp, $COLOR_PURPLE)
+			If $debugSetlog = 1 Then
+				Switch $FullTemp
+					Case "barbarian"
+						setlog("Detected barbarian",$COLOR_GREEN)
+					Case "archer"
+						setlog("Detected archer",$COLOR_GREEN)
+					Case "giant"
+						setlog("Detected giant",$COLOR_GREEN)
+					Case "goblin"
+						setlog("Detected goblin",$COLOR_GREEN)
+					Case "wb"
+						setlog("Detected wall breaker",$COLOR_GREEN)
+					Case "balloon"
+						setlog("Detected balloon",$COLOR_GREEN)
+					Case "balloonballoon"
+						setlog("Detected balloon*",$COLOR_GREEN)
+					Case "wizard"
+						setlog("Detected wizard",$COLOR_GREEN)
+					Case "healer"
+						setlog("Detected healer",$COLOR_GREEN)
+					Case "dragon"
+						setlog("Detected dragon",$COLOR_GREEN)
+					Case "pekka"
+						setlog("Detected pekka",$COLOR_GREEN)
+					Case "minions"
+						setlog("Detected minion",$COLOR_GREEN)
+					Case "hogs"
+						setlog("Detected hog",$COLOR_GREEN)
+					Case "walk"
+						setlog("Detected walkiria",$COLOR_GREEN)
+					Case "witch"
+						setlog("Detected witch",$COLOR_GREEN)
+					Case "golem"
+						setlog("Detected golem",$COLOR_GREEN)
+					Case "lava"
+						setlog("Detected lava",$COLOR_GREEN)
+					Case "bowler"
+						setlog("Detected bowler",$COLOR_GREEN)
+					Case "poison"
+						setlog("Detected poison",$COLOR_GREEN)
+					Case "earthquake"
+						setlog("Detected earthquake",$COLOR_GREEN)
+					Case "haste"
+						setlog("Detected haste",$COLOR_GREEN)
+					Case Else
+						setlog("Detected <<<<" & $FullTemp & ">>>>", $COLOR_GREEN)
+				EndSwitch
+			EndIf
 			If $FullTemp <> "" Then
+				If $FullTemp = "empty" Then exitloop
+
 				If $Type = $eBarb And $FullTemp = "barbarian" Then
 					Return $Slot
 				EndIf
 				If $Type = $eArch And $FullTemp = "archer" Then
 					Return $Slot
 				EndIf
-				If $Type = $eGiant And ($FullTemp = "giant" Or $FullTemp = "giant1") Then
+				If $Type = $eGiant And ($FullTemp = "giant") Then
 					Return $Slot
 				EndIf
-				If $Type = $eGobl And $FullTemp = "goblin" Then
+				If $Type = $eGobl And ($FullTemp = "goblin") Then
 					Return $Slot
 				EndIf
-				If $Type = $eWall And $FullTemp = "wb" Then
+				If $Type = $eWall And ($FullTemp = "wb") Then
 					Return $Slot
 				EndIf
-				If $Type = $eBall And $FullTemp = "balloon" Then
+				If $Type = $eBall And ($FullTemp = "balloon" or $FullTemp = "balloonballoon")  Then
 					Return $Slot
 				EndIf
-				If $Type = $eWiza And ($FullTemp = "wizard" Or $FullTemp = "wizard1") Then
+				If $Type = $eWiza And ($FullTemp = "wizard") Then
 					Return $Slot
 				EndIf
 				If $Type = $eHeal And $FullTemp = "healer" Then
 					Return $Slot
 				EndIf
-				If $Type = $eDrag And $FullTemp = "dragon" Then
+				If $Type = $eDrag And ($FullTemp = "dragon") Then
 					Return $Slot
 				EndIf
 				If $Type = $ePekk And $FullTemp = "pekka" Then
@@ -850,30 +907,82 @@ Func DetectSlotTroop($Type)
 				If $Type = $eLava And $FullTemp = "lava" Then
 					Return $Slot
 				EndIf
+				;If $Type = $eBowl And $FullTemp = "bowler" Then
+					;Return $Slot
+				;EndIf
 			EndIf
 		Next
-
-		For $Slot = 7 To 13
-			If $debugsetlog = 1 Then Setlog(" Slot : " & $Slot, $COLOR_PURPLE)
-			Local $FullTemp = getOcrDonationTroopsDetection(358 + (68 * ($Slot - 7)), $DonationWindowY + 127)
-			If $debugsetlog = 1 Then Setlog(" getOcrDonationTroopsDetection: " & $FullTemp, $COLOR_PURPLE)
+		For $Slot = 6 To 11
+			If $debugSetlog = 1 Then Setlog(" Slot : " & $Slot, $COLOR_PURPLE)
+			Local $FullTemp = getOcrDonationTroopsDetection(343 + (68 * ($Slot - 6)), $DonationWindowY + 124)
+			If $debugSetlog = 1 Then Setlog(" getOcrDonationTroopsDetection: " & $FullTemp, $COLOR_PURPLE)
+			If $debugSetlog = 1 Then
+				Switch $FullTemp
+					Case "barbarian"
+						setlog("Detected barbarian",$COLOR_GREEN)
+					Case "archer"
+						setlog("Detected archer",$COLOR_GREEN)
+					Case "giant"
+						setlog("Detected giant",$COLOR_GREEN)
+					Case "goblin"
+						setlog("Detected goblin",$COLOR_GREEN)
+					Case "wb"
+						setlog("Detected wall breaker",$COLOR_GREEN)
+					Case "balloon"
+						setlog("Detected balloon",$COLOR_GREEN)
+					Case "balloonballoon"
+						setlog("Detected balloon*",$COLOR_GREEN)
+					Case "wizard"
+						setlog("Detected wizard",$COLOR_GREEN)
+					Case "healer"
+						setlog("Detected healer",$COLOR_GREEN)
+					Case "dragon"
+						setlog("Detected dragon",$COLOR_GREEN)
+					Case "pekka"
+						setlog("Detected pekka",$COLOR_GREEN)
+					Case "minions"
+						setlog("Detected minion",$COLOR_GREEN)
+					Case "hogs"
+						setlog("Detected hog",$COLOR_GREEN)
+					Case "walk"
+						setlog("Detected walkiria",$COLOR_GREEN)
+					Case "witch"
+						setlog("Detected witch",$COLOR_GREEN)
+					Case "golem"
+						setlog("Detected golem",$COLOR_GREEN)
+					Case "lava"
+						setlog("Detected lava",$COLOR_GREEN)
+					Case "bowler"
+						setlog("Detected bowler",$COLOR_GREEN)
+					Case "poison"
+						setlog("Detected poison",$COLOR_GREEN)
+					Case "earthquake"
+						setlog("Detected earthquake",$COLOR_GREEN)
+					Case "haste"
+						setlog("Detected haste",$COLOR_GREEN)
+					Case Else
+						setlog("Detected <<<<" & $FullTemp & ">>>>", $COLOR_GREEN)
+				EndSwitch
+			EndIf
 			If $FullTemp <> "" Then
+				If $FullTemp = "empty" Then exitloop
+
 				If $Type = $eBarb And $FullTemp = "barbarian" Then
 					Return $Slot
 				EndIf
 				If $Type = $eArch And $FullTemp = "archer" Then
 					Return $Slot
 				EndIf
-				If $Type = $eGiant And ($FullTemp = "giant" Or $FullTemp = "giant1") Then
+				If $Type = $eGiant And ($FullTemp = "giant" ) Then
 					Return $Slot
 				EndIf
-				If $Type = $eGobl And $FullTemp = "goblin" Then
+				If $Type = $eGobl And ($FullTemp = "goblin") Then
 					Return $Slot
 				EndIf
-				If $Type = $eWall And $FullTemp = "wb" Then
+				If $Type = $eWall And ($FullTemp = "wb" ) Then
 					Return $Slot
 				EndIf
-				If $Type = $eBall And $FullTemp = "balloon" Then
+				If $Type = $eBall And ($FullTemp = "balloon" or $FullTemp = "balloonballoon") Then
 					Return $Slot
 				EndIf
 				If $Type = $eWiza And $FullTemp = "wizard" Then
@@ -882,7 +991,7 @@ Func DetectSlotTroop($Type)
 				If $Type = $eHeal And $FullTemp = "healer" Then
 					Return $Slot
 				EndIf
-				If $Type = $eDrag And ($FullTemp = "dragon" Or $FullTemp = "dragon2") Then
+				If $Type = $eDrag And $FullTemp = "dragon"  Then
 					Return $Slot
 				EndIf
 				If $Type = $ePekk And $FullTemp = "pekka" Then
@@ -906,19 +1015,70 @@ Func DetectSlotTroop($Type)
 				If $Type = $eLava And $FullTemp = "lava" Then
 					Return $Slot
 				EndIf
+				;If $Type = $eBowl And $FullTemp = "bowler" Then
+					;Return $Slot
+				;EndIf
 			EndIf
 		Next
 	EndIf
-
 	If $Type >= $ePSpell And $Type <= $eHaSpell Then
-		For $Slot = 14 To 16
-			If $debugsetlog = 1 Then Setlog(" Slot : " & $Slot, $COLOR_PURPLE)
-			Local $FullTemp = getOcrDonationTroopsDetection(356 + (68 * ($Slot - 14)), $DonationWindowY + 241 + 22)
-			If $debugsetlog = 1 Then Setlog(" getOcrDonationSpells: " & $FullTemp, $COLOR_PURPLE)
+		For $Slot = 12 To 14
+			If $debugSetlog = 1 Then Setlog(" Slot : " & $Slot, $COLOR_PURPLE)
+			Local $FullTemp = getOcrDonationTroopsDetection(343 + (68 * ($Slot - 12)), $DonationWindowY + 242)
+			If $debugSetlog = 1 Then Setlog(" getOcrDonationSpells: " & $FullTemp, $COLOR_PURPLE)
+			If $debugSetlog = 1 Then
+				Switch $FullTemp
+					Case "barbarian"
+						setlog("Detected barbarian",$COLOR_GREEN)
+					Case "archer"
+						setlog("Detected archer",$COLOR_GREEN)
+					Case "giant"
+						setlog("Detected giant",$COLOR_GREEN)
+					Case "goblin"
+						setlog("Detected goblin",$COLOR_GREEN)
+					Case "wb"
+						setlog("Detected wall breaker",$COLOR_GREEN)
+					Case "balloon"
+						setlog("Detected balloon",$COLOR_GREEN)
+					Case "balloonballoon"
+						setlog("Detected balloon*",$COLOR_GREEN)
+					Case "wizard"
+						setlog("Detected wizard",$COLOR_GREEN)
+					Case "healer"
+						setlog("Detected healer",$COLOR_GREEN)
+					Case "dragon"
+						setlog("Detected dragon",$COLOR_GREEN)
+					Case "pekka"
+						setlog("Detected pekka",$COLOR_GREEN)
+					Case "minions"
+						setlog("Detected minion",$COLOR_GREEN)
+					Case "hogs"
+						setlog("Detected hog",$COLOR_GREEN)
+					Case "walk"
+						setlog("Detected walkiria",$COLOR_GREEN)
+					Case "witch"
+						setlog("Detected witch",$COLOR_GREEN)
+					Case "golem"
+						setlog("Detected golem",$COLOR_GREEN)
+					Case "lava"
+						setlog("Detected lava",$COLOR_GREEN)
+					Case "bowler"
+						setlog("Detected bowler",$COLOR_GREEN)
+					Case "poison"
+						setlog("Detected poison",$COLOR_GREEN)
+					Case "earthquake"
+						setlog("Detected earthquake",$COLOR_GREEN)
+					Case "haste"
+						setlog("Detected haste",$COLOR_GREEN)
+					Case Else
+						setlog("Detected <<<<" & $FullTemp & ">>>>", $COLOR_GREEN)
+				EndSwitch
+			EndIf
+			If $FullTemp = "empty" Then exitloop
 			If $Type = $ePSpell And $FullTemp = "poison" Then
 				Return $Slot
 			EndIf
-			If $Type = $eESpell And $FullTemp = "eq" Then
+			If $Type = $eESpell And $FullTemp = "earthquake" Then
 				Return $Slot
 			EndIf
 			If $Type = $eHaSpell And $FullTemp = "haste" Then
@@ -926,7 +1086,6 @@ Func DetectSlotTroop($Type)
 			EndIf
 		Next
 	EndIf
-
 	If $FullTemp = "" Then
 		Return -1
 	EndIf

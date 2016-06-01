@@ -949,21 +949,19 @@ Func saveConfig() ;Saves the controls settings to the config
 	SetDebugLog("Save Config " & $config)
 
 	; collectors gui -> variables --------------------------------------------------
-	IniWriteS($config, "collectors", "lvl6Enabled", $chkLvl6Enabled)
-	IniWriteS($config, "collectors", "lvl7Enabled", $chkLvl7Enabled)
-	IniWriteS($config, "collectors", "lvl8Enabled", $chkLvl8Enabled)
-	IniWriteS($config, "collectors", "lvl9Enabled", $chkLvl9Enabled)
-	IniWriteS($config, "collectors", "lvl10Enabled", $chkLvl10Enabled)
-	IniWriteS($config, "collectors", "lvl11Enabled", $chkLvl11Enabled)
-	IniWriteS($config, "collectors", "lvl12Enabled", $chkLvl12Enabled)
-	IniWriteS($config, "collectors", "lvl6fill", $cmbLvl6Fill)
-	IniWriteS($config, "collectors", "lvl7fill", $cmbLvl7Fill)
-	IniWriteS($config, "collectors", "lvl8fill", $cmbLvl8Fill)
-	IniWriteS($config, "collectors", "lvl9fill", $cmbLvl9Fill)
-	IniWriteS($config, "collectors", "lvl10fill", $cmbLvl10Fill)
-	IniWriteS($config, "collectors", "lvl11fill", $cmbLvl11Fill)
-	IniWriteS($config, "collectors", "lvl12fill", $cmbLvl12Fill)
-	IniWriteS($config, "collectors", "tolerance", $toleranceOffset)
+
+	For $collectorLevel = 6 To 12
+		If GUICtrlRead(Eval("chkLvl"&$collectorLevel)) = $GUI_CHECKED Then
+			Assign("chkLvl"&$collectorLevel&"Enabled", 1)
+		Else
+			Assign("chkLvl"&$collectorLevel&"Enabled", 0)
+
+
+		EndIf
+
+		Assign("cmbLvl"&$collectorLevel&"Fill", _GUICtrlComboBox_GetCurSel(Eval("cmbLvl"&$collectorLevel)))
+	Next
+	IniWriteS($config, "collectors", "tolerance", GUICtrlRead($sldCollectorTolerance))
 
 	; replayshare GUI -> variables -------------------------------------------------
 	$iShareminGold = GUICtrlRead($txtShareMinGold)
@@ -971,8 +969,33 @@ Func saveConfig() ;Saves the controls settings to the config
 	$iShareminDark = GUICtrlRead($txtShareMinDark)
 	$sShareMessage = GUICtrlRead($txtShareMessage)
 
+
 	; Write the stats arrays to the stat files
 	saveWeakBaseStats()
+
+
+	;General Settings--------------------------------------------------------------------------
+
+	Local $hFile = -1
+	If $ichkExtraAlphabets = 1 Then $hFile = FileOpen($config, $FO_UTF16_LE + $FO_OVERWRITE)
+
+	Local $frmBotPos = WinGetPos($sBotTitle)
+
+	IniWriteS($config, "general", "cmbProfile", _GUICtrlComboBox_GetCurSel($cmbProfile))
+	IniWriteS($config, "general", "frmBotPosX", $frmBotPos[0])
+	IniWriteS($config, "general", "frmBotPosY", $frmBotPos[1])
+	IniWriteS($config, "general", "villageName", GUICtrlRead($txtVillageName))
+
+	IniWriteS($config, "general", "logstyle", _GUICtrlComboBox_GetCurSel($cmbLog))
+	$DPos = ControlGetPos($hGUI_LOG, "", $divider)
+	IniWriteS($config, "general", "LogDividerY", $DPos[1] - $_GUI_CHILD_TOP)
+
+	IniWriteS($config, "general", "AutoStart", $ichkAutoStart)
+	IniWriteS($config, "general", "AutoStartDelay", $ichkAutoStartDelay)
+
+
+
+	If GUICtrlRead($chkBackground) = $GUI_CHECKED Then
 
 
 	;General Settings--------------------------------------------------------------------------
@@ -2241,3 +2264,4 @@ Func saveConfig() ;Saves the controls settings to the config
 	If $hFile <> -1 Then FileClose($hFile)
 
 EndFunc   ;==>saveConfig
+

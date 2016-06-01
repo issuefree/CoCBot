@@ -58,10 +58,10 @@ GUICtrlSetOnEvent(-1, "")
 ;~ ------------------------------------------------------
 ;~ GUI Child Files
 ;~ ------------------------------------------------------
-#include "GUI\MBR GUI Design Child General.au3" ; includes '$FirstControlToHide" on GUI
-#include "GUI\MBR GUI Design Child Village.au3"
 #include "GUI\MBR GUI Design Child Attack.au3"
 #include "GUI\MBR GUI Design Child Bot.au3"
+#include "GUI\MBR GUI Design Child General.au3" ; includes '$FirstControlToHide" on GUI
+#include "GUI\MBR GUI Design Child Village.au3"
 ;GUISetState()
 GUISwitch($frmBot)
 $tabMain = GUICtrlCreateTab(5, 85, $_GUI_MAIN_WIDTH - 9, $_GUI_MAIN_HEIGHT - 225); , $TCS_MULTILINE)

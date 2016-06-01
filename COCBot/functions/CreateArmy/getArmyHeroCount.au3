@@ -111,7 +111,7 @@ Func getArmyHeroCount($bOpenArmyWindow = False, $bCloseArmyWindow = False)
 		If $found = 1 Then
 			Setlog(" - Archer Queen available.", $color_blue)
 			If $debugArmyHeroCount = 1 Then Setlog("- detected in position (" & $xpos & "+" & $capture_x & "," & $ypos & "+" & $capture_y & ")")
-			$iHeroAvailable = BitOR($iHeroAvailable, $HERO_WARDEN)
+			$iHeroAvailable = BitOR($iHeroAvailable, $HERO_QUEEN)
 		Else
 					If $debugsetlogTrain = 1 Or $debugArmyHeroCount = 1 Then Setlog(" - Archer Queen not found", $color_blue)
 		EndIf

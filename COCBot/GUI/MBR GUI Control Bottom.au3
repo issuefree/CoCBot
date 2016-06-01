@@ -679,6 +679,7 @@ Func ButtonBoost()
 
 EndFunc   ;==>ButtonBoost
 
+
 Func arrows()
 	getArmyHeroCount()
 EndFunc
