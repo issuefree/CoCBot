@@ -51,6 +51,7 @@ $sBotTitle = "My Bot " & $sBotVersion & " "
 
 Opt("WinTitleMatchMode", 3) ; Window Title exact match mode
 #include "COCBot\functions\Android\Android.au3"
+#include "COCBot\tim\globals.au3"
 
 ;multilanguage
 #include "COCBot\functions\Other\Multilanguage.au3"
