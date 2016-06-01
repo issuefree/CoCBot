@@ -955,8 +955,6 @@ Func saveConfig() ;Saves the controls settings to the config
 			Assign("chkLvl"&$collectorLevel&"Enabled", 1)
 		Else
 			Assign("chkLvl"&$collectorLevel&"Enabled", 0)
-
-
 		EndIf
 
 		Assign("cmbLvl"&$collectorLevel&"Fill", _GUICtrlComboBox_GetCurSel(Eval("cmbLvl"&$collectorLevel)))
@@ -969,33 +967,8 @@ Func saveConfig() ;Saves the controls settings to the config
 	$iShareminDark = GUICtrlRead($txtShareMinDark)
 	$sShareMessage = GUICtrlRead($txtShareMessage)
 
-
 	; Write the stats arrays to the stat files
 	saveWeakBaseStats()
-
-
-	;General Settings--------------------------------------------------------------------------
-
-	Local $hFile = -1
-	If $ichkExtraAlphabets = 1 Then $hFile = FileOpen($config, $FO_UTF16_LE + $FO_OVERWRITE)
-
-	Local $frmBotPos = WinGetPos($sBotTitle)
-
-	IniWriteS($config, "general", "cmbProfile", _GUICtrlComboBox_GetCurSel($cmbProfile))
-	IniWriteS($config, "general", "frmBotPosX", $frmBotPos[0])
-	IniWriteS($config, "general", "frmBotPosY", $frmBotPos[1])
-	IniWriteS($config, "general", "villageName", GUICtrlRead($txtVillageName))
-
-	IniWriteS($config, "general", "logstyle", _GUICtrlComboBox_GetCurSel($cmbLog))
-	$DPos = ControlGetPos($hGUI_LOG, "", $divider)
-	IniWriteS($config, "general", "LogDividerY", $DPos[1] - $_GUI_CHILD_TOP)
-
-	IniWriteS($config, "general", "AutoStart", $ichkAutoStart)
-	IniWriteS($config, "general", "AutoStartDelay", $ichkAutoStartDelay)
-
-
-
-	If GUICtrlRead($chkBackground) = $GUI_CHECKED Then
 
 
 	;General Settings--------------------------------------------------------------------------
