@@ -30,7 +30,6 @@ Func BotCommand()
 			$Trophy = ""
 		EndIf
 
-		$MeetCondStop = False
 		Switch $icmbBotCond
 			Case 0
 				If isGoldFull() And isElixirFull() And $TrophyMax Then $MeetCondStop = True

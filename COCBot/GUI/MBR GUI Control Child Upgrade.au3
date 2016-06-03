@@ -159,12 +159,12 @@ Func chkUpgradeKing()
 			GUICtrlSetState($chkABKingWait, $GUI_UNCHECKED)
 			GUICtrlSetState($chkDBKingWait, $GUI_DISABLE)
 			GUICtrlSetState($chkABKingWait, $GUI_DISABLE)
-		_GUI_Value_STATE("SHOW", $groupKingSleeping)
+			_GUI_Value_STATE("SHOW", $groupKingSleeping)
 		Else
 			$ichkUpgradeKing = 0
 			GUICtrlSetState($chkDBKingWait, $GUI_ENABLE)
 			GUICtrlSetState($chkABKingWait, $GUI_ENABLE)
-		_GUI_Value_STATE("HIDE", $groupKingSleeping)
+			_GUI_Value_STATE("HIDE", $groupKingSleeping)
 		EndIf
 
 		If GUICtrlRead($cmbBoostBarbarianKing) > 0 Then
@@ -188,12 +188,12 @@ Func chkUpgradeQueen()
 			GUICtrlSetState($chkABQueenWait, $GUI_UNCHECKED)
 			GUICtrlSetState($chkDBQueenWait, $GUI_DISABLE)
 			GUICtrlSetState($chkABQueenWait, $GUI_DISABLE)
-		_GUI_Value_STATE("SHOW", $groupQueenSleeping)
+			_GUI_Value_STATE("SHOW", $groupQueenSleeping)
 		Else
 			$ichkUpgradeQueen = 0
 			GUICtrlSetState($chkDBQueenWait, $GUI_ENABLE)
 			GUICtrlSetState($chkABQueenWait, $GUI_ENABLE)
-		_GUI_Value_STATE("HIDE", $groupQueenSleeping)
+			_GUI_Value_STATE("HIDE", $groupQueenSleeping)
 		EndIf
 
 		If GUICtrlRead($cmbBoostArcherQueen) > 0 Then
@@ -217,12 +217,12 @@ Func chkUpgradeWarden()
 			GUICtrlSetState($chkABWardenWait, $GUI_UNCHECKED)
 			GUICtrlSetState($chkDBWardenWait, $GUI_DISABLE)
 			GUICtrlSetState($chkABWardenWait, $GUI_DISABLE)
-		_GUI_Value_STATE("SHOW", $groupWardenSleeping)
+			_GUI_Value_STATE("SHOW", $groupWardenSleeping)
 		Else
 			$ichkUpgradeWarden = 0
 			GUICtrlSetState($chkDBWardenWait, $GUI_ENABLE)
 			GUICtrlSetState($chkABWardenWait, $GUI_ENABLE)
-		_GUI_Value_STATE("HIDE", $groupWardenSleeping)
+			_GUI_Value_STATE("HIDE", $groupWardenSleeping)
 		EndIf
 
 		If GUICtrlRead($cmbBoostWarden) > 0 Then
@@ -233,6 +233,7 @@ Func chkUpgradeWarden()
 			GUICtrlSetState($chkUpgradeWarden, $GUI_ENABLE)
 		EndIf
 	Else
+		GUICtrlSetState($chkUpgradeWarden, BitOR($GUI_DISABLE, $GUI_UNCHECKED))
 	EndIf
 EndFunc   ;==>chkUpgradeWarden
 

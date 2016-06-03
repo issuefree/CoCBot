@@ -393,7 +393,6 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	Else
 		GUICtrlSetState($chkDBWardenAttack, $GUI_UNCHECKED)
 	EndIf
-
 	If BitAND($iHeroAttack[$LB], $HERO_WARDEN) = $HERO_WARDEN Then
 		GUICtrlSetState($chkABWardenAttack, $GUI_CHECKED)
 	Else
@@ -914,7 +913,6 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	Else
 		GUICtrlSetState($chkABLightSpell, $GUI_UNCHECKED)
 	EndIf
-
 	If $ichkLightSpell[$TS] = 1 Then
 		GUICtrlSetState($chkTSLightSpell, $GUI_CHECKED)
 	Else
@@ -937,16 +935,6 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 		GUICtrlSetState($chkTSHealSpell, $GUI_UNCHECKED)
 	EndIf
 
-
-
-	;location of TH, CC, Army Camp, Barrack and Spell Fact. not Applied, only read
-
-
-
-
-
-
-
 	If $ichkRageSpell[$DB] = 1 Then
 		GUICtrlSetState($chkDBRageSpell, $GUI_CHECKED)
 	Else
@@ -962,12 +950,6 @@ Func applyConfig($bRedrawAtExit = True) ;Applies the data from config to the con
 	Else
 		GUICtrlSetState($chkTSRageSpell, $GUI_UNCHECKED)
 	EndIf
-
-
-
-	GUICtrlSetData($txtSWTTiles, $itxtSWTtiles)
-	;ChkSnipeWhileTrain()
-
 
 	If $ichkJumpSpell[$DB] = 1 Then
 		GUICtrlSetState($chkDBJumpSpell, $GUI_CHECKED)
@@ -1572,6 +1554,7 @@ EndIf
 	chkUpgradeQueen()
 	chkDBQueenWait()  ; Need to run function after upgrade status is applied
 	chkABQueenWait()  ; Need to run function after upgrade status is applied
+
 	If $ichkUpgradeWarden = 1 Then
 		GUICtrlSetState($chkUpgradeWarden, $GUI_CHECKED)
 	Else

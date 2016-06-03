@@ -248,17 +248,17 @@ EndFunc
 
 ; UI variables
 
-Global $rtTankPerc
-Global $rtMeleePerc
-Global $rtRangedPerc
-Global $rtResourcePerc
+Global $rtTankPerc     = .3
+Global $rtMeleePerc    = .2
+Global $rtRangedPerc   = .4
+Global $rtResourcePerc = .1
 
-Global $rtGoldMax
-Global $rtGoldRes
-Global $rtElixirMax
-Global $rtElixirRes
-Global $rtDarkMax
-Global $rtDarkRes
+Global $rtGoldMax   = 8000000
+Global $rtGoldRes   = 5000000
+Global $rtElixirMax = 8000000
+Global $rtElixirRes = 3000000
+Global $rtDarkMax   = 180000
+Global $rtDarkRes   = 110000
 
 Global $rtBarracksLevel[6]
 
@@ -268,7 +268,7 @@ Global $SentRequestCC = False
 Global $currentAccount = 1
 Global $accountSwitchTimer = TimerInit()
 Global $accountSwitchTimeout = 0
-Global $rtAccountSwitch
+Global $rtAccountSwitch = 1
 Global $rtAccountList[5]
 
 Func loadAccount($accountNum, $startDisconnected = False)

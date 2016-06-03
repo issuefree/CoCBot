@@ -279,7 +279,6 @@ Func btnTestDonateCC()
 
 		SetLog(_PadStringCenter(" Test DonateCC begin ", 54, "="), $COLOR_BLUE)
 		$DonationWindowY = 0
-
 		Local $aDonWinOffColors[2][3] = [[0xFFFFFF, 0, 2], [0xc7c5bc, 0, 209]]
 		Local $aDonationWindow = _MultiPixelSearch(409, 0, 410, $DEFAULT_HEIGHT, 1, 1, Hex(0xFFFFFF, 6), $aDonWinOffColors, 10)
 

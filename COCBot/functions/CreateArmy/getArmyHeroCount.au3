@@ -139,6 +139,7 @@ Func getArmyHeroCount($bOpenArmyWindow = False, $bCloseArmyWindow = False)
 		EndIf
 	EndIf
 
+
 	If BitAND($iHeroWait[$DB], $iHeroAvailable) > 0 Or BitAND($iHeroWait[$LB], $iHeroAvailable) > 0 Or _
 			($iHeroWait[$DB] = $HERO_NOHERO And $iHeroWait[$DB] = $HERO_NOHERO) Then
 		$bFullArmyHero = True

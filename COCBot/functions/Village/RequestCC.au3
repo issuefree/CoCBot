@@ -14,8 +14,7 @@
 ; ===============================================================================================================================
 
 Func RequestCC()
-	; the SentRequestCC var should remain "True" for one bot cycle giving me a chance to react to it before it gets reset.
-	$SentRequestCC = False
+
 	If $iPlannedRequestCCHoursEnable <> 1 Or $canRequestCC = False Or $bDonationEnabled = False Then
 		Return
 	EndIf
@@ -94,11 +93,10 @@ Func _makerequest()
 			AndroidSendText($sTxtRequest, True)
 			Click($atxtRequestCCBtn[0], $atxtRequestCCBtn[1], 1, 0, "#0254") ;Select text for request $atxtRequestCCBtn[2] = [430, 140]
 			_Sleep($iDelaymakerequest2)
-ControlSend($Title, "", "", $sTxtRequest, 0)
-			; If SendText($sTxtRequest) = 0 Then
-			; 	Setlog(" Request text entry failed, try again", $COLOR_RED)
-			; 	Return
-			; EndIf
+			If SendText($sTxtRequest) = 0 Then
+				Setlog(" Request text entry failed, try again", $COLOR_RED)
+				Return
+			EndIf
 		EndIf
 		If _Sleep($iDelaymakerequest2) Then Return ; wait time for text request to complete
 		$icount = 0
@@ -109,13 +107,12 @@ ControlSend($Title, "", "", $sTxtRequest, 0)
 			If $icount > 25 Then ExitLoop ; wait 26*500ms = 13 seconds max
 		WEnd
 		If $icount > 25 Then
-			SetLog("Send request button not found", $COLOR_PURPLE)
-			checkMainScreen(False) ;emergency exit
+			If $DebugSetLog = 1 Then SetLog("Send request button not found", $COLOR_PURPLE)
+			CheckMainScreen(False) ;emergency exit
 		EndIf
 		If $ichkBackground = 0 And $NoFocusTampering = False Then ControlFocus($HWnD, "", "")  ; make sure Android has window focus
 		Click($aSendRequestCCBtn[0], $aSendRequestCCBtn[1], 1, 100, "#0256") ; click send button
 		$canRequestCC = False
-		$SentRequestCC = True
 	EndIf
 
 EndFunc   ;==>_makerequest

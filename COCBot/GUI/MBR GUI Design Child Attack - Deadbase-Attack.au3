@@ -31,7 +31,7 @@ Local $x = 25, $y = 40
 		$y += 25
 		$lblDBSelectSpecialTroop=GUICtrlCreateLabel(GetTranslated(624,19,"Special troops to use") & ":",$x, $y, 135, 18, $SS_LEFT)
 		$y += 18
-	    $IMGchkDBKingAttack=GUICtrlCreateIcon($pIconLib, $eIcnKing, $x , $y, 24, 24)
+		$IMGchkDBKingAttack=GUICtrlCreateIcon($pIconLib, $eIcnKing, $x , $y, 24, 24)
 			$txtTip = GetTranslated(624,20, "Use your King when Attacking...") & @CRLF & GetTranslated(624,41, "Enabled with TownHall 7 and higher")
 			GUICtrlSetTip(-1, $txtTip)
 		$chkDBKingAttack = GUICtrlCreateCheckbox("", $x + 27, $y, 17, 17)

@@ -19,8 +19,6 @@ Global $LastDarkBarrackTrainDonatedTroop = 1
 
 
 Func Train()
-	If $bTrainEnabled = False Then Return
-
 	If $icmbTroopComp = 10 Then 
 		ResourceTrain()
 		Return
@@ -78,6 +76,7 @@ Func Train()
 	Local $tempDElixirSpent = 0
 
 	If $debugsetlogTrain = 1 Then SetLog("Func Train ", $COLOR_PURPLE)
+	If $bTrainEnabled = False Then Return
 
 	; Read Resource Values For army cost Stats
 	VillageReport(True, True)
@@ -239,7 +238,7 @@ Func Train()
 
 
 	; PREPARE TROOPS IF FULL ARMY
-	; Barracks status to false , after the first loop and train Selected Troops composition = True
+	; Baracks status to false , after the first loop and train Selected Troops composition = True
 	;
 	If $debugsetlogTrain = 1 Then Setlog("Fullarmy = " & $fullarmy & " CurCamp = " & $CurCamp & " TotalCamp = " & $TotalCamp & " - result = " & ($fullarmy = True And $CurCamp = $TotalCamp), $COLOR_PURPLE)
 	If $fullarmy = True Then
